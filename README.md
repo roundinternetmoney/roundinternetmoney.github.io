@@ -1,6 +1,4 @@
-# Round Internet Money
-
-A minimal, static web pages.
+Minimal, static web pages.
 
 ## Features
 
