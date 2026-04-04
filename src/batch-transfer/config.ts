@@ -46,6 +46,33 @@ export const APP_CONFIG: AppConfig = {
       multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
     },
     {
+      key: "optimism",
+      name: "Optimism",
+      chainId: 10,
+      rpcUrls: ["https://mainnet.optimism.io"],
+      blockExplorerUrls: ["https://optimistic.etherscan.io"],
+      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "linea",
+      name: "Linea",
+      chainId: 59144,
+      rpcUrls: ["https://rpc.linea.build"],
+      blockExplorerUrls: ["https://lineascan.build"],
+      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "zksync",
+      name: "ZKsync",
+      chainId: 324,
+      rpcUrls: ["https://zksync-era.blockpi.network/v1/rpc/public"],
+      blockExplorerUrls: ["https://explorer.zksync.io"],
+      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },    
+    {
       key: "polygon",
       name: "Polygon",
       chainId: 137,

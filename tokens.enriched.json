@@ -4723,6 +4723,236 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC"
       ]
+    },
+    {
+      "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
+      "symbol": "STG",
+      "decimals": 18,
+      "chainKey": "optimism",
+      "sourceSymbol": "STG",
+      "matches": [
+        {
+          "chainKey": "optimism",
+          "chainId": 10,
+          "chainName": "Optimism",
+          "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "STG",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Optimism:STG"
+      ]
+    },
+    {
+      "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
+      ]
+    },
+    {
+      "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum",
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "USDC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Arbitrum:USDC"
+      ]
+    },    
+    {
+      "address": "0xB8918754AA8E5291403097d44B85d3de78cDe456",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xB8918754AA8E5291403097d44B85d3de78cDe456",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
+      ]
+    },
+    {
+      "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
+      "symbol": "ZERO",
+      "decimals": 18,
+      "chainKey": "linea",
+      "sourceSymbol": "ZERO",
+      "matches": [
+        {
+          "chainKey": "linea",
+          "chainId": 59144,
+          "chainName": "Linea",
+          "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "ZERO",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Linea:ZERO"
+      ]
+    },
+    {
+      "address": "0x0B63C61bba4a876a6eB8b5e596800F7649A9B71E",
+      "symbol": "SECT",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "SECT",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum",
+          "address": "0x0B63C61bba4a876a6eB8b5e596800F7649A9B71E",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SECT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Arbitrum:SECT"
+      ]
+    },
+    {
+      "address": "0xFF0C532FDB8Cd566Ae169C1CB157ff2Bdc83E105",
+      "symbol": "Fren Pet",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "FrenPet",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xFF0C532FDB8Cd566Ae169C1CB157ff2Bdc83E105",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "Fren Pet",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:Fren-Pet"
+      ]
+    },
+    {
+      "address": "0x9DE16c805A3227b9b92e39a446F9d56cf59fe640",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x9DE16c805A3227b9b92e39a446F9d56cf59fe640",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
+      ]
+    },    
+    {
+      "address": "0x729031B3995538DDF6B6BcE6E68D5D6fDEb3CCB5",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x729031B3995538DDF6B6BcE6E68D5D6fDEb3CCB5",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
+      ]
+    },            
+    {
+      "address": "0x44A454784907E2634AC474292FD921489721C320",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x44A454784907E2634AC474292FD921489721C320",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
+      ]
     }
   ]
 }
