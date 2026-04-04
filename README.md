@@ -4,6 +4,13 @@ Minimal, static web pages.
 
 - **Batch Transfers**: Send many token transfers across hundreds of tokens on EVM chains; fast.
 
+## Local Build
+
+- Install dependencies with `npm install`
+- Edit `src/batch-transfer/`
+- Build the browser bundle with `npm run build`
+- Deploy the generated `batch-transfer/app.js` with the static site files
+
 ## Deployment
 
 This is a static site that can be deployed to any web server:
@@ -11,8 +18,8 @@ This is a static site that can be deployed to any web server:
 ### Contents
 
 - `index.html` - Main page
-- `batch-transfer.html` - Batch transfer interface
-- `batch-transfer-app.js` - Application logic
+- `batch-transfer/` - Batch transfer page assets
+- `src/batch-transfer/` - Batch transfer source files
 - `tokens.enriched.json` - Token catalog data
 - `banner.webp` - Site banner image
 

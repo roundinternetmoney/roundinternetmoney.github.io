@@ -1,51 +1,112 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta content="device-width">
-    <style>
-      body { margin: auto; max-width: 80%; background-color: #FFE37A; }
-      #banner { width: 50%; }
-      #github { font-size: 20px; background: #F5f5f5; border: 5px solid #D3d3d3; }
-      h2 { margin-top: 50px; text-align: center;}
-      h2 ul { list-style-type: none;}
-      textbox { font-family: monospace; }
-      dl dt { font-family: monospace; margin-top: 1em; }
-    </style>
-    <title>Round Internet Money</title>
-  </head>
-  <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Round Internet Money</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .home-banner {
+      width: min(460px, 100%);
+      margin: 0 auto;
+    }
+
+    .home-intro {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .home-manifesto {
+      margin: 18px 0 10px;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: bold;
+    }
+
+    .home-manifesto li + li {
+      margin-top: 8px;
+    }
+
+    .home-sections {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .github-box {
+      display: inline-block;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 720px) {
+      .home-sections {
+        grid-template-columns: 1fr;
+      }
+
+      .home-manifesto {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header centered">
     <h1>
-      <img src="./banner.webp" id="banner">
+      <img class="home-banner" src="./banner.webp" alt="Round Internet Money" />
     </h1>
-    <h2>
-      Finance <b>must </b> be made
-      <ul>
+    <div class="home-intro">
+      <h2>Finance must be made</h2>
+      <ul class="home-manifesto">
         <li>Decentralised</li>
         <li>Trustless</li>
         <li>Austere</li>
       </ul>
-      <a href="batch-transfer.html">batch transfers</a><br>
-    </h2>
-    <p>
-      <textbox id="github">
-        https://github.com/roundinternetmoney
-      </textbox>
+      <div class="nav">
+        <a href="index.html">index</a>
+        <a href="batch-transfer/">batch transfers</a>
+        <a href="mailto:contact@roundinternet.money">contact</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="panel-intro">
+      Static front-end work for austere finance tooling. Keep the surface simple, readable, and easy to host.
+    </p>
+    <p class="link-row">
+      <span class="codebox github-box">https://github.com/roundinternetmoney</span>
       <a href="https://github.com/roundinternetmoney">github</a>
     </p>
-    <h3><br>Integrations: </h3>
-    <ol>
-      <li>EVM Chains</li>
-      <li>Web3 Services</li>
-      <li>Web2 Services</li>
-    </ol>
-    <ul>
-      <li>Unix</li>
-      <li>Golang</li>
-      <li>Nats</li>
-      <li>Grafana</li>
-      <li>Protobuf</li>
-    </ul>
-    <h4><i>dont be <a href="https://web.archive.org/web/20260306200619/https://www.npr.org/2021/11/29/1059821677/google-dont-be-evil-lawsuit">evil<a></i></h4>
-    <p><a href="mailto:contact@roundinternet.money">contact@roundinternet.money</a></p>
-  </body>
+  </div>
+
+  <div class="home-sections">
+    <div class="panel">
+      <h2>Integrations</h2>
+      <ol class="stack-list">
+        <li>EVM Chains</li>
+        <li>Web3 Services</li>
+        <li>Web2 Services</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h2>Stack</h2>
+      <ul class="stack-list">
+        <li>Unix</li>
+        <li>Golang</li>
+        <li>NATS</li>
+        <li>Grafana</li>
+        <li>Protobuf</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="footnote"><i>dont be <a href="https://web.archive.org/web/20260306200619/https://www.npr.org/2021/11/29/1059821677/google-dont-be-evil-lawsuit">evil</a></i></p>
+    <p class="footnote"><a href="mailto:contact@roundinternet.money">contact@roundinternet.money</a></p>
+  </div>
+</body>
 </html>

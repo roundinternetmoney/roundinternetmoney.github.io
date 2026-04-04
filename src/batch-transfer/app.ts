@@ -1,82 +1,31 @@
-const MULTICALL3_ABI = [
-  "function aggregate3((address target,bool allowFailure,bytes callData)[] calls) view returns ((bool success, bytes returnData)[] returnData)",
-  "function aggregate3Value((address target,bool allowFailure,uint256 value,bytes callData)[] calls) payable returns ((bool success, bytes returnData)[] returnData)"
-];
+import { ethers } from "ethers";
+import { APP_CONFIG, CHAINLIST_RPCS_URL, ERC20_ABI, MAX_SCAN_RETRIES, MULTICALL3_ABI } from "./config";
+import { el } from "./dom";
+import type {
+  AppState,
+  CatalogToken,
+  ChainConfig,
+  ExecutionPlan,
+  KnownTokenBalance,
+  KnownTokenConfig,
+  NoticeKind,
+  ScanCacheEntry,
+  StrategyKey,
+  TokenSelectionMode,
+  TokenStateEntry
+} from "./types";
 
-const MAX_SCAN_RETRIES = 5;
-const CHAINLIST_RPCS_URL = "https://chainlist.org/rpcs.json";
-
-const ERC20_ABI = [
-  "function balanceOf(address owner) view returns (uint256)",
-  "function decimals() view returns (uint8)",
-  "function symbol() view returns (string)",
-  "function transfer(address to, uint256 amount) returns (bool)",
-  "function approve(address spender, uint256 amount) returns (bool)"
-];
-
-const APP_CONFIG = {
-  chains: [
-    {
-      key: "ethereum",
-      name: "Ethereum Mainnet",
-      chainId: 1,
-      rpcUrls: ["https://0xrpc.io/eth"],
-      blockExplorerUrls: ["https://etherscan.io"],
-      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
-    },
-    {
-      key: "base",
-      name: "Base",
-      chainId: 8453,
-      rpcUrls: ["https://rpc.sentio.xyz/base"],
-      blockExplorerUrls: ["https://basescan.org"],
-      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
-    },
-    {
-      key: "arbitrum",
-      name: "Arbitrum One",
-      chainId: 42161,
-      rpcUrls: ["https://arb1.arbitrum.io/rpc"],
-      blockExplorerUrls: ["https://arbiscan.io"],
-      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
-    },
-    {
-      key: "polygon",
-      name: "Polygon",
-      chainId: 137,
-      rpcUrls: ["https://polygon-rpc.com"],
-      blockExplorerUrls: ["https://polygonscan.com"],
-      nativeCurrency: { name: "POL", symbol: "POL", decimals: 18 },
-      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
-    },
-    {
-      key: "hyperliquid",
-      name: "HyperEVM",
-      chainId: 999,
-      rpcUrls: ["https://rpc.hyperliquid.xyz/evm"],
-      blockExplorerUrls: ["https://app.hyperliquid.xyz/explorer"],
-      nativeCurrency: { name: "HYPE", symbol: "HYPE", decimals: 18 },
-      multicall3: ""
-    }
-  ],
-  strategies: {
-    sequential_calls: {
-      label: "Many direct transactions from the connected wallet",
-      supportsNative: true,
-      supportsErc20: true
-    },
-    permit_batch_signer: {
-      label: "Permit signatures plus separate batch executor",
-      supportsNative: false,
-      supportsErc20: true
-    }
+declare global {
+  interface Window {
+    ethereum?: {
+      request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+      on: (event: string, handler: (...args: any[]) => void) => void;
+      __walletBatchBound?: boolean;
+    };
   }
-};
+}
 
-const state = {
+const state: AppState = {
   browserProvider: null,
   signer: null,
   account: null,
@@ -99,45 +48,23 @@ const state = {
   scanVersion: 0
 };
 
-const el = {
-  chainSelect: document.getElementById("chainSelect"),
-  modeDisplay: document.getElementById("modeDisplay"),
-  executionStrategy: document.getElementById("executionStrategy"),
-  tokenSelectionMode: document.getElementById("tokenSelectionMode"),
-  connectButton: document.getElementById("connectButton"),
-  scanBalancesButton: document.getElementById("scanBalancesButton"),
-  debugToggle: document.getElementById("debugToggle"),
-  debugPanel: document.getElementById("debugPanel"),
-  sendButton: document.getElementById("sendButton"),
-  singleRecipient: document.getElementById("singleRecipient"),
-  maxTokenTransfers: document.getElementById("maxTokenTransfers"),
-  approvalTarget: document.getElementById("approvalTarget"),
-  actionModeDisplay: document.getElementById("actionModeDisplay"),
-  rapidSubmitToggle: document.getElementById("rapidSubmitToggle"),
-  nativeFallbackToggle: document.getElementById("nativeFallbackToggle"),
-  tokenTransferList: document.getElementById("tokenTransferList"),
-  walletNotice: document.getElementById("walletNotice"),
-  transferNotice: document.getElementById("transferNotice"),
-  configuredChainStatus: document.getElementById("configuredChainStatus"),
-  walletChainStatus: document.getElementById("walletChainStatus"),
-  accountStatus: document.getElementById("accountStatus"),
-  balanceStatus: document.getElementById("balanceStatus"),
-  multicallStatus: document.getElementById("multicallStatus"),
-  assetList: document.getElementById("assetList"),
-  debugCatalogLoaded: document.getElementById("debugCatalogLoaded"),
-  debugChain: document.getElementById("debugChain"),
-  debugCatalogCount: document.getElementById("debugCatalogCount"),
-  debugReadMode: document.getElementById("debugReadMode"),
-  debugMaxRetries: document.getElementById("debugMaxRetries"),
-  debugActiveRpc: document.getElementById("debugActiveRpc"),
-  debugQueried: document.getElementById("debugQueried"),
-  debugNonzero: document.getElementById("debugNonzero"),
-  debugFailures: document.getElementById("debugFailures"),
-  privateKeyInput: document.getElementById("privateKeyInput"),
-  signingModeDisplay: document.getElementById("signingModeDisplay")
-};
+function createStaticJsonRpcProvider(url: string, chainId: number): ethers.JsonRpcProvider {
+  return new ethers.JsonRpcProvider(url, chainId, {
+    staticNetwork: true
+  });
+}
 
-function escapeHtml(value) {
+function destroyProvider(provider: ethers.JsonRpcProvider): void {
+  if (typeof provider.destroy === "function") {
+    provider.destroy();
+  }
+}
+
+function getTokenAddressKey(address: string | null | undefined): string {
+  return String(address || "").toLowerCase();
+}
+
+function escapeHtml(value: unknown): string {
   return String(value)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -146,24 +73,12 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
-function getSelectedChain() {
-  return APP_CONFIG.chains.find((item) => item.key === el.chainSelect.value) || APP_CONFIG.chains[0];
-}
-
-function createReadProvider() {
-  const chain = getSelectedChain();
-  const urls = getRpcUrlsForChain(chain);
-  return new ethers.JsonRpcProvider(urls[0], chain.chainId, {
-    staticNetwork: true
-  });
-}
-
-function sleep(ms) {
+function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function withRetries(label, task, maxRetries = MAX_SCAN_RETRIES) {
-  let lastError;
+async function withRetries<T>(label: string, task: () => Promise<T>, maxRetries = MAX_SCAN_RETRIES): Promise<T> {
+  let lastError: unknown;
   for (let attempt = 1; attempt <= maxRetries; attempt += 1) {
     try {
       return await task();
@@ -175,93 +90,95 @@ async function withRetries(label, task, maxRetries = MAX_SCAN_RETRIES) {
       await sleep(Math.min(250 * attempt, 1000));
     }
   }
-  throw new Error(label + " failed after " + maxRetries + " attempts: " + (lastError?.message || String(lastError)));
+
+  const message = lastError instanceof Error ? lastError.message : String(lastError);
+  throw new Error(label + " failed after " + maxRetries + " attempts: " + message);
 }
 
-function getSelectedStrategy() {
-  return el.executionStrategy.value;
+function getSelectedChain(): ChainConfig {
+  return APP_CONFIG.chains.find((item) => item.key === el.chainSelect.value) || APP_CONFIG.chains[0];
 }
 
-function updateActionModeDisplay() {
-  const strategyKey = getSelectedStrategy();
-  if (strategyKey === "permit_batch_signer") {
-    el.actionModeDisplay.value = "Approve full balances to approval target";
-    el.sendButton.textContent = "Approve selected tokens";
-  } else {
-    el.actionModeDisplay.value = "Send full balances to recipient";
-    el.sendButton.textContent = "Send selected tokens";
-  }
+function getSelectedStrategy(): StrategyKey {
+  return el.executionStrategy.value as StrategyKey;
 }
 
-function setWalletNotice(message, kind) {
+function getSingleRecipient(): string {
+  return (el.singleRecipient.value || "").trim();
+}
+
+function getApprovalTarget(): string {
+  return (el.approvalTarget.value || "").trim();
+}
+
+function getPrivateKeyValue(): string {
+  return (el.privateKeyInput.value || "").trim();
+}
+
+function useRapidSubmit(): boolean {
+  return Boolean(el.rapidSubmitToggle.checked);
+}
+
+function useNativeFallback(): boolean {
+  return Boolean(el.nativeFallbackToggle.checked);
+}
+
+function setWalletNotice(message: string, kind?: NoticeKind): void {
   el.walletNotice.textContent = message;
   el.walletNotice.className = "notice" + (kind ? " " + kind : "");
 }
 
-function setTransferNotice(message, kind) {
+function setTransferNotice(message: string, kind?: NoticeKind): void {
   el.transferNotice.textContent = message;
   el.transferNotice.className = "notice" + (kind ? " " + kind : "");
 }
 
-function updateStrategyStatus() {
+function updateConfiguredChainStatus(): void {
+  const chain = getSelectedChain();
+  el.configuredChainStatus.textContent = chain.name + " (" + chain.chainId + ")";
+  el.multicallStatus.textContent = chain.multicall3 || "Not configured";
+}
+
+function updateActionModeDisplay(): void {
+  if (getSelectedStrategy() === "permit_batch_signer") {
+    el.actionModeDisplay.value = "Approve each selected token balance to the approval target";
+    el.sendButton.textContent = "Approve selected tokens";
+    return;
+  }
+
+  el.actionModeDisplay.value = "Send each selected token balance to the recipient";
+  el.sendButton.textContent = "Send selected tokens";
+}
+
+function updateStrategyStatus(): void {
   const strategyKey = getSelectedStrategy();
-  const strategy = APP_CONFIG.strategies[strategyKey];
-  el.modeDisplay.value = strategy ? strategy.label : strategyKey;
+  el.modeDisplay.value = APP_CONFIG.strategies[strategyKey]?.label || strategyKey;
   updateActionModeDisplay();
 }
 
-function populateChains() {
+function populateChains(): void {
   el.chainSelect.innerHTML = APP_CONFIG.chains.map((chain) => {
     return '<option value="' + chain.key + '">' + chain.name + "</option>";
   }).join("");
   updateConfiguredChainStatus();
 }
 
-function updateConfiguredChainStatus() {
-  const chain = getSelectedChain();
-  el.configuredChainStatus.textContent = chain.name + " (" + chain.chainId + ")";
-  el.multicallStatus.textContent = chain.multicall3 || "Not configured";
-}
-
-function renderKnownTokenBalances(results) {
+function renderKnownTokenBalances(results: KnownTokenBalance[]): void {
   if (!results.length) {
     el.assetList.textContent = "No detected token balances for the selected chain.";
     return;
   }
 
   const items = results.map((token) => {
-    const symbol = escapeHtml(token.symbol || token.sourceSymbol || "UNKNOWN");
-    const amount = escapeHtml(token.balanceFormatted || "0");
-    const address = escapeHtml(token.address);
-    return "<li>" + symbol + ": " + amount + " [" + address + "]</li>";
+    return "<li>" + escapeHtml(token.symbol || token.sourceSymbol || "UNKNOWN") +
+      ": " + escapeHtml(token.balanceFormatted || "0") +
+      " [" + escapeHtml(token.address) + "]</li>";
   }).join("");
 
-  el.assetList.innerHTML = "<strong>Detected token balances</strong><ul>" + items + "</ul>";
+  el.assetList.innerHTML = "<strong>Detected token balances (" + results.length + ")</strong><ul>" + items + "</ul>";
 }
 
-function getSingleRecipient() {
-  const value = (el.singleRecipient.value || "").trim();
-  return value;
-}
-
-function getApprovalTarget() {
-  const value = (el.approvalTarget.value || "").trim();
-  return value;
-}
-
-function useRapidSubmit() {
-  return Boolean(el.rapidSubmitToggle.checked);
-}
-
-function useNativeFallback() {
-  return Boolean(el.nativeFallbackToggle.checked);
-}
-
-function getPrivateKeyValue() {
-  return (el.privateKeyInput?.value || "").trim();
-}
-
-function getPrivateKeySigner() {
+function getPrivateKeySigner(): ethers.Wallet | null {
   const privateKey = getPrivateKeyValue();
   if (!privateKey || !state.browserProvider) {
     return null;
@@ -274,11 +191,11 @@ function getPrivateKeySigner() {
   }
 }
 
-function getExecutionSigner() {
+function getExecutionSigner(): ethers.Wallet | ethers.JsonRpcSigner | null {
   return getPrivateKeySigner() || state.signer;
 }
 
-async function getEffectiveAccount() {
+async function getEffectiveAccount(): Promise<string | null> {
   const privateSigner = getPrivateKeySigner();
   if (privateSigner) {
     return privateSigner.address;
@@ -286,17 +203,14 @@ async function getEffectiveAccount() {
   return state.account;
 }
 
-function updateSigningModeDisplay() {
-  const privateSigner = getPrivateKeySigner();
-  if (privateSigner) {
-    el.signingModeDisplay.value = "Debug private key via browser RPC";
-    return;
-  }
-  el.signingModeDisplay.value = "Extension wallet only";
+function updateSigningModeDisplay(): void {
+  el.signingModeDisplay.value = getPrivateKeySigner()
+    ? "Debug private key using browser RPC"
+    : "Extension wallet only";
 }
 
-function syncSelectedTokenAddresses(mode) {
-  const available = state.knownTokenBalances.map((token) => token.address.toLowerCase());
+function syncSelectedTokenAddresses(mode: TokenSelectionMode): void {
+  const available = state.knownTokenBalances.map((token) => getTokenAddressKey(token.address));
   const availableSet = new Set(available);
   state.selectedTokenAddresses = state.selectedTokenAddresses.filter((address) => availableSet.has(address));
 
@@ -305,8 +219,8 @@ function syncSelectedTokenAddresses(mode) {
   }
 }
 
-function renderTokenTransferList() {
-  const mode = el.tokenSelectionMode.value;
+function renderTokenTransferList(): void {
+  const mode = el.tokenSelectionMode.value as TokenSelectionMode;
   syncSelectedTokenAddresses(mode);
 
   if (!state.knownTokenBalances.length) {
@@ -315,28 +229,25 @@ function renderTokenTransferList() {
   }
 
   const header = mode === "all_known_tokens"
-    ? "Scanned token balances selected for transfer"
-    : "Select scanned token balances to transfer";
+    ? "All scanned token balances are selected"
+    : "Choose which scanned token balances to include";
 
   const items = state.knownTokenBalances.map((token) => {
-    const addressKey = token.address.toLowerCase();
+    const addressKey = getTokenAddressKey(token.address);
     const checked = state.selectedTokenAddresses.includes(addressKey) ? " checked" : "";
     const disabled = mode === "all_known_tokens" ? " disabled" : "";
-    const symbol = escapeHtml(token.symbol || "UNKNOWN");
-    const amount = escapeHtml(token.balanceFormatted || "0");
-    const address = escapeHtml(token.address);
     return [
       '<label>',
-      '<input type="checkbox" class="token-transfer-checkbox" data-address="' + address + '"' + checked + disabled + ' />',
-      '<span>' + symbol + ': ' + amount + ' [' + address + ']</span>',
-      '</label>'
+      '<input type="checkbox" class="token-transfer-checkbox" data-address="' + escapeHtml(token.address) + '"' + checked + disabled + " />",
+      "<span>" + escapeHtml(token.symbol || "UNKNOWN") + ": " + escapeHtml(token.balanceFormatted || "0") + " [" + escapeHtml(token.address) + "]</span>",
+      "</label>"
     ].join("");
   }).join("");
 
   el.tokenTransferList.innerHTML = "<strong>" + header + "</strong>" + items;
 }
 
-function renderDebugPanel() {
+function renderDebugPanel(): void {
   const chain = getSelectedChain();
   el.debugPanel.classList.toggle("hidden", !el.debugToggle.checked);
   el.debugCatalogLoaded.textContent = state.enrichedTokensLoaded ? "yes" : "no";
@@ -345,34 +256,30 @@ function renderDebugPanel() {
   el.debugReadMode.textContent = state.debug.readMode || "-";
   el.debugMaxRetries.textContent = String(MAX_SCAN_RETRIES);
   el.debugActiveRpc.textContent = state.debug.activeRpc || "-";
-  el.debugQueried.textContent = state.debug.queriedAddresses.length
-    ? state.debug.queriedAddresses.slice(0, 6).join(", ")
-    : "-";
-  el.debugNonzero.textContent = state.debug.nonZeroAddresses.length
-    ? state.debug.nonZeroAddresses.slice(0, 6).join(", ")
-    : "-";
-  el.debugFailures.textContent = state.debug.failures.length
-    ? state.debug.failures.slice(0, 4).join(" | ")
-    : "-";
+  el.debugQueried.textContent = state.debug.queriedAddresses.length ? state.debug.queriedAddresses.slice(0, 6).join(", ") : "-";
+  el.debugNonzero.textContent = state.debug.nonZeroAddresses.length ? state.debug.nonZeroAddresses.slice(0, 6).join(", ") : "-";
+  el.debugFailures.textContent = state.debug.failures.length ? state.debug.failures.slice(0, 4).join(" | ") : "-";
 }
 
-async function loadEnrichedTokenCatalog() {
+async function loadEnrichedTokenCatalog(): Promise<CatalogToken[]> {
   if (state.enrichedTokensLoaded) {
     return state.enrichedTokens;
   }
 
   try {
-    const response = await fetch("tokens.enriched.json", { cache: "no-store" });
+    const response = await fetch("../tokens.enriched.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
     }
-    const payload = await response.json();
+
+    const payload = await response.json() as { results?: CatalogToken[] };
     state.enrichedTokens = Array.isArray(payload.results) ? payload.results : [];
     state.enrichedTokensLoaded = true;
     renderDebugPanel();
     return state.enrichedTokens;
   } catch (error) {
-    setWalletNotice("Failed to load tokens.enriched.json: " + (error.message || error), "error");
+    const message = error instanceof Error ? error.message : String(error);
+    setWalletNotice("Failed to load tokens.enriched.json: " + message, "error");
     state.enrichedTokens = [];
     state.enrichedTokensLoaded = true;
     renderDebugPanel();
@@ -380,7 +287,7 @@ async function loadEnrichedTokenCatalog() {
   }
 }
 
-function sanitizeRpcUrl(value) {
+function sanitizeRpcUrl(value: unknown): string | null {
   if (typeof value !== "string" || !value.startsWith("http")) {
     return null;
   }
@@ -390,15 +297,16 @@ function sanitizeRpcUrl(value) {
   return value;
 }
 
-function getRpcUrlsForChain(chain) {
+function getRpcUrlsForChain(chain: ChainConfig): string[] {
   const dynamic = state.rpcCatalog[chain.key] || [];
   const merged = [...dynamic, ...(chain.rpcUrls || [])]
     .map(sanitizeRpcUrl)
-    .filter(Boolean);
+    .filter((value): value is string => Boolean(value));
+
   return [...new Set(merged)];
 }
 
-async function loadChainlistRpcs() {
+async function loadChainlistRpcs(): Promise<Record<string, string[]>> {
   if (state.chainlistLoaded) {
     return state.rpcCatalog;
   }
@@ -408,25 +316,28 @@ async function loadChainlistRpcs() {
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
     }
-    const payload = await response.json();
-    const rpcCatalog = {};
+
+    const payload = await response.json() as Array<{ chainId?: number; rpc?: Array<string | { url?: string }> }>;
+    const rpcCatalog: Record<string, string[]> = {};
 
     for (const chain of APP_CONFIG.chains) {
       const entry = Array.isArray(payload)
         ? payload.find((item) => Number(item.chainId) === Number(chain.chainId))
         : null;
+
       const urls = entry && Array.isArray(entry.rpc)
         ? entry.rpc
             .map((item) => sanitizeRpcUrl(typeof item === "string" ? item : item.url))
-            .filter(Boolean)
+            .filter((value): value is string => Boolean(value))
         : [];
+
       rpcCatalog[chain.key] = [...new Set(urls)];
     }
 
     state.rpcCatalog = rpcCatalog;
     state.chainlistLoaded = true;
     return rpcCatalog;
-  } catch (error) {
+  } catch {
     state.rpcCatalog = {};
     state.chainlistLoaded = true;
     setWalletNotice("Chainlist RPC fetch failed. Using built-in RPC fallbacks.", "error");
@@ -434,40 +345,37 @@ async function loadChainlistRpcs() {
   }
 }
 
-async function withRotatingProvider(label, task) {
+async function withRotatingProvider<T>(
+  label: string,
+  task: (provider: ethers.JsonRpcProvider) => Promise<T>
+): Promise<T> {
   const chain = getSelectedChain();
   const urls = getRpcUrlsForChain(chain);
-  let lastError;
+  let lastError: unknown;
 
   if (!urls.length) {
     throw new Error("No RPC URLs configured for " + chain.name);
   }
 
   for (const url of urls) {
-    const provider = new ethers.JsonRpcProvider(url, chain.chainId, {
-      staticNetwork: true
-    });
+    const provider = createStaticJsonRpcProvider(url, chain.chainId);
     state.debug.activeRpc = url;
     renderDebugPanel();
+
     try {
       const result = await withRetries(label + " via " + url, () => task(provider));
-      if (typeof provider.destroy === "function") {
-        provider.destroy();
-      }
+      destroyProvider(provider);
       return result;
     } catch (error) {
       lastError = error;
-      if (typeof provider.destroy === "function") {
-        provider.destroy();
-      }
-      continue;
+      destroyProvider(provider);
     }
   }
 
   throw lastError || new Error(label + " failed across all RPC URLs");
 }
 
-function getChainKnownTokensFromCatalog() {
+function getChainKnownTokensFromCatalog(): KnownTokenConfig[] {
   const chain = getSelectedChain();
   return state.enrichedTokens
     .filter((token) => token.chainKey === chain.key && token.address)
@@ -478,10 +386,11 @@ function getChainKnownTokensFromCatalog() {
     }));
 }
 
-function getScanCacheKey() {
+function getScanCacheKey(): string {
   const chain = getSelectedChain();
   let account = state.account || "no-account";
   const privateKey = getPrivateKeyValue();
+
   if (privateKey) {
     try {
       account = new ethers.Wallet(privateKey).address;
@@ -489,12 +398,12 @@ function getScanCacheKey() {
       account = state.account || "no-account";
     }
   }
+
   return [chain.key, account].join(":");
 }
 
-function saveScanCache(results, readMode) {
-  const key = getScanCacheKey();
-  state.scanCache[key] = {
+function saveScanCache(results: KnownTokenBalance[], readMode: string): void {
+  const entry: ScanCacheEntry = {
     results,
     readMode,
     configuredTokenCount: state.debug.configuredTokenCount,
@@ -502,11 +411,11 @@ function saveScanCache(results, readMode) {
     nonZeroAddresses: [...state.debug.nonZeroAddresses],
     failures: [...state.debug.failures]
   };
+  state.scanCache[getScanCacheKey()] = entry;
 }
 
-function restoreScanCache() {
-  const key = getScanCacheKey();
-  const cached = state.scanCache[key];
+function restoreScanCache(): boolean {
+  const cached = state.scanCache[getScanCacheKey()];
   if (!cached) {
     state.knownTokenBalances = [];
     state.debug.readMode = "not scanned";
@@ -526,20 +435,23 @@ function restoreScanCache() {
   renderKnownTokenBalances(cached.results);
   renderTokenTransferList();
   renderDebugPanel();
-  setTransferNotice(
-    "Loaded cached scan for " + getSelectedChain().name + ". Found " + cached.results.length + " token balances."
-  );
+  setTransferNotice("Loaded cached scan for " + getSelectedChain().name + ". Found " + cached.results.length + " token balances.");
   return true;
 }
 
-async function loadKnownTokenBalancesDirect(tokens) {
+async function loadKnownTokenBalancesDirect(tokens: KnownTokenConfig[]): Promise<KnownTokenBalance[]> {
   const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    return [];
+  }
+
   return withRotatingProvider("direct token scan", async (provider) => {
-    const results = [];
+    const results: KnownTokenBalance[] = [];
+
     for (const token of tokens) {
       try {
         const contract = new ethers.Contract(token.address, ERC20_ABI, provider);
-        const balanceRaw = await contract.balanceOf(effectiveAccount);
+        const balanceRaw = await contract.balanceOf(effectiveAccount) as bigint;
 
         let decimalsValue = token.decimals != null ? Number(token.decimals) : 18;
         if (token.decimals == null) {
@@ -553,7 +465,7 @@ async function loadKnownTokenBalancesDirect(tokens) {
         let symbolValue = token.symbol || "UNKNOWN";
         if (!token.symbol || token.symbol === "UNKNOWN") {
           try {
-            symbolValue = await contract.symbol();
+            symbolValue = await contract.symbol() as string;
           } catch {
             symbolValue = token.symbol || "UNKNOWN";
           }
@@ -573,21 +485,29 @@ async function loadKnownTokenBalancesDirect(tokens) {
           decimals: Number(token.decimals) || 18,
           balanceRaw: 0n,
           balanceFormatted: "0",
-          error: error.message || "Token read failed"
+          error: error instanceof Error ? error.message : "Token read failed"
         });
       }
     }
+
     return results;
   });
 }
 
-async function loadKnownTokenBalancesMulticall(chain, tokens) {
+async function loadKnownTokenBalancesMulticall(
+  chain: ChainConfig,
+  tokens: KnownTokenConfig[]
+): Promise<KnownTokenBalance[]> {
   const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    return [];
+  }
+
   return withRotatingProvider("multicall token scan", async (provider) => {
     const multicall = new ethers.Contract(chain.multicall3, MULTICALL3_ABI, provider);
     const iface = new ethers.Interface(ERC20_ABI);
-    const calls = [];
-    const callIndex = [];
+    const calls: Array<{ target: string; allowFailure: boolean; callData: string }> = [];
+    const callIndex: Array<{ address: string; type: "balanceOf" | "decimals" | "symbol" }> = [];
 
     for (const token of tokens) {
       calls.push({
@@ -616,10 +536,11 @@ async function loadKnownTokenBalancesMulticall(chain, tokens) {
       }
     }
 
-    const response = await multicall.aggregate3(calls);
-    const tokenState = {};
+    const response = await multicall.aggregate3(calls) as Array<{ success: boolean; returnData: string }>;
+    const tokenState: Record<string, TokenStateEntry> = {};
+
     for (const token of tokens) {
-      tokenState[token.address.toLowerCase()] = {
+      tokenState[getTokenAddressKey(token.address)] = {
         address: token.address,
         symbol: token.symbol || "UNKNOWN",
         decimals: token.decimals != null ? Number(token.decimals) : null,
@@ -629,18 +550,19 @@ async function loadKnownTokenBalancesMulticall(chain, tokens) {
 
     response.forEach((item, index) => {
       const meta = callIndex[index];
-      const entry = tokenState[meta.address.toLowerCase()];
+      const entry = tokenState[getTokenAddressKey(meta.address)];
       if (!entry || !item.success) {
         return;
       }
+
       try {
         const decoded = iface.decodeFunctionResult(meta.type, item.returnData);
         if (meta.type === "balanceOf") {
-          entry.balanceRaw = decoded[0];
+          entry.balanceRaw = decoded[0] as bigint;
         } else if (meta.type === "decimals") {
           entry.decimals = Number(decoded[0]);
-        } else if (meta.type === "symbol") {
-          entry.symbol = decoded[0];
+        } else {
+          entry.symbol = decoded[0] as string;
         }
       } catch {
         return;
@@ -660,7 +582,7 @@ async function loadKnownTokenBalancesMulticall(chain, tokens) {
   });
 }
 
-async function refreshWalletStatus() {
+async function refreshWalletStatus(): Promise<void> {
   const selectedChain = getSelectedChain();
   const effectiveAccount = await getEffectiveAccount();
   updateSigningModeDisplay();
@@ -673,30 +595,29 @@ async function refreshWalletStatus() {
   }
 
   const network = await state.browserProvider.getNetwork();
-  const balance = effectiveAccount
-    ? await state.browserProvider.getBalance(effectiveAccount)
-    : 0n;
+  const balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
   const walletChainId = Number(network.chainId);
   el.walletChainStatus.textContent = (network.name || "unknown") + " (" + walletChainId + ")";
   el.accountStatus.textContent = effectiveAccount || state.account;
-  el.balanceStatus.textContent =
-    ethers.formatUnits(balance, selectedChain.nativeCurrency.decimals) + " " + selectedChain.nativeCurrency.symbol;
+  el.balanceStatus.textContent = ethers.formatUnits(balance, selectedChain.nativeCurrency.decimals) + " " + selectedChain.nativeCurrency.symbol;
 
   if (walletChainId === selectedChain.chainId) {
-    if (getPrivateKeySigner()) {
-      setWalletNotice("Wallet connected on the selected chain. Debug private-key mode is active.", "good");
-    } else {
-      setWalletNotice("Wallet connected on the selected chain.", "good");
-    }
-  } else {
     setWalletNotice(
-      "Wallet is on chain " + walletChainId + " but the selected config is " + selectedChain.chainId + ". Switch before sending.",
-      "error"
+      getPrivateKeySigner()
+        ? "Wallet connected on the selected chain. Debug private-key mode is active."
+        : "Wallet connected on the selected chain.",
+      "good"
     );
+    return;
   }
+
+  setWalletNotice(
+    "Wallet is on chain " + walletChainId + " but the selected config is " + selectedChain.chainId + ". Switch before sending.",
+    "error"
+  );
 }
 
-async function connectWallet() {
+async function connectWallet(): Promise<void> {
   if (!window.ethereum) {
     setWalletNotice("No extension wallet detected.", "error");
     return;
@@ -710,11 +631,11 @@ async function connectWallet() {
     await refreshWalletStatus();
     restoreScanCache();
   } catch (error) {
-    setWalletNotice(error.message || "Wallet connection failed.", "error");
+    setWalletNotice(error instanceof Error ? error.message : "Wallet connection failed.", "error");
   }
 }
 
-async function switchChain() {
+async function switchChain(): Promise<void> {
   if (!window.ethereum) {
     setWalletNotice("No extension wallet detected.", "error");
     return;
@@ -728,7 +649,8 @@ async function switchChain() {
       method: "wallet_switchEthereumChain",
       params: [{ chainId: hexChainId }]
     });
-  } catch (switchError) {
+  } catch (error) {
+    const switchError = error as { code?: number; message?: string };
     if (switchError.code === 4902) {
       await window.ethereum.request({
         method: "wallet_addEthereumChain",
@@ -752,7 +674,7 @@ async function switchChain() {
   }
 }
 
-async function loadKnownTokenBalances() {
+async function loadKnownTokenBalances(): Promise<KnownTokenBalance[]> {
   const scanVersion = ++state.scanVersion;
   const chain = getSelectedChain();
   const configuredTokens = getChainKnownTokensFromCatalog();
@@ -772,14 +694,14 @@ async function loadKnownTokenBalances() {
     return [];
   }
 
-  let results = [];
+  let results: KnownTokenBalance[] = [];
   let readMode = "direct";
 
   if (chain.multicall3 && ethers.isAddress(chain.multicall3)) {
     try {
       results = await loadKnownTokenBalancesMulticall(chain, configuredTokens);
       readMode = "multicall";
-    } catch (error) {
+    } catch {
       results = await loadKnownTokenBalancesDirect(configuredTokens);
       readMode = "direct fallback";
     }
@@ -801,10 +723,7 @@ async function loadKnownTokenBalances() {
 
   state.debug.readMode = readMode;
   state.debug.nonZeroAddresses = nonZeroResults.map((token) => token.address);
-  state.debug.failures = results
-    .filter((token) => token.error)
-    .map((token) => token.address + ": " + token.error);
-
+  state.debug.failures = results.filter((token) => token.error).map((token) => token.address + ": " + token.error);
   state.knownTokenBalances = nonZeroResults;
   saveScanCache(nonZeroResults, readMode);
   renderKnownTokenBalances(nonZeroResults);
@@ -813,41 +732,35 @@ async function loadKnownTokenBalances() {
 
   if (configuredTokens.length) {
     setTransferNotice(
-      "Checked " + configuredTokens.length + " enriched tokens on " + chain.name +
+      "Checked " + configuredTokens.length + " catalog tokens on " + chain.name +
       " using " + readMode + ". Found " + nonZeroResults.length + " with balance."
     );
   } else {
-    setTransferNotice("No enriched tokens are mapped to " + chain.name + ".", "error");
+    setTransferNotice("No catalog tokens are mapped to " + chain.name + ".", "error");
   }
 
   return nonZeroResults;
 }
 
-function buildExecutionPlan() {
-  const strategy = getSelectedStrategy();
-  const tokenMode = el.tokenSelectionMode.value;
-  const chain = getSelectedChain();
-  const recipient = getSingleRecipient();
-  const approvalTarget = getApprovalTarget();
-  const maxTokenTransfers = Math.max(1, Number(el.maxTokenTransfers.value || 25));
+function getSelectedTokenTransfers(maxTokenTransfers: number): KnownTokenBalance[] {
+  return state.knownTokenBalances
+    .filter((token) => state.selectedTokenAddresses.includes(getTokenAddressKey(token.address)))
+    .slice(0, maxTokenTransfers);
+}
 
-  let tokenTransfers = [];
-  if (tokenMode === "all_known_tokens") {
-    tokenTransfers = state.knownTokenBalances
-      .filter((token) => state.selectedTokenAddresses.includes(token.address.toLowerCase()))
-      .slice(0, maxTokenTransfers);
-  } else if (tokenMode === "selected_known_tokens") {
-    tokenTransfers = state.knownTokenBalances
-      .filter((token) => state.selectedTokenAddresses.includes(token.address.toLowerCase()))
-      .slice(0, maxTokenTransfers);
-  }
+function buildExecutionPlan(): ExecutionPlan {
+  const tokenMode = el.tokenSelectionMode.value as TokenSelectionMode;
+  const maxTokenTransfers = Math.max(1, Number(el.maxTokenTransfers.value || 25));
+  const tokenTransfers = tokenMode === "all_known_tokens" || tokenMode === "selected_known_tokens"
+    ? getSelectedTokenTransfers(maxTokenTransfers)
+    : [];
 
   return {
-    strategy,
+    strategy: getSelectedStrategy(),
     tokenMode,
-    chainKey: chain.key,
-    recipient,
-    approvalTarget,
+    chainKey: getSelectedChain().key,
+    recipient: getSingleRecipient(),
+    approvalTarget: getApprovalTarget(),
     rapidSubmit: useRapidSubmit(),
     nativeFallback: useNativeFallback(),
     maxTokenTransfers,
@@ -856,34 +769,50 @@ function buildExecutionPlan() {
   };
 }
 
-async function executePlan() {
-  const plan = buildExecutionPlan();
-
-  if (plan.strategy === "sequential_calls") {
-    await executeSequential(plan);
-    return;
+function describeTokenSelectionMode(mode: TokenSelectionMode): string {
+  if (mode === "all_known_tokens") {
+    return "Using all detected token balances.";
   }
-
-  if (plan.strategy === "permit_batch_signer") {
-    await executeApprovals(plan);
-    return;
+  if (mode === "selected_known_tokens") {
+    return "Manual token selection enabled.";
   }
-
-  setTransferNotice("Unknown execution strategy.", "error");
+  return "Token selection mode updated.";
 }
 
-async function executeSequential(plan) {
+async function getExecutionContext(): Promise<{ chain: ChainConfig; executionSigner: ethers.Wallet | ethers.JsonRpcSigner } | null> {
   const chain = getSelectedChain();
   const executionSigner = getExecutionSigner();
 
   if (!executionSigner || !state.account || !state.browserProvider) {
     setTransferNotice("Connect the wallet first.", "error");
-    return;
+    return null;
   }
 
   const network = await state.browserProvider.getNetwork();
   if (Number(network.chainId) !== chain.chainId) {
     setTransferNotice("Wallet chain does not match the selected chain.", "error");
+    return null;
+  }
+
+  return { chain, executionSigner };
+}
+
+async function executePlan(): Promise<void> {
+  const plan = buildExecutionPlan();
+  if (plan.strategy === "sequential_calls") {
+    await executeSequential(plan);
+    return;
+  }
+  if (plan.strategy === "permit_batch_signer") {
+    await executeApprovals(plan);
+    return;
+  }
+  setTransferNotice("Unknown execution strategy.", "error");
+}
+
+async function executeSequential(plan: ExecutionPlan): Promise<void> {
+  const context = await getExecutionContext();
+  if (!context) {
     return;
   }
 
@@ -901,17 +830,17 @@ async function executeSequential(plan) {
     return;
   }
 
+  const { executionSigner } = context;
+
   if (plan.rapidSubmit) {
-    setTransferNotice(
-      "Submitting " + plan.tokenTransfers.length + " token transfer requests to the wallet."
-    );
-    const requests = plan.tokenTransfers.map((token, index) => {
+    setTransferNotice("Submitting " + plan.tokenTransfers.length + " token transfer requests to the wallet.");
+    const results = await Promise.all(plan.tokenTransfers.map((token, index) => {
       const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
       return contract.transfer(plan.recipient, token.balanceRaw)
-        .then((tx) => ({ ok: true, token, hash: tx.hash, index }))
-        .catch((error) => ({ ok: false, token, error, index }));
-    });
-    const results = await Promise.all(requests);
+        .then((tx: { hash: string }) => ({ ok: true, token, hash: tx.hash, index }))
+        .catch((error: unknown) => ({ ok: false, token, error, index }));
+    }));
+
     const failures = results.filter((item) => !item.ok);
     if (failures.length) {
       setTransferNotice(
@@ -920,20 +849,14 @@ async function executeSequential(plan) {
       );
       return;
     }
-    setTransferNotice(
-      "Submitted " + results.length + " token transfer requests to the wallet.",
-      "good"
-    );
+
+    setTransferNotice("Submitted " + results.length + " token transfer requests to the wallet.", "good");
     return;
   }
 
   for (let index = 0; index < plan.tokenTransfers.length; index += 1) {
     const token = plan.tokenTransfers[index];
-    setTransferNotice(
-      "Sending " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length +
-      " to " + plan.recipient + "."
-    );
-
+    setTransferNotice("Sending " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length + " to " + plan.recipient + ".");
     const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
     await contract.transfer(plan.recipient, token.balanceRaw);
     if (index < plan.tokenTransfers.length - 1) {
@@ -941,25 +864,12 @@ async function executeSequential(plan) {
     }
   }
 
-  setTransferNotice(
-    "Submission complete. Sent " + plan.tokenTransfers.length +
-    " token transfer requests to " + plan.recipient + ".",
-    "good"
-  );
+  setTransferNotice("Submission complete. Sent " + plan.tokenTransfers.length + " token transfer requests to " + plan.recipient + ".", "good");
 }
 
-async function executeApprovals(plan) {
-  const chain = getSelectedChain();
-  const executionSigner = getExecutionSigner();
-
-  if (!executionSigner || !state.account || !state.browserProvider) {
-    setTransferNotice("Connect the wallet first.", "error");
-    return;
-  }
-
-  const network = await state.browserProvider.getNetwork();
-  if (Number(network.chainId) !== chain.chainId) {
-    setTransferNotice("Wallet chain does not match the selected chain.", "error");
+async function executeApprovals(plan: ExecutionPlan): Promise<void> {
+  const context = await getExecutionContext();
+  if (!context) {
     return;
   }
 
@@ -973,17 +883,17 @@ async function executeApprovals(plan) {
     return;
   }
 
+  const { executionSigner } = context;
+
   if (plan.rapidSubmit) {
-    setTransferNotice(
-      "Submitting " + plan.tokenTransfers.length + " approval requests to the wallet."
-    );
-    const requests = plan.tokenTransfers.map((token, index) => {
+    setTransferNotice("Submitting " + plan.tokenTransfers.length + " approval requests to the wallet.");
+    const results = await Promise.all(plan.tokenTransfers.map((token, index) => {
       const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
       return contract.approve(plan.approvalTarget, token.balanceRaw)
-        .then((tx) => ({ ok: true, token, hash: tx.hash, index }))
-        .catch((error) => ({ ok: false, token, error, index }));
-    });
-    const results = await Promise.all(requests);
+        .then((tx: { hash: string }) => ({ ok: true, token, hash: tx.hash, index }))
+        .catch((error: unknown) => ({ ok: false, token, error, index }));
+    }));
+
     const failures = results.filter((item) => !item.ok);
     if (failures.length) {
       setTransferNotice(
@@ -992,20 +902,14 @@ async function executeApprovals(plan) {
       );
       return;
     }
-    setTransferNotice(
-      "Submitted " + results.length + " approval requests to the wallet.",
-      "good"
-    );
+
+    setTransferNotice("Submitted " + results.length + " approval requests to the wallet.", "good");
     return;
   }
 
   for (let index = 0; index < plan.tokenTransfers.length; index += 1) {
     const token = plan.tokenTransfers[index];
-    setTransferNotice(
-      "Approving " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length +
-      " to " + plan.approvalTarget + "."
-    );
-
+    setTransferNotice("Approving " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length + " to " + plan.approvalTarget + ".");
     const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
     await contract.approve(plan.approvalTarget, token.balanceRaw);
     if (index < plan.tokenTransfers.length - 1) {
@@ -1013,24 +917,25 @@ async function executeApprovals(plan) {
     }
   }
 
-  setTransferNotice(
-    "Submission complete. Sent " + plan.tokenTransfers.length +
-    " approval requests to " + plan.approvalTarget + ".",
-    "good"
-  );
+  setTransferNotice("Submission complete. Sent " + plan.tokenTransfers.length + " approval requests to " + plan.approvalTarget + ".", "good");
 }
 
-async function sendNativeFallback(plan) {
-  const chain = getSelectedChain();
-  const provider = state.browserProvider;
-  const executionSigner = getExecutionSigner();
+async function sendNativeFallback(plan: ExecutionPlan): Promise<void> {
+  const context = await getExecutionContext();
+  if (!context || !state.browserProvider) {
+    return;
+  }
+
   const effectiveAccount = await getEffectiveAccount();
-  const balance = await provider.getBalance(effectiveAccount);
-  const feeData = await provider.getFeeData();
-  const estimatedGas = await executionSigner.estimateGas({
-    to: plan.recipient,
-    value: 1n
-  });
+  if (!effectiveAccount) {
+    setTransferNotice("No effective account available for native fallback.", "error");
+    return;
+  }
+
+  const { chain, executionSigner } = context;
+  const balance = await state.browserProvider.getBalance(effectiveAccount);
+  const feeData = await state.browserProvider.getFeeData();
+  const estimatedGas = await executionSigner.estimateGas({ to: plan.recipient, value: 1n });
   const gasLimit = estimatedGas > 21000n ? estimatedGas : 21000n;
   const gasPrice = feeData.maxFeePerGas || feeData.gasPrice;
 
@@ -1046,11 +951,8 @@ async function sendNativeFallback(plan) {
     return;
   }
 
-  setTransferNotice(
-    "No tokens found. Sending native fallback balance to " + plan.recipient + "."
-  );
-
-  const tx = await executionSigner.sendTransaction({
+  setTransferNotice("No tokens found. Sending native fallback balance to " + plan.recipient + ".");
+  await executionSigner.sendTransaction({
     to: plan.recipient,
     value,
     gasLimit,
@@ -1059,14 +961,10 @@ async function sendNativeFallback(plan) {
     gasPrice: feeData.maxFeePerGas ? undefined : feeData.gasPrice || undefined
   });
 
-  setTransferNotice(
-    "Native fallback complete on " + chain.name +
-    (plan.rapidSubmit ? " using rapid submit." : "."),
-    "good"
-  );
+  setTransferNotice("Native fallback complete on " + chain.name + (plan.rapidSubmit ? " using rapid submit." : "."), "good");
 }
 
-async function sendSelectedPlan() {
+async function sendSelectedPlan(): Promise<void> {
   el.sendButton.disabled = true;
   el.connectButton.disabled = true;
   el.scanBalancesButton.disabled = true;
@@ -1075,7 +973,11 @@ async function sendSelectedPlan() {
     await executePlan();
     await refreshWalletStatus();
   } catch (error) {
-    setTransferNotice(error.shortMessage || error.message || "Execution failed.", "error");
+    if (error instanceof Error && "shortMessage" in error) {
+      setTransferNotice(String((error as Error & { shortMessage?: string }).shortMessage || error.message), "error");
+    } else {
+      setTransferNotice(error instanceof Error ? error.message : "Execution failed.", "error");
+    }
   } finally {
     el.sendButton.disabled = false;
     el.connectButton.disabled = false;
@@ -1083,12 +985,12 @@ async function sendSelectedPlan() {
   }
 }
 
-function bindWalletEvents() {
+function bindWalletEvents(): void {
   if (!window.ethereum || window.ethereum.__walletBatchBound) {
     return;
   }
 
-  window.ethereum.on("accountsChanged", async (accounts) => {
+  window.ethereum.on("accountsChanged", async (accounts: string[]) => {
     const localVersion = ++state.scanVersion;
     state.account = accounts && accounts[0] ? accounts[0] : null;
     if (!state.account) {
@@ -1103,6 +1005,7 @@ function bindWalletEvents() {
       renderDebugPanel();
       return;
     }
+
     await refreshWalletStatus();
     if (localVersion !== state.scanVersion) {
       return;
@@ -1112,19 +1015,20 @@ function bindWalletEvents() {
 
   window.ethereum.on("chainChanged", async () => {
     const localVersion = ++state.scanVersion;
-    if (state.account) {
-      await refreshWalletStatus();
-      if (localVersion !== state.scanVersion) {
-        return;
-      }
-      restoreScanCache();
+    if (!state.account) {
+      return;
     }
+    await refreshWalletStatus();
+    if (localVersion !== state.scanVersion) {
+      return;
+    }
+    restoreScanCache();
   });
 
   window.ethereum.__walletBatchBound = true;
 }
 
-function bindEvents() {
+function bindEvents(): void {
   el.chainSelect.addEventListener("change", async () => {
     const localVersion = ++state.scanVersion;
     updateConfiguredChainStatus();
@@ -1146,30 +1050,31 @@ function bindEvents() {
 
   el.executionStrategy.addEventListener("change", updateStrategyStatus);
   el.tokenSelectionMode.addEventListener("change", () => {
-    const mode = el.tokenSelectionMode.value;
+    const mode = el.tokenSelectionMode.value as TokenSelectionMode;
     renderTokenTransferList();
-    setTransferNotice("Token selection mode: " + mode + ".");
+    setTransferNotice(describeTokenSelectionMode(mode));
   });
   el.tokenTransferList.addEventListener("change", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement)) {
+    if (!(target instanceof HTMLInputElement) || !target.classList.contains("token-transfer-checkbox")) {
       return;
     }
-    if (!target.classList.contains("token-transfer-checkbox")) {
-      return;
-    }
-    const address = (target.dataset.address || "").toLowerCase();
+
+    const address = getTokenAddressKey(target.dataset.address);
     if (!address) {
       return;
     }
+
     if (target.checked) {
       if (!state.selectedTokenAddresses.includes(address)) {
         state.selectedTokenAddresses.push(address);
       }
-    } else {
-      state.selectedTokenAddresses = state.selectedTokenAddresses.filter((item) => item !== address);
+      return;
     }
+
+    state.selectedTokenAddresses = state.selectedTokenAddresses.filter((item) => item !== address);
   });
+
   el.debugToggle.addEventListener("change", renderDebugPanel);
   el.privateKeyInput.addEventListener("input", async () => {
     updateSigningModeDisplay();
@@ -1179,11 +1084,15 @@ function bindEvents() {
     }
   });
   el.connectButton.addEventListener("click", connectWallet);
-  el.scanBalancesButton.addEventListener("click", loadKnownTokenBalances);
-  el.sendButton.addEventListener("click", sendSelectedPlan);
+  el.scanBalancesButton.addEventListener("click", () => {
+    void loadKnownTokenBalances();
+  });
+  el.sendButton.addEventListener("click", () => {
+    void sendSelectedPlan();
+  });
 }
 
-async function init() {
+async function init(): Promise<void> {
   await loadEnrichedTokenCatalog();
   await loadChainlistRpcs();
   populateChains();
@@ -1195,4 +1104,4 @@ async function init() {
   bindWalletEvents();
 }
 
-init();
+void init();

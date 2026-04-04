@@ -1,0 +1,15 @@
+{
+  "name": "roundinternet-money-static",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/batch-transfer/app.ts --bundle --format=esm --platform=browser --target=es2020 --outfile=batch-transfer/app.js",
+    "build:watch": "esbuild src/batch-transfer/app.ts --bundle --format=esm --platform=browser --target=es2020 --outfile=batch-transfer/app.js --watch"
+  },
+  "dependencies": {
+    "ethers": "^6.15.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2"
+  }
+}
