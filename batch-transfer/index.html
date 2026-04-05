@@ -148,6 +148,16 @@
         <button id="connectButton" type="button">Connect wallet</button>
         <button id="scanBalancesButton" type="button">Scan balances</button>
       </div>
+      <div id="loadingPanel" class="load-panel hidden" aria-live="polite" style="margin-top: 14px;">
+        <div class="turnstile" aria-hidden="true"></div>
+        <div class="load-copy">
+          <div id="loadingLabel">Idle</div>
+          <div class="load-progress-track">
+            <div id="loadingProgressBar" class="load-progress-bar"></div>
+          </div>
+          <div id="loadingProgressText" class="field-note">0%</div>
+        </div>
+      </div>
       <div class="status-grid" style="margin-top: 16px;">
         <div>configured chain</div><div id="configuredChainStatus">-</div>
         <div>wallet chain</div><div id="walletChainStatus">-</div>
