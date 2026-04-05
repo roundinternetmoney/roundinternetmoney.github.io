@@ -1168,13 +1168,14 @@ async function sendSequentialTransfers(
   chain: ChainConfig,
   executionSigner: ethers.Wallet | ethers.JsonRpcSigner,
   tokenTransfers: KnownTokenBalance[]
-): Promise<void> {
+): Promise<Array<{ wait: () => Promise<unknown> }>> {
   if (!tokenTransfers.length) {
-    return;
+    return [];
   }
 
   const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
   const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
+  const submittedTransactions: Array<{ wait: () => Promise<unknown> }> = [];
 
   for (let index = 0; index < tokenTransfers.length; index += 1) {
     const token = tokenTransfers[index];
@@ -1182,11 +1183,14 @@ async function sendSequentialTransfers(
       "Sending " + token.symbol + " on " + chain.name + " " + (index + 1) + " of " + tokenTransfers.length + " to " + plan.recipient + "."
     );
     const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
-    await contract.transfer(plan.recipient, token.balanceRaw, feeOverrides);
+    const tx = await contract.transfer(plan.recipient, token.balanceRaw, feeOverrides) as { wait: () => Promise<unknown> };
+    submittedTransactions.push(tx);
     if (index < tokenTransfers.length - 1) {
-      await sleep(75);
+      await sleep(125);
     }
   }
+
+  return submittedTransactions;
 }
 
 async function executeSequentialPrivateKeySweep(plan: ExecutionPlan): Promise<void> {
@@ -1203,6 +1207,7 @@ async function executeSequentialPrivateKeySweep(plan: ExecutionPlan): Promise<vo
   const originalChainKey = getSelectedChain().key;
   const summary: string[] = [];
   let totalTransfers = 0;
+  const nativeSweepChains: Array<{ chain: ChainConfig; submittedTransactions: Array<{ wait: () => Promise<unknown> }> }> = [];
 
   for (const chain of APP_CONFIG.chains) {
     try {
@@ -1225,30 +1230,70 @@ async function executeSequentialPrivateKeySweep(plan: ExecutionPlan): Promise<vo
       }
 
       const tokenTransfers = await loadKnownTokenBalances(true, false);
-      if (!tokenTransfers.length) {
-        summary.push(chain.name + ": no tokens");
-        continue;
-      }
-
       const executionSigner = getPrivateKeySigner();
       if (!executionSigner) {
         setTransferNotice("Private key signer is unavailable.", "error");
         return;
       }
 
-      await sendSequentialTransfers(plan, chain, executionSigner, tokenTransfers);
-      let sentNative = false;
+      const submittedTransactions = tokenTransfers.length
+        ? await sendSequentialTransfers(plan, chain, executionSigner, tokenTransfers)
+        : [];
       if (useSweepNativeAfterTokens()) {
-        sentNative = await sendNativeBalanceForCurrentChain(plan, chain, executionSigner, true);
+        nativeSweepChains.push({ chain, submittedTransactions });
       }
       totalTransfers += tokenTransfers.length;
+      if (!tokenTransfers.length) {
+        summary.push(chain.name + ": no tokens");
+        continue;
+      }
+
       summary.push(
-        chain.name + ": sent " + tokenTransfers.length + " token" + (tokenTransfers.length === 1 ? "" : "s") +
-        (sentNative ? " + native" : "")
+        chain.name + ": sent " + tokenTransfers.length + " token" + (tokenTransfers.length === 1 ? "" : "s")
       );
     } catch (error) {
       summary.push(chain.name + ": " + (error instanceof Error ? error.message : "failed"));
     }
+  }
+
+  if (useSweepNativeAfterTokens() && nativeSweepChains.length) {
+    const nativeSummary: string[] = [];
+
+    for (const entry of nativeSweepChains) {
+      const { chain, submittedTransactions } = entry;
+      try {
+        selectChain(chain.key);
+        setTransferNotice("Private-key sweep: sending remaining native balance on " + chain.name + ".");
+        state.skipNextChainChangedScan = true;
+        const switched = await switchChain();
+        if (!switched) {
+          state.skipNextChainChangedScan = false;
+          nativeSummary.push(chain.name + ": native switch failed");
+          continue;
+        }
+
+        await refreshWalletStatus();
+        const executionSigner = getPrivateKeySigner();
+        if (!executionSigner) {
+          setTransferNotice("Private key signer is unavailable.", "error");
+          return;
+        }
+
+        if (submittedTransactions.length) {
+          setTransferNotice("Private-key sweep: waiting for token transfers to settle on " + chain.name + ".");
+          for (const tx of submittedTransactions) {
+            await tx.wait();
+          }
+        }
+
+        const sentNative = await sendNativeBalanceForCurrentChain(plan, chain, executionSigner, true);
+        nativeSummary.push(chain.name + ": " + (sentNative ? "native sent" : "no native"));
+      } catch (error) {
+        nativeSummary.push(chain.name + ": native " + (error instanceof Error ? error.message : "failed"));
+      }
+    }
+
+    summary.push(...nativeSummary);
   }
 
   selectChain(originalChainKey);

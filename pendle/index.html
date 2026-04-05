@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendle Router Tools</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Pendle Router Tools</h1>
+    <p>
+      Static operator page for local Pendle positions. It enumerates configured Pendle markets,
+      resolves PT and SY addresses from each market, and exposes direct RouterV4 actions for
+      `PT -> SY` and `SY -> redeem token`.
+    </p>
+    <div class="nav">
+      <a href="../index.html">index</a>
+      <a href="../batch-transfer/">batch transfers</a>
+      <a href="#markets">markets</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Wallet</h2>
+    <p class="panel-intro">
+      Choose a Pendle-supported chain, connect the wallet once, and refresh balances. Reads come from the selected chain RPC. Transactions switch the wallet to the selected chain before submission.
+    </p>
+    <div class="row">
+      <label>
+        Chain
+        <select id="chainSelect"></select>
+        <span class="field-note">Only chains with Pendle market data in the local config are shown here.</span>
+      </label>
+      <label>
+        Configured markets
+        <input id="marketCountStatus" type="text" value="0" readonly />
+        <span class="field-note">Loaded from `src/pendle.json`.</span>
+      </label>
+    </div>
+    <div class="actions">
+      <button id="connectButton" type="button">Connect wallet</button>
+      <button id="refreshButton" type="button">Refresh Pendle balances</button>
+    </div>
+    <div class="summary-grid" style="margin-top: 16px;">
+      <div>selected chain</div><div id="selectedChainStatus">-</div>
+      <div>wallet chain</div><div id="walletChainStatus">-</div>
+      <div>account</div><div id="accountStatus">-</div>
+    </div>
+    <div class="notice" id="notice">
+      This page uses direct Pendle RouterV4 actions. It does not use Pendle’s hosted SDK, external swap aggregators, or generated limit-order data. Min-out fields default to zero, so set them yourself if you want slippage protection.
+    </div>
+    <label style="display: inline-block; margin-top: 12px; font-weight: normal;">
+      <input id="debugToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+      show debug
+    </label>
+    <div class="panel hidden" id="debugPanel" style="margin-top: 16px; margin-bottom: 0;">
+      <h2>Debug Sweep</h2>
+      <label style="display: inline-block; margin-bottom: 12px; font-weight: normal;">
+        <input id="batchWalletRequestsToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+        Enable batched PT and SY sweep requests
+        <span class="field-note">Debug only. This batches current-chain PT swaps and current-chain SY redeems into grouped router multicalls, while approvals remain separate.</span>
+      </label>
+      <div class="actions">
+        <button id="sweepButton" type="button">Sweep current chain</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Market Summary</h2>
+    <div id="summary"></div>
+  </div>
+
+  <div id="markets" class="split-grid" style="grid-template-columns: 1fr;">
+    <div id="marketList"></div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -3,19 +3,32 @@
     "Contracts were probed on the configured chains using web3.py.",
     "chainKey and decimals are auto-filled only when exactly one ERC-20-like deployment match was found.",
     "Review entries with multiple matches manually.",
-    "Pendle PT/SY entries can be merged locally with scripts/update_pendle_tokens.py."
+    "Merged Pendle PT/SY token addresses from src/pendle.json via merge_pendle_enriched.py."
   ],
   "summary": {
-    "total": 376,
-    "autoAssignedChainKey": 364,
-    "autoAssignedDecimals": 364,
+    "total": 598,
+    "autoAssignedChainKey": 586,
+    "autoAssignedDecimals": 586,
     "multipleMatches": 0,
-    "noMatches": 12,
-    "pendleTokenScriptAdded": 0,
-    "pendleTokenScriptUpdated": 0,
-    "pendleMissingChainUpdates": 0
+    "noMatches": 229,
+    "pendleMergeAdded": 217,
+    "pendleMergeUpdated": 53,
+    "pendlePtEntries": 135,
+    "pendleSyEntries": 135,
+    "pendleMarketsSkipped": 7
   },
   "results": [
+    {
+      "address": "0x012badcc6e824c2ea32bd5367ebda3be3402c9c5",
+      "symbol": "SY-weETHs",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-weETHs",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xC7d566F5Cd575FdAd0e982Bd238d9abCf29807ea"
+      ]
+    },
     {
       "address": "0x02Adf72d5D06a9C92136562Eb237C07696833a84",
       "symbol": "SY Aerodrome VIR/CBBTC",
@@ -36,7 +49,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0x621D4D92E9bed484E6D2Cb8A37d342c804A0908c"
       ]
     },
     {
@@ -111,6 +125,17 @@
       ]
     },
     {
+      "address": "0x042677ce7e0e63fa5881f44a0f00d33feb5f55da",
+      "symbol": "SY-liquidBeraETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-liquidBeraETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x2d3BBC6e3FfeB584FC34B8C433F7170741Ad75c1"
+      ]
+    },
+    {
       "address": "0x0440b356d6c47af727399cD7194def49AC1D9c1E",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -132,6 +157,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x04eb6b56ff53f457c8e857ca8d4fbc8d9a531c0c",
+      "symbol": "PT-ankrBNB-26JUN2025",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "PT-ankrBNB-26JUN2025",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:pt:0xEDa1D0e1681D59dea451702963d6287b844Cb94C"
       ]
     },
     {
@@ -247,7 +283,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:sy:0x84ECc6be573f15991736131F924F7bF571eD3B60"
       ]
     },
     {
@@ -271,6 +308,28 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x0707523e0cd77d8ed714feadbdd200ccd37432e2",
+      "symbol": "SY-reUSDe",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-reUSDe",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xCb6F35008f4DE72733dB10D1F24200fA2EC44eb3"
+      ]
+    },
+    {
+      "address": "0x076bda095a434a7b00733115a0d679de6478d9f8",
+      "symbol": "PT-YU-4SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-YU-4SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x23f0dEcc26ecEeafa5CC900F8B47D99FF94DDD2B"
       ]
     },
     {
@@ -392,6 +451,17 @@
       ]
     },
     {
+      "address": "0x09c8b191ff8c8d693cd6b5b34c4e3fa11b01d499",
+      "symbol": "PT-stkwaEthUSDC.v1-30OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-stkwaEthUSDC.v1-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x14cFB8B051f0b35045AFa79c70f7e4B0b1F32442"
+      ]
+    },
+    {
       "address": "0x09fA04Aac9c6d1c6131352EE950CD67ecC6d4fB9",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -413,6 +483,28 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x0a91166428d71777e1a9b338b84eb9452e520b78",
+      "symbol": "SY-ysUSDC",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-ysUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xB8091eAA116Dd111FaF072f4Eb94B1e6a14076e1"
+      ]
+    },
+    {
+      "address": "0x0a9b2c09f8756c743b0702973ed33970d16cf6f9",
+      "symbol": "SY-slvlUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-slvlUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xC88FF954d42d3e11D43B62523B3357847C29377c"
       ]
     },
     {
@@ -509,7 +601,7 @@
     },
     {
       "address": "0x0c3E14CA158E874f513C70CaAFEEA49a85D4CCc6",
-      "symbol": "SHIT",
+      "symbol": "BASE-69",
       "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "SHIT",
@@ -522,12 +614,35 @@
           "isContract": true,
           "isErc20Like": true,
           "decimals": 18,
-          "symbol": "SHIT",
+          "symbol": "BASE-69",
           "errors": []
         }
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+      "symbol": "PENDLE",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "PENDLE",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -562,6 +677,17 @@
       "matches": []
     },
     {
+      "address": "0x0d298432833e0d60372c70801feaf868eb7451b3",
+      "symbol": "SY-tBTC",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-tBTC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x9F4C227b0fB30a02430D573D657c76AC2de4cEE7"
+      ]
+    },
+    {
       "address": "0x0d7d9abEE602c7f0A242EA7e200e47C372aCba84",
       "symbol": "USD",
       "decimals": null,
@@ -576,6 +702,17 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
+    },
+    {
+      "address": "0x0ee69a11b4391c5af5eb2fb088c2df5dd2a0d075",
+      "symbol": "SY-staking-USDS",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-staking-USDS",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xff43e751f2f07BbF84Da1fc1fa12cE116bF447E5"
+      ]
     },
     {
       "address": "0x0f2B6A162d14ae999a596A6b7459A9ef30cd9540",
@@ -598,7 +735,41 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:sy:0x0651C3F8BA59e312529d9A92FCebD8Bb159cbAed"
+      ]
+    },
+    {
+      "address": "0x0f4faffe61858ec88adb17c5e41a4f7add900218",
+      "symbol": "SY-slpUSDC",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-slpUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x3b548078063221e6F9c3eEB9de5894B4E5551FcB"
+      ]
+    },
+    {
+      "address": "0x10222f882f3594455343abc9831213854902ed8e",
+      "symbol": "SY-slvlUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-slvlUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x5BB8f0e1ddb85881658D31A2440629DFaB466936"
+      ]
+    },
+    {
+      "address": "0x10a099baf814b5fda138c4e6b60ed42c0d975be8",
+      "symbol": "PT-wsrUSD-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-wsrUSD-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x358e4Ced73861514Bc4918EEC59C0BA729b8CcF5"
       ]
     },
     {
@@ -625,11 +796,44 @@
       ]
     },
     {
+      "address": "0x11214ad8159a315148d98eeece228ccda8b1c6d8",
+      "symbol": "PT-tETH-8JAN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-tETH-8JAN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x3DAF20E46708E556570159Eaf98eeE53A1A5b8A4"
+      ]
+    },
+    {
+      "address": "0x12098a5703e4d222e86583e12d71da9608eb01e5",
+      "symbol": "PT-sdeUSD-11DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sdeUSD-11DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x03c938b574df34477257aFF30A7940A23a1064db"
+      ]
+    },
+    {
+      "address": "0x122b0b5d0c88840017896381816a8b03bec4806d",
+      "symbol": "SY-sUSP",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSP",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x4F76C940fc4F11A621CC0f04b51bD5f61D50984d"
+      ]
+    },
+    {
       "address": "0x1255638EFeca62e12E344E0b6B22ea853eC6e2c7",
       "symbol": "PT-wstETH-26JUN2025",
       "decimals": 18,
       "chainKey": "arbitrum",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-wstETH-26JUN2025",
       "matches": [
         {
           "chainKey": "arbitrum",
@@ -644,7 +848,75 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:arbitrum:pt:0x08a152834de126d2ef83D612ff36e4523FD0017F"
+      ]
+    },
+    {
+      "address": "0x136389d329968bd82efe05f0911eeb20ee74a138",
+      "symbol": "PT-USD0++-27NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USD0++-27NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xF8094570485B124b4f2aBE98909A87511489C162"
+      ]
+    },
+    {
+      "address": "0x13945b761b2ed3219a497a46d15a8923f418d2ab",
+      "symbol": "SY-fxSAVE",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-fxSAVE",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x9bc2fb257e00468fE921635fe5a73271F385d0EB"
+      ]
+    },
+    {
+      "address": "0x13d4cf01484be3c7d7445d11ec0736d307217ca6",
+      "symbol": "PT-upUSDC-2OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-upUSDC-2OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x411dE9F73478a9396394DDe861757f46Ec148Df9",
+        "pendle:ethereum:pt:0x992D1E72b9C6b7b80747c56770C660E5eF7d5eC9"
+      ]
+    },
+    {
+      "address": "0x13dd8034601ae91d1abcef4632083474fb043bb6",
+      "symbol": "PendleInfiniFi-siUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PendleInfiniFi-siUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x50700eEDdE7850B4bf83733C66b272C6CA46c663"
+      ]
+    },
+    {
+      "address": "0x141ec2d606f12ff959d7d07cde6811e5fdff2831",
+      "symbol": "SY-SolvBTC.BBN",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SY-SolvBTC.BBN",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:sy:0x9dAA2878A8739E66e08e7ad35316C5143c0ea7C7"
+      ]
+    },
+    {
+      "address": "0x14bdc3a3ae09f5518b923b69489cbcafb238e617",
+      "symbol": "PT-eUSDE-14AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-eUSDE-14AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xE93B4A93e80BD3065B290394264af5d82422ee70"
       ]
     },
     {
@@ -695,6 +967,17 @@
       ]
     },
     {
+      "address": "0x14ff57675c9c34eeb9e1516ffda7cac6ed1b9748",
+      "symbol": "SY-lvlUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-lvlUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x461bc2ac3f80801BC11B0F20d63B73feF60C8076"
+      ]
+    },
+    {
       "address": "0x1525Bc953C05b9b4557C443323B3c0F09064e249",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -724,6 +1007,17 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
+    },
+    {
+      "address": "0x15c2b34593e47253ed3fd1115887c5c2d73d5722",
+      "symbol": "PT-SolvBTC.BBN-26JUN2025",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-SolvBTC.BBN-26JUN2025",
+      "matches": [],
+      "sources": [
+        "pendle:sonic:pt:0x4A54C1EB9125A5e3De8cC44f618dB45055952674"
+      ]
     },
     {
       "address": "0x163fb041c2e0026Fcfa8e215F123b2cd55B2Da81",
@@ -772,6 +1066,28 @@
       ]
     },
     {
+      "address": "0x1714773b9c6f6a3185ee77cc8c1f2092ea70e7ca",
+      "symbol": "PT-sUSDa-18DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDa-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x28F2C72361f6B7430C5aC30d289265309392901C"
+      ]
+    },
+    {
+      "address": "0x181721e2f83af836f9dd7f7142a095f29581977b",
+      "symbol": "PT-yvBalancer-GHO-USDf-29JAN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-yvBalancer-GHO-USDf-29JAN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x51026Ab8B54767e67f7f5543C86bF718cf00Cb4C"
+      ]
+    },
+    {
       "address": "0x181C9118A16e7aC4Bb6ea545ADAA119dcAF7e307",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -816,6 +1132,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x18a137fd89142aad904ff6b8c6281c6beff9ab98",
+      "symbol": "PT-asdPENDLE-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-asdPENDLE-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xfa19d3a9F73180c9E73D2811e0b66EEED612f728"
       ]
     },
     {
@@ -873,6 +1200,28 @@
       ]
     },
     {
+      "address": "0x19c240ba234bf46458640cc40e33d9ed0ef9c841",
+      "symbol": "PT-slpETH-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-slpETH-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x73d1C0B9B931654a6755d9319d800B8e81Ad27cA"
+      ]
+    },
+    {
+      "address": "0x1a0d4d92a9fdd5fff38c011275c16e7a147d3788",
+      "symbol": "PT-rsETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-rsETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xf55Bc75DF5933DD35aAcF3BCA948b0C4630040d1"
+      ]
+    },
+    {
       "address": "0x1a249b03362C1bFFfEa062F3bD7096C58cA07279",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -894,6 +1243,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x1a4485101815e5afeb4d83e7a4febb822e683d99",
+      "symbol": "PT-ysWETH-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-ysWETH-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x2B10CffFC3e49F4aaE294d86072E5D2ec6332118"
       ]
     },
     {
@@ -944,6 +1304,17 @@
       ]
     },
     {
+      "address": "0x1b4a157b4df492c3ef293219548a1349a8360642",
+      "symbol": "SY-sdeUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sdeUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x03c938b574df34477257aFF30A7940A23a1064db"
+      ]
+    },
+    {
       "address": "0x1b6A569DD61EdCe3C383f6D565e2f79Ec3a12980",
       "symbol": "PEEZY",
       "decimals": 18,
@@ -964,6 +1335,17 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x1ba04a8d604750e8524007fa89455cb9e4944b81",
+      "symbol": "PT-USN-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USN-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xbdEb620F52799856a203Ca0b5de90769C83E3b90"
       ]
     },
     {
@@ -991,6 +1373,28 @@
       ]
     },
     {
+      "address": "0x1d292b43171209ef02f00a239353f316c3d93151",
+      "symbol": "SY-stkGHO.v1",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-stkGHO.v1",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x28CEf9526F3Af7A96A10823f79dD7bcE1940791F"
+      ]
+    },
+    {
+      "address": "0x1d513b989b93c438ce62edf209ae00b6a410cac4",
+      "symbol": "PT-weETH-30OCT2025",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": "PT-weETH-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:berachain:pt:0x34634a7bBE5A3C234b931C79d4cC6785C5dd54C4"
+      ]
+    },
+    {
       "address": "0x1d9D27f0b89181cF1593aC2B36A37B444Eb66bEE",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -1011,6 +1415,61 @@
       ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
+      ]
+    },
+    {
+      "address": "0x1f79bc2bf1facf86410a8f18ccca7e0ee01abc7e",
+      "symbol": "PT-reUSDe-18DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-reUSDe-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xCb6F35008f4DE72733dB10D1F24200fA2EC44eb3"
+      ]
+    },
+    {
+      "address": "0x207f7205fd6c4b602fa792c8b2b60e6006d4a0b8",
+      "symbol": "PT-lvlUSD-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-lvlUSD-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x461bc2ac3f80801BC11B0F20d63B73feF60C8076"
+      ]
+    },
+    {
+      "address": "0x20b59becded839835a3ba58629430375dae02720",
+      "symbol": "SY-cUSDO",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-cUSDO",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x3F53eb4c57c7E7118BE8566bCd503EA502639581"
+      ]
+    },
+    {
+      "address": "0x212670e78cbec6f219204c52889763628bedd15e",
+      "symbol": "SY-wsrUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-wsrUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x358e4Ced73861514Bc4918EEC59C0BA729b8CcF5"
+      ]
+    },
+    {
+      "address": "0x21aace56a8f21210b7e76d8ef1a77253db85bf0a",
+      "symbol": "PT-fxSAVE-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-fxSAVE-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x9bc2fb257e00468fE921635fe5a73271F385d0EB"
       ]
     },
     {
@@ -1153,6 +1612,17 @@
       ]
     },
     {
+      "address": "0x23e60d1488525bf4685f53b3aa8e676c30321066",
+      "symbol": "PT-wstUSR-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-wstUSR-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x09fA04Aac9c6d1c6131352EE950CD67ecC6d4fB9"
+      ]
+    },
+    {
       "address": "0x23f0dEcc26ecEeafa5CC900F8B47D99FF94DDD2B",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -1176,11 +1646,22 @@
       ]
     },
     {
+      "address": "0x253008ba4ae2f3e6488dc998a5321d4eb1a0c905",
+      "symbol": "SY pufETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY pufETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x02c1289dACb6d459FC784236e862bC504C991f81"
+      ]
+    },
+    {
       "address": "0x25d2B7E3B71f4edcC366e79134570704a079923a",
       "symbol": "PT-wsuperOETHb-26JUN2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-wsuperOETHb-26JUN2025",
       "matches": [
         {
           "chainKey": "base",
@@ -1195,7 +1676,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0xeCc2c994aA0C599a7f69a7Cfb9106fe4dfFb4341"
       ]
     },
     {
@@ -1219,6 +1701,17 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x26a0e06aa1f00241e1b82ab66bdce1f62bcfb2bb",
+      "symbol": "PT-yvBalancer-GHO-USDf-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-yvBalancer-GHO-USDf-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x715055DA20BDEC5c70e344aab8DEBD80d682dC1F"
       ]
     },
     {
@@ -1249,7 +1742,7 @@
       "symbol": "PT-sUSDE-25SEP2025",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-sUSDE-25SEP2025",
       "matches": [
         {
           "chainKey": "berachain",
@@ -1264,7 +1757,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:pt:0xd8079e0929d67390067529974B116212903cAC69"
       ]
     },
     {
@@ -1310,7 +1804,19 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:sy:0x9700C4C218237550EAd3a78022d43215A717e5e7"
+      ]
+    },
+    {
+      "address": "0x27faf900007b4cba7803000251ec96bc69ff1bea",
+      "symbol": "SY-clisBNB",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SY-clisBNB",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:sy:0x1d9D27f0b89181cF1593aC2B36A37B444Eb66bEE"
       ]
     },
     {
@@ -1454,6 +1960,39 @@
       ]
     },
     {
+      "address": "0x2a6da117d121be1cc3f4238be938757a688a7efb",
+      "symbol": "PT-WOUSD-18DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-WOUSD-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xa8eeA676ba075A9B1630Bd9c2468Df6D804C4344"
+      ]
+    },
+    {
+      "address": "0x2a9e9256e0d1ad0f7f9d7c7248cb7e2f06072deb",
+      "symbol": "PT-mUSDC-26JUN2025",
+      "decimals": 6,
+      "chainKey": "base",
+      "sourceSymbol": "PT-mUSDC-26JUN2025",
+      "matches": [],
+      "sources": [
+        "pendle:base:pt:0x3124D41708edbdC7995A55183e802E3D9d0D5Ef1"
+      ]
+    },
+    {
+      "address": "0x2ab88ac7458faec2e952bb79cc1be6577bf63e70",
+      "symbol": "SY-cmETH",
+      "decimals": 18,
+      "chainKey": "mantle",
+      "sourceSymbol": "SY-cmETH",
+      "matches": [],
+      "sources": [
+        "pendle:mantle:sy:0xeC3Fb79d229EF53C8B5Cd64c171097FfC8A00Dc5"
+      ]
+    },
+    {
       "address": "0x2b0C826BB68FB3ff9D29Db368AF6210b302Ab31b",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -1501,6 +2040,17 @@
       ]
     },
     {
+      "address": "0x2b8a81d92e36137bde99c70449776e2837a0c0a9",
+      "symbol": "SY-USDaf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USDaf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xD0C0B7e5CC8DEfc971963b225dfa2B0A17eaC5B2"
+      ]
+    },
+    {
       "address": "0x2C001233eD5E731B98B15B30267F78C7560b71f2",
       "symbol": "BUBU",
       "decimals": 18,
@@ -1524,11 +2074,22 @@
       ]
     },
     {
+      "address": "0x2c0fa52e70298fbb5909a92f354585da016254b7",
+      "symbol": "PT-eUSDC-22-18DEC2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-eUSDC-22-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x80c229544530c2bA693bF7e8A5AA76Ff98705C6E"
+      ]
+    },
+    {
       "address": "0x2C14E596C51fB6c0Dbad96858B1829835257b93B",
       "symbol": "PT-sUSDz-25SEP2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-sUSDz-25SEP2025",
       "matches": [
         {
           "chainKey": "base",
@@ -1543,7 +2104,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0xd7C3CEce4bd8FF41aDE50D59ecE7bc91DC2545c1"
       ]
     },
     {
@@ -1569,6 +2131,28 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x2c452bdd2192a197fb085a7c73fe6c82782401dc",
+      "symbol": "SY-USN",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USN",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xbdEb620F52799856a203Ca0b5de90769C83E3b90"
+      ]
+    },
+    {
+      "address": "0x2ca5f2c4300450d53214b00546795c1c07b89acb",
+      "symbol": "PT-slvlUSD-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-slvlUSD-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xC88FF954d42d3e11D43B62523B3357847C29377c"
       ]
     },
     {
@@ -1619,6 +2203,17 @@
       ]
     },
     {
+      "address": "0x2d6361c8a70af5a415e39c0f916133774f7f0c65",
+      "symbol": "PT-xUSD-25SEP2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-xUSD-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x577afF6DDaD1d25ee18FEE16DE7037dE44F2f5E8"
+      ]
+    },
+    {
       "address": "0x2Da56AcB9Ea78330f947bD57C54119Debda7AF71",
       "symbol": "MOG",
       "decimals": 18,
@@ -1665,26 +2260,38 @@
       ]
     },
     {
+      "address": "0x2e3229674085f5490a4cc2558ab96aedc3ab25d1",
+      "symbol": "PT-mEDGE-30OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-mEDGE-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x8322B96F7aFF9Bf405A5A321C7CA5aaC748716e0"
+      ]
+    },
+    {
       "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
-      "symbol": "STG",
+      "symbol": "WETH",
       "decimals": 18,
-      "chainKey": "polygon",
-      "sourceSymbol": "STG",
+      "chainKey": "berachain",
+      "sourceSymbol": "ETH",
       "matches": [
         {
-          "chainKey": "polygon",
-          "chainId": 137,
-          "chainName": "Polygon",
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
           "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
           "isContract": true,
-          "isErc20Like": true,
-          "decimals": 6,
-          "symbol": "STG",
-          "errors": []
+          "isErc20Like": false,
+          "errors": [
+            "decimals: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 46, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}",
+            "symbol: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 49, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}"
+          ]
         }
       ],
       "sources": [
-        "config:Polygon:Tokens"
+        "manual:entry"
       ]
     },
     {
@@ -1759,6 +2366,17 @@
       ]
     },
     {
+      "address": "0x31081a986f55d071bd89e5f66ef5187e77383197",
+      "symbol": "SY-eUSDC-22",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-eUSDC-22",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x80c229544530c2bA693bF7e8A5AA76Ff98705C6E"
+      ]
+    },
+    {
       "address": "0x3124D41708edbdC7995A55183e802E3D9d0D5Ef1",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -1829,7 +2447,7 @@
     },
     {
       "address": "0x3348b2b47e388bB4A03Cb890e1F3f308b90828EF",
-      "symbol": "SHIT",
+      "symbol": "TROLL",
       "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "SHIT",
@@ -1842,14 +2460,23 @@
           "isContract": true,
           "isErc20Like": true,
           "decimals": 18,
-          "symbol": null,
-          "errors": [
-            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
-          ]
+          "symbol": "TROLL",
+          "errors": []
         }
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x338e2cafa81e72ff422983e124e265eeccd718cb",
+      "symbol": "SY-AIDaUSDT",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-AIDaUSDT",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xBaA5aED0aFD90390F00B1915744Ad7e3296FB880"
       ]
     },
     {
@@ -1896,6 +2523,17 @@
       ],
       "sources": [
         "config:Ethereum:PENDLE_STATIC"
+      ]
+    },
+    {
+      "address": "0x33e88943b00e699fc5b6597c5f8bcb0872af8bee",
+      "symbol": "SY-pUSDe",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-pUSDe",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xf4C449d6a2D1840625211769779ADA42857d04dD"
       ]
     },
     {
@@ -2015,6 +2653,17 @@
       ]
     },
     {
+      "address": "0x3566069b5bef9fbc1ab97bfb951909d4c6f9d8c7",
+      "symbol": "PT-ysyBOLD-27NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-ysyBOLD-27NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x1BD78377DFbCA2043e38b692D2E0b32396b4772d"
+      ]
+    },
+    {
       "address": "0x358e4Ced73861514Bc4918EEC59C0BA729b8CcF5",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2062,6 +2711,28 @@
       ]
     },
     {
+      "address": "0x378fa6c08c86d76f0c2511a8addd9464d3dfc723",
+      "symbol": "SY-hgETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-hgETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x7da97FbFAA3020f856C60EB4EF068079A9023Aca"
+      ]
+    },
+    {
+      "address": "0x385d17215295a186c1ff0d1fd121831694dd9ba4",
+      "symbol": "SY-YU",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-YU",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x23f0dEcc26ecEeafa5CC900F8B47D99FF94DDD2B"
+      ]
+    },
+    {
       "address": "0x39174Ed417F8FDf60890e4b24609F69c59D302eB",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2086,6 +2757,17 @@
       ]
     },
     {
+      "address": "0x39f47ae8a1fb6298260e642d5312e5d89fbe7830",
+      "symbol": "SY-stkwaEthUSDT.v1",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-stkwaEthUSDT.v1",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xBb28865FfDe901c705FB2fDdb351424883A6A441"
+      ]
+    },
+    {
       "address": "0x3a4204255257698e379245EF94274ef3B2907296",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2106,6 +2788,17 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x3aa1dced39da0a92e5e26e211f81c96a3fbcf1f5",
+      "symbol": "PT-slpUSDC-25SEP2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-slpUSDC-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xAC316382B026Ed66b612C4F66e6D371C46Ca1b74"
       ]
     },
     {
@@ -2202,6 +2895,17 @@
       ]
     },
     {
+      "address": "0x3b89c9b29ab63175717c85f198b2fb714934f292",
+      "symbol": "PT-spETH-9OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-spETH-9OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x39174Ed417F8FDf60890e4b24609F69c59D302eB"
+      ]
+    },
+    {
       "address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
       "symbol": "USDC",
       "decimals": 6,
@@ -2267,7 +2971,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0x6d3ECf7a9fc726387bb6a91FfFB4f90D1F38139c"
       ]
     },
     {
@@ -2294,6 +2999,17 @@
       ]
     },
     {
+      "address": "0x3d98195b252dbfec41dff573981224e4a4b01aff",
+      "symbol": "SY-liquidBera-BTC-scaled18",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-liquidBera-BTC-scaled18",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xD009A734028e3aa0839eB69DAB4A594AbcfAE728"
+      ]
+    },
+    {
       "address": "0x3DAF20E46708E556570159Eaf98eeE53A1A5b8A4",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2315,6 +3031,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x3e3a6d9de6930b706f2cdb2136379c9aefd05d1b",
+      "symbol": "PT-MC_PTs-18DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-MC_PTs-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x7057c9e6f213bbb9B845FC57010034E9e4A69E8A"
       ]
     },
     {
@@ -2356,6 +3083,29 @@
           "isErc20Like": true,
           "decimals": 18,
           "symbol": "SURVIVOR",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x3ecced5b416e58664f04a39dD18935eB71D33B15",
+      "symbol": "BRIAN",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x3ecced5b416e58664f04a39dD18935eB71D33B15",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BRIAN",
           "errors": []
         }
       ],
@@ -2411,54 +3161,6 @@
       ]
     },
     {
-      "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
-      "symbol": "WETH",
-      "decimals": 18,
-      "chainKey": "berachain",
-      "sourceSymbol": "ETH",
-      "matches": [
-        {
-          "chainKey": "berachain",
-          "chainId": 80094,
-          "chainName": "Berachain",
-          "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
-          "isContract": true,
-          "isErc20Like": false,
-          "errors": [
-            "decimals: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 46, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}",
-            "symbol: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 49, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}"
-          ]
-        }
-      ],
-      "sources": [
-        "manual:entry"
-      ]
-    },     
-    {
-      "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
-      "symbol": "SY-sUSDE",
-      "decimals": 18,
-      "chainKey": "berachain",
-      "sourceSymbol": "USD",
-      "matches": [
-        {
-          "chainKey": "berachain",
-          "chainId": 80094,
-          "chainName": "Berachain",
-          "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
-          "isContract": true,
-          "isErc20Like": false,
-          "errors": [
-            "decimals: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 46, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}",
-            "symbol: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 49, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}"
-          ]
-        }
-      ],
-      "sources": [
-        "manual:pendle"
-      ]
-    },    
-    {
       "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
       "symbol": "SY-sUSDE",
       "decimals": 18,
@@ -2479,7 +3181,9 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:sy:0xd8079e0929d67390067529974B116212903cAC69",
+        "pendle:sonic:sy:0x4A54C1EB9125A5e3De8cC44f618dB45055952674"
       ]
     },
     {
@@ -2507,6 +3211,17 @@
       ]
     },
     {
+      "address": "0x41bb4fd34b191f9945888eb33de792c42f7719cb",
+      "symbol": "PT-stkwaEthUSDT.v1-30OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-stkwaEthUSDT.v1-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xBb28865FfDe901c705FB2fDdb351424883A6A441"
+      ]
+    },
+    {
       "address": "0x41D81Daf401a0AA7422a769243fa933f351a0D64",
       "symbol": "SY-iBERA",
       "decimals": 18,
@@ -2526,7 +3241,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:sy:0x31Ed9F16C7BbC26AE3404B14aBc68aDc7611B1A6"
       ]
     },
     {
@@ -2595,7 +3311,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0x3aeF1d372d0a7a7E482F465Bc14A42D78f920392"
       ]
     },
     {
@@ -2645,11 +3362,44 @@
       ]
     },
     {
+      "address": "0x43ca553398042069786fa20ffac05f44a62d0fe5",
+      "symbol": "PT-stkGHO.v1-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-stkGHO.v1-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x28CEf9526F3Af7A96A10823f79dD7bcE1940791F"
+      ]
+    },
+    {
+      "address": "0x43d03031fab845065e9cefe89dd122d63f72011f",
+      "symbol": "SY-weETH",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": "SY-weETH",
+      "matches": [],
+      "sources": [
+        "pendle:berachain:sy:0x34634a7bBE5A3C234b931C79d4cC6785C5dd54C4"
+      ]
+    },
+    {
+      "address": "0x43d6651ff941776976ae8e5b11ef513e054a7931",
+      "symbol": "SY-RUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-RUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x04EEb15A3A96b679eEd0a5F490ef89Ec5477F045"
+      ]
+    },
+    {
       "address": "0x43FE057B02cE301a2b09C9873676032892566DE7",
       "symbol": "PT-wcgUSD-26JUN2025",
       "decimals": 6,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-wcgUSD-26JUN2025",
       "matches": [
         {
           "chainKey": "base",
@@ -2664,7 +3414,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0xaD4e0eFc7b641591dC1a94eFc5d352d098516D2e"
       ]
     },
     {
@@ -2790,7 +3541,7 @@
       "symbol": "SY-USR",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-USR",
       "matches": [
         {
           "chainKey": "base",
@@ -2805,7 +3556,9 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0x715509Bde846104cF2cCeBF6fdF7eF1BB874Bc45",
+        "pendle:base:sy:0xE15578523937ed7F08E8F7a1Fa8a021E07025a08"
       ]
     },
     {
@@ -2828,7 +3581,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0x4E82347Bc41CFD5d62cEF483C7f0a739a8158963"
       ]
     },
     {
@@ -2856,6 +3610,17 @@
       ]
     },
     {
+      "address": "0x4726fcb2fbe4398449bb7ce44eb458dbd7141191",
+      "symbol": "SY-fGHO",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-fGHO",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x1821eC9c2D2C13f6b89D21301B93BD8D6667712b"
+      ]
+    },
+    {
       "address": "0x47306E3Cb4E325042556864B38aA0CBE8D928bE5",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2876,6 +3641,17 @@
       ],
       "sources": [
         "config:Ethereum:PENDLE_STATIC"
+      ]
+    },
+    {
+      "address": "0x47743a9203e636674467ff58b7ab0ae0ee6f97cb",
+      "symbol": "SY-iUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-iUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x2353193fa14A6477a4523e2C078e4063022FCf66"
       ]
     },
     {
@@ -2906,7 +3682,7 @@
       "symbol": "PT-iBERA-26JUN2025",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-iBERA-26JUN2025",
       "matches": [
         {
           "chainKey": "berachain",
@@ -2921,7 +3697,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:pt:0x31Ed9F16C7BbC26AE3404B14aBc68aDc7611B1A6"
       ]
     },
     {
@@ -2996,6 +3773,17 @@
       ]
     },
     {
+      "address": "0x4a6228dcc3e7f6973b8cfd55adcd7537fd803758",
+      "symbol": "PT-Curve-GHOUSR-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-Curve-GHOUSR-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x1a249b03362C1bFFfEa062F3bD7096C58cA07279"
+      ]
+    },
+    {
       "address": "0x4B272672A58da22B213E733F5ABA48cfec534D30",
       "symbol": "SY-sKAITO",
       "decimals": 18,
@@ -3017,7 +3805,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0xa46caC2243Ecd83A6a9Ad58232C1967EBD14D41B"
       ]
     },
     {
@@ -3207,6 +3996,17 @@
       ]
     },
     {
+      "address": "0x4e91f1eb389242b0f718859158c1d912055afb32",
+      "symbol": "SY-MC_PTs",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-MC_PTs",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x7057c9e6f213bbb9B845FC57010034E9e4A69E8A"
+      ]
+    },
+    {
       "address": "0x4eaA571EaFCD96f51728756BD7F396459BB9B869",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -3227,6 +4027,17 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x4ede9c1dd28dac5356642663bea5a72fe9b6b2a2",
+      "symbol": "SY-eWETH-2",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-eWETH-2",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x2CbB8eFe9a7ff340768A1b672475111672e7527e"
       ]
     },
     {
@@ -3274,6 +4085,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x508defdb5dd2adeefe36f58fdcd75d6efa36697b",
+      "symbol": "SY-USDS",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USDS",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xdacE1121e10500e9e29d071F01593fD76B000f08"
       ]
     },
     {
@@ -3344,6 +4166,17 @@
       ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x52453825c287ddef62d647ce51c0979d27c461f7",
+      "symbol": "SY-USD0++",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USD0++",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xF8094570485B124b4f2aBE98909A87511489C162"
       ]
     },
     {
@@ -3440,10 +4273,10 @@
     },
     {
       "address": "0x540e181d4e3c70632e6bB153282BEAD2886d0768",
-      "symbol": null,
+      "symbol": "SY-aBasGHO",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-aBasGHO",
       "matches": [
         {
           "chainKey": "base",
@@ -3460,7 +4293,30 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0x6144511E1BD935c258B7b9075F120474dF1b1e5f"
+      ]
+    },
+    {
+      "address": "0x541b5eeac7d4434c8f87e2d32019d67611179606",
+      "symbol": "PT-SolvBTC.BBN-27MAR2025",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "PT-SolvBTC.BBN-27MAR2025",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:pt:0x9dAA2878A8739E66e08e7ad35316C5143c0ea7C7"
+      ]
+    },
+    {
+      "address": "0x545d22755c7ffc551774303750efb111cecc06d7",
+      "symbol": "SY-sUSDaf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDaf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xe52E4d0F21e810fb81Ef0fDe1bf6d18805f51Bec"
       ]
     },
     {
@@ -3535,6 +4391,17 @@
       ]
     },
     {
+      "address": "0x58732f1c1243a0d5876a601fb8d1ee508b21580d",
+      "symbol": "SY-ankrBNB",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SY-ankrBNB",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:sy:0xEDa1D0e1681D59dea451702963d6287b844Cb94C"
+      ]
+    },
+    {
       "address": "0x593b67a445E836D0b4e9186D7604C53b0aE6A74b",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -3556,6 +4423,39 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x5a5b93f762739fa94f3ecc0b34af2e56702e7f70",
+      "symbol": "PT-USR-4SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USR-4SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x33BdA865c6815c906e63878357335B28f063936c"
+      ]
+    },
+    {
+      "address": "0x5b1578e2604b91bd7b24f86f0e5ef6c024bb3a14",
+      "symbol": "PT-hgETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-hgETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x7da97FbFAA3020f856C60EB4EF068079A9023Aca"
+      ]
+    },
+    {
+      "address": "0x5b4918e997b9f6e09309d297ab44f2433245b8a3",
+      "symbol": "SY-sUSDX",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SY-sUSDX",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:sy:0xE08fC3054450053cd341da695f72b18E6110ffFC"
       ]
     },
     {
@@ -3583,29 +4483,6 @@
       ]
     },
     {
-      "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
-      "symbol": "PENDLE",
-      "decimals": 18,
-      "chainKey": "arbitrum",
-      "sourceSymbol": "PENDLE",
-      "matches": [
-        {
-          "chainKey": "arbitrum",
-          "chainId": 42161,
-          "chainName": "Arbitrum One",
-          "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "PENDLE",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:pendle"
-      ]
-    },    
-    {
       "address": "0x5C4110eD760470f79E469a901Bd6fb45a65BE0F4",
       "symbol": "SY-mPendle",
       "decimals": 18,
@@ -3626,6 +4503,17 @@
       ],
       "sources": [
         "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x5c6593f57ee95519ff6a8cd16a5e41ff50af239a",
+      "symbol": "PT-mcbBTC-26JUN2025",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "PT-mcbBTC-26JUN2025",
+      "matches": [],
+      "sources": [
+        "pendle:base:pt:0xd94Fd7bcEb29159405Ae1E06Ce80e51EF1A484B0"
       ]
     },
     {
@@ -3652,6 +4540,28 @@
       ]
     },
     {
+      "address": "0x5d1735b8e33bae069708cea245066de1a12cd38d",
+      "symbol": "PT-vBNB-26JUN2025",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "PT-vBNB-26JUN2025",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:pt:0x0921CcC98956B1599003Fd9739d5e66BF319A161"
+      ]
+    },
+    {
+      "address": "0x5d746848005507da0b1717c137a10c30ad9ee307",
+      "symbol": "PT-LBTC-29MAY2025",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "PT-LBTC-29MAY2025",
+      "matches": [],
+      "sources": [
+        "pendle:base:pt:0x727cEbAcfb10fFd353Fc221D06A862B437eC1735"
+      ]
+    },
+    {
       "address": "0x5eD8BA85D277C870EeE77EE7A628E94D18Bfe027",
       "symbol": "Web3",
       "decimals": 18,
@@ -3672,6 +4582,42 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x5Efc4446E1D772428adBD6053a0421Ca7B3Ed85A",
+      "symbol": "WAZ",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x5Efc4446E1D772428adBD6053a0421Ca7B3Ed85A",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": null,
+          "symbol": "WAZ",
+          "errors": [
+            "decimals: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x5f2f6324aa5590e408ba892e39cec4c0afb16068",
+      "symbol": "PT-iUSD-4SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-iUSD-4SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x2353193fa14A6477a4523e2C078e4063022FCf66"
       ]
     },
     {
@@ -3702,7 +4648,7 @@
       "symbol": "PT-Aerodrome VIR/CBBTC-26JUN2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-Aerodrome VIR/CBBTC-26JUN2025",
       "matches": [
         {
           "chainKey": "base",
@@ -3717,7 +4663,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0x621D4D92E9bed484E6D2Cb8A37d342c804A0908c"
       ]
     },
     {
@@ -3743,6 +4690,28 @@
       ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x61d799b23c938220d27fc03ad2044a7aa891fe81",
+      "symbol": "PT-sYUSD-4SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sYUSD-4SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x701C3eFDA4e90Be78Dd63cc0493d2e9B7D2245a6"
+      ]
+    },
+    {
+      "address": "0x61da65f0534c6a4f4c9757f2979a923c08d6d2aa",
+      "symbol": "PT-mMEV-30OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-mMEV-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x688b8eea04B9756da290C962bfBA988b11fC66dF"
       ]
     },
     {
@@ -3838,6 +4807,17 @@
       ]
     },
     {
+      "address": "0x62f338f22045cdac5dcc6b7b0bcaa21cf1c7b2d4",
+      "symbol": "SY-reUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-reUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xa8F21c9D0aFb46382EAD7C33e79f00eF9666e122"
+      ]
+    },
+    {
       "address": "0x6524421041a33a559831A6d305936361B6e4D217",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -3865,7 +4845,7 @@
       "symbol": "SY-yvBal-GHO-USR",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-yvBal-GHO-USR",
       "matches": [
         {
           "chainKey": "base",
@@ -3880,7 +4860,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0xA6b8cFE75Ca5e1b2A527AA255d10521FAaF24b61"
       ]
     },
     {
@@ -3911,7 +4892,7 @@
       "symbol": "SY-wsuperOETHb",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-wsuperOETHb",
       "matches": [
         {
           "chainKey": "base",
@@ -3926,7 +4907,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0xeCc2c994aA0C599a7f69a7Cfb9106fe4dfFb4341"
       ]
     },
     {
@@ -3974,6 +4956,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x690559c7bd75c9a301e15515a8ea3316840f17be",
+      "symbol": "SY-uptBTC",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-uptBTC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x2e250f3E0Ca772E87f0C9E2aa55254F7Eb82EA58"
       ]
     },
     {
@@ -4043,7 +5036,30 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:sy:0x6d3ECf7a9fc726387bb6a91FfFB4f90D1F38139c"
+      ]
+    },
+    {
+      "address": "0x6ada3d3a4304aa7c5d9e5801cba45bc1e6c59319",
+      "symbol": "SY-cUSDO",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-cUSDO",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xfaA442D3bAbF60633c191C6A932a811893275C12"
+      ]
+    },
+    {
+      "address": "0x6afde97a0c27e57cf0582373f9d7dc2b9f1cc3a3",
+      "symbol": "SY-USR",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USR",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x33BdA865c6815c906e63878357335B28f063936c"
       ]
     },
     {
@@ -4071,6 +5087,17 @@
       ]
     },
     {
+      "address": "0x6c78661c00d797c9c7fcbe4bcacbd9612a61c07f",
+      "symbol": "SY wstUSR",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY wstUSR",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x09fA04Aac9c6d1c6131352EE950CD67ecC6d4fB9"
+      ]
+    },
+    {
       "address": "0x6Cc1594bc1125fC2357Fedf58A0C1b5E0f16e483",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -4091,6 +5118,17 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x6cc3237ae1bbeba960c35b47b0424d34b6404037",
+      "symbol": "PT-weETHs-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-weETHs-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xC7d566F5Cd575FdAd0e982Bd238d9abCf29807ea"
       ]
     },
     {
@@ -4264,6 +5302,50 @@
       ]
     },
     {
+      "address": "0x6e5fa20e6d16c2d53c21f4ebd559bfa2a446e497",
+      "symbol": "PT-sUSDaf-13NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDaf-13NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xB8d8d70B813EF60Dd47c6ebb320Df4ACF691361a"
+      ]
+    },
+    {
+      "address": "0x6e6551a332c453ead27bc3b2a084657dee1b5f76",
+      "symbol": "PT-AIDaUSDC-14AUG2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-AIDaUSDC-14AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x47306E3Cb4E325042556864B38aA0CBE8D928bE5"
+      ]
+    },
+    {
+      "address": "0x6eda24c7a5ad869295b87a8c2628d39153954f86",
+      "symbol": "PT-rstETH-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-rstETH-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x0440b356d6c47af727399cD7194def49AC1D9c1E"
+      ]
+    },
+    {
+      "address": "0x6fc5b9eebf6f19556db8c8fdcc8d4a52e6dc106d",
+      "symbol": "SY-USDaf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USDaf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x8Bf03ACbF1C2aC2e487c80678De7873C954525D2"
+      ]
+    },
+    {
       "address": "0x701C3eFDA4e90Be78Dd63cc0493d2e9B7D2245a6",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -4330,7 +5412,30 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:sy:0x3aeF1d372d0a7a7E482F465Bc14A42D78f920392"
+      ]
+    },
+    {
+      "address": "0x70af3e726836ca37093912dcd421b09f113f7332",
+      "symbol": "SY-stkwaEthUSDC.v1",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-stkwaEthUSDC.v1",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x14cFB8B051f0b35045AFa79c70f7e4B0b1F32442"
+      ]
+    },
+    {
+      "address": "0x711214da1a94f478b96c1ca3d14a750f496f2a80",
+      "symbol": "PT-PendleInfiniFi-siUSD-9OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-PendleInfiniFi-siUSD-9OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x50700eEDdE7850B4bf83733C66b272C6CA46c663"
       ]
     },
     {
@@ -4484,6 +5589,28 @@
       ]
     },
     {
+      "address": "0x7297c0be7d053de983a810df676b6cbabb739111",
+      "symbol": "PT-sUSDaf-13NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDaf-13NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xe52E4d0F21e810fb81Ef0fDe1bf6d18805f51Bec"
+      ]
+    },
+    {
+      "address": "0x730a5e2acebccaa5e9095723b3cb862739da793c",
+      "symbol": "SY-rsETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-rsETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xf55Bc75DF5933DD35aAcF3BCA948b0C4630040d1"
+      ]
+    },
+    {
       "address": "0x73d1C0B9B931654a6755d9319d800B8e81Ad27cA",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -4505,6 +5632,28 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x742b4166878bfd339db65a29a17e49b81a6b6aac",
+      "symbol": "PT-RLP-4SEP2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-RLP-4SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x55F06992E4C3ed17Df830dA37644885c0c34EDdA"
+      ]
+    },
+    {
+      "address": "0x749087ee993fdfc141f6f0e0b1370fee2d0202f9",
+      "symbol": "SY-rstETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-rstETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x0440b356d6c47af727399cD7194def49AC1D9c1E"
       ]
     },
     {
@@ -4535,7 +5684,7 @@
       "symbol": "SY-cbETH",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-cbETH",
       "matches": [
         {
           "chainKey": "base",
@@ -4550,15 +5699,49 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0x483f2e223c58a5eF19c4B32fbC6dE57709749cb3"
+      ]
+    },
+    {
+      "address": "0x761353416187cd12cb5fcbf524ddda940705acc5",
+      "symbol": "PT-swETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-swETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x69295970dd33B135417C9b866d03C6f59f022f8b"
+      ]
+    },
+    {
+      "address": "0x7786729eee8b9d30fe7d91fdff23a0f1d0c615d9",
+      "symbol": "SY-rswETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-rswETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xC5ECdAfBEDe3c8436C9C09E60bFFaC3731A9B28E"
+      ]
+    },
+    {
+      "address": "0x77891c7f756d4f49d91e6aabae7df5c1169f2aaa",
+      "symbol": "SY-mMEV",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-mMEV",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x688b8eea04B9756da290C962bfBA988b11fC66dF"
       ]
     },
     {
       "address": "0x77d07ab8466a57fB8615AEB75c37aBFF25c06Ebf",
-      "symbol": null,
+      "symbol": "SY-wcgUSD",
       "decimals": 6,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-wcgUSD",
       "matches": [
         {
           "chainKey": "base",
@@ -4575,7 +5758,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0xaD4e0eFc7b641591dC1a94eFc5d352d098516D2e"
       ]
     },
     {
@@ -4598,7 +5782,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0xaCfAD541698437F6EF0E728C56A50CE35C73cC3e"
       ]
     },
     {
@@ -4669,7 +5854,19 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0x9700C4C218237550EAd3a78022d43215A717e5e7"
+      ]
+    },
+    {
+      "address": "0x797f9d67a878250e0aa572c41a8a4e862ad09d5c",
+      "symbol": "SY-sYUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sYUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x701C3eFDA4e90Be78Dd63cc0493d2e9B7D2245a6"
       ]
     },
     {
@@ -4698,6 +5895,28 @@
       ]
     },
     {
+      "address": "0x7ac8ca87959b1d5edfe2df5325a37c304dcea4d0",
+      "symbol": "SY-eUSDE",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-eUSDE",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xE93B4A93e80BD3065B290394264af5d82422ee70"
+      ]
+    },
+    {
+      "address": "0x7acdf2012aac69d70b86677fe91eb66e08961880",
+      "symbol": "SY-EBTC",
+      "decimals": 8,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-EBTC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x6c6668df3916AD01e54397F54ba9deDdBaFeEb50"
+      ]
+    },
+    {
       "address": "0x7AF366c06939535628f1D10f9f2a7Ee6a2E58535",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -4718,6 +5937,28 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x7b5a43070bd97c2814f0d8b3b31ed53450375c19",
+      "symbol": "SY-vBNB",
+      "decimals": 8,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SY-vBNB",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:sy:0x0921CcC98956B1599003Fd9739d5e66BF319A161"
+      ]
+    },
+    {
+      "address": "0x7c853d6bfb49256af65af672dcc3f66c015e96e0",
+      "symbol": "PT-uptBTC-14AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-uptBTC-14AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x2e250f3E0Ca772E87f0C9E2aa55254F7Eb82EA58"
       ]
     },
     {
@@ -4791,11 +6032,44 @@
       ]
     },
     {
+      "address": "0x7eec75fe8d9ac678f9b4e0ecf2af7b445e0c5b4c",
+      "symbol": "SY-asUSDF",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SY-asUSDF",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:sy:0x9E515a7115C86d7314159DbdAb41E555d5330Dfe"
+      ]
+    },
+    {
+      "address": "0x7f5efa1bb887a5080ceacd6f3e2c0fc16bd90c90",
+      "symbol": "SY-mcbBTC",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "SY-mcbBTC",
+      "matches": [],
+      "sources": [
+        "pendle:base:sy:0xd94Fd7bcEb29159405Ae1E06Ce80e51EF1A484B0"
+      ]
+    },
+    {
+      "address": "0x8077b6f34e9193d5bbb0ef06a73119060534d130",
+      "symbol": "SY-csUSDL",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-csUSDL",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x56C4200915D74A7cae45dFa57aB33725B0439193"
+      ]
+    },
+    {
       "address": "0x80c12D5b6Cc494632Bf11b03F09436c8B61Cc5Df",
       "symbol": "SY-wstETH",
       "decimals": 18,
       "chainKey": "arbitrum",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-wstETH",
       "matches": [
         {
           "chainKey": "arbitrum",
@@ -4810,7 +6084,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:arbitrum:sy:0x08a152834de126d2ef83D612ff36e4523FD0017F"
       ]
     },
     {
@@ -4977,6 +6252,17 @@
       ]
     },
     {
+      "address": "0x84013d1a574515b6a05a0e2392584d445d39d1df",
+      "symbol": "PT-pufETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-pufETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x02c1289dACb6d459FC784236e862bC504C991f81"
+      ]
+    },
+    {
       "address": "0x84ECc6be573f15991736131F924F7bF571eD3B60",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -5043,6 +6329,28 @@
       ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x86f6817c22a14393550b135710ea58f311e457ed",
+      "symbol": "SY-hwHLP",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-hwHLP",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x71d4a6bAc0FE7210309b6A3807cf2BaD13d7C1E1"
+      ]
+    },
+    {
+      "address": "0x87b8e462080fa443a06d2bb119adb3828c407d78",
+      "symbol": "SY-uniBTC",
+      "decimals": 8,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-uniBTC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x4c60AB7cE24D4D7268317f44b6DC3d6530864E86"
       ]
     },
     {
@@ -5117,6 +6425,17 @@
       ]
     },
     {
+      "address": "0x8891302d91db6e7c2ce6e82a8f6c952ab556eb7a",
+      "symbol": "PT-sDOLA-9OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sDOLA-9OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xE6723992EC43aa6011457bBBed7D6Cd7Db1407B6"
+      ]
+    },
+    {
       "address": "0x891502bA08132653151f822a3A430198f1844115",
       "symbol": "Blue",
       "decimals": 18,
@@ -5140,6 +6459,18 @@
       ]
     },
     {
+      "address": "0x8946f653aed1af1f82a8de6d7f54088afff5a14e",
+      "symbol": "SY-sUSDa",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDa",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x28F2C72361f6B7430C5aC30d289265309392901C",
+        "pendle:ethereum:sy:0xab39fb8E28Def89e5df77c2788a811d881D7fC8E"
+      ]
+    },
+    {
       "address": "0x896f4D49916aC5cfC36d7a260a7039ba4Ea317b6",
       "symbol": "SY-wstkscUSD",
       "decimals": 6,
@@ -5159,7 +6490,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:sy:0x6e4e95FaB7db1f0524b4b0a05F0b9c96380b7Dfa"
       ]
     },
     {
@@ -5230,6 +6562,28 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x8b9d898327c0ac74b946ca3ca9fcfcbe9bc29c48",
+      "symbol": "SY-lvlUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-lvlUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x8F661231F737c2F704362fDF64b8d847ba511F81"
+      ]
+    },
+    {
+      "address": "0x8bb86a99f97f5d19718bd5ca0b0ca00354532ef3",
+      "symbol": "SY-wstkscETH",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-wstkscETH",
+      "matches": [],
+      "sources": [
+        "pendle:sonic:sy:0xd14117baf6EC5D12BE68CD06e763A4B82C9B6d1D"
       ]
     },
     {
@@ -5326,6 +6680,17 @@
       ]
     },
     {
+      "address": "0x8e8b8d3b2dca78cb04b9914b7ec1ad72f671f96d",
+      "symbol": "PT-weETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-weETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x95a9504f246cd65bf91c2c550a53F7f415227eD1"
+      ]
+    },
+    {
       "address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
       "symbol": "DAI",
       "decimals": 18,
@@ -5396,6 +6761,17 @@
       ]
     },
     {
+      "address": "0x904673592a3febb74a30a73161e8c05a200c8961",
+      "symbol": "PT-hwHLP-25SEP2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-hwHLP-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x71d4a6bAc0FE7210309b6A3807cf2BaD13d7C1E1"
+      ]
+    },
+    {
       "address": "0x905A911E627EcCc7A0Ee3A30bb4f7e98501A1fB1",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -5416,6 +6792,50 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x90a7e3396403634942acc24906fbda19f1418a41",
+      "symbol": "SY-sDOLA",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sDOLA",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xE6723992EC43aa6011457bBBed7D6Cd7Db1407B6"
+      ]
+    },
+    {
+      "address": "0x9143d331c1113e3adc20f3956a6436a2547aecf3",
+      "symbol": "PT-USDaf-13NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USDaf-13NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xD0C0B7e5CC8DEfc971963b225dfa2B0A17eaC5B2"
+      ]
+    },
+    {
+      "address": "0x9304037325e7ec5b2e0a9dcdf33c785ee2f5b179",
+      "symbol": "PT-sGHO-28AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sGHO-28AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xD4f6592DE90024e541187527d7F1dE83F6Cb6a52"
+      ]
+    },
+    {
+      "address": "0x930441aa7ab17654df5663781ca0c02cc17e6643",
+      "symbol": "PT-aSonUSDC-14AUG2025",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-aSonUSDC-14AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:sonic:pt:0x3F5EA53d1160177445B1898afbB16da111182418"
       ]
     },
     {
@@ -5442,6 +6862,17 @@
       ]
     },
     {
+      "address": "0x93c903299c22c4c226944bf8ba3daf8f6a94e435",
+      "symbol": "PT-sUSDa-28AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDa-28AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xab39fb8E28Def89e5df77c2788a811d881D7fC8E"
+      ]
+    },
+    {
       "address": "0x940181a94A35A4569E4529A3CDfB74e38FD98631",
       "symbol": "AERO",
       "decimals": 18,
@@ -5464,6 +6895,17 @@
       ],
       "sources": [
         "config:Base:TOKENS"
+      ]
+    },
+    {
+      "address": "0x94a9643a9056f8a4c75d6940dd0cc26bdd779773",
+      "symbol": "PT-cmETH-26JUN2025",
+      "decimals": 18,
+      "chainKey": "mantle",
+      "sourceSymbol": "PT-cmETH-26JUN2025",
+      "matches": [],
+      "sources": [
+        "pendle:mantle:pt:0xeC3Fb79d229EF53C8B5Cd64c171097FfC8A00Dc5"
       ]
     },
     {
@@ -5515,7 +6957,7 @@
     },
     {
       "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
-      "symbol": "SHIT",
+      "symbol": "Bsop",
       "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "SHIT",
@@ -5528,7 +6970,7 @@
           "isContract": true,
           "isErc20Like": true,
           "decimals": 18,
-          "symbol": "SHIT",
+          "symbol": "Bsop",
           "errors": []
         }
       ],
@@ -5556,7 +6998,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0x84ECc6be573f15991736131F924F7bF571eD3B60"
       ]
     },
     {
@@ -5626,6 +7069,29 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x982be58c67689e0bab9e884c30e7a6e78e064c9d",
+      "symbol": "SY-USDf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USDf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x4D2A10CC91F70C21A7c90C3b1A09498cD88e1435",
+        "pendle:ethereum:sy:0xc65B7a0f8Fc97e1D548860d866f4304E039EF016"
+      ]
+    },
+    {
+      "address": "0x9843d6129ad455839262a1f3acb80507be601b5e",
+      "symbol": "SY-xUSD",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-xUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x577afF6DDaD1d25ee18FEE16DE7037dE44F2f5E8"
       ]
     },
     {
@@ -5719,6 +7185,51 @@
       ],
       "sources": [
         "config:Ethereum:PENDLE_STATIC"
+      ]
+    },
+    {
+      "address": "0x9a68bba8074f78727a7b129e30175388e02a5b9d",
+      "symbol": "SY-upUSDC",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-upUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x411dE9F73478a9396394DDe861757f46Ec148Df9",
+        "pendle:ethereum:sy:0x992D1E72b9C6b7b80747c56770C660E5eF7d5eC9"
+      ]
+    },
+    {
+      "address": "0x9ac87302429a367cde6df17e1f150b53e2967924",
+      "symbol": "PT-stEUR-6NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-stEUR-6NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x593b67a445E836D0b4e9186D7604C53b0aE6A74b"
+      ]
+    },
+    {
+      "address": "0x9aef3bf940a22a58d8c55e287e2edfdb0130cf2b",
+      "symbol": "PT-sdeUSD-11DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sdeUSD-11DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x446c8AB198C848871c767aDd10a8938A259e9ff6"
+      ]
+    },
+    {
+      "address": "0x9b02ca5685e9c332b158c01459562a161c8e8adf",
+      "symbol": "PT-USDaf-13NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USDaf-13NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x8Bf03ACbF1C2aC2e487c80678De7873C954525D2"
       ]
     },
     {
@@ -5850,7 +7361,7 @@
       "symbol": "SY-dWBERA",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-dWBERA",
       "matches": [
         {
           "chainKey": "berachain",
@@ -5865,7 +7376,19 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:sy:0x5200C9900436f649B4659dFc79213837DcCCaAB1"
+      ]
+    },
+    {
+      "address": "0x9ef16573f98543066faaadcd52a896c42fefd678",
+      "symbol": "SY-slpUSDC",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-slpUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xAC316382B026Ed66b612C4F66e6D371C46Ca1b74"
       ]
     },
     {
@@ -5916,6 +7439,39 @@
       ]
     },
     {
+      "address": "0x9f56094c450763769ba0ea9fe2876070c0fd5f77",
+      "symbol": "PT-sUSDE-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDE-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xA36b60A14A1A5247912584768C6e53E1a269a9F7"
+      ]
+    },
+    {
+      "address": "0xa004dd9439c2cf00794786c9662267bee6d9f723",
+      "symbol": "SY-RLP",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-RLP",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x55F06992E4C3ed17Df830dA37644885c0c34EDdA"
+      ]
+    },
+    {
+      "address": "0xa0a2c8c94bf30227f84af6e054025945a51d0eff",
+      "symbol": "SY-sUSN",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSN",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xbdf3EA4673116698219c08A9AD6B51e4E68d22ab"
+      ]
+    },
+    {
       "address": "0xa2161E75EDf50d70544e6588788A5732A3105c00",
       "symbol": "PT-wstkscETH-29MAY2025",
       "decimals": 18,
@@ -5935,7 +7491,19 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:pt:0xd14117baf6EC5D12BE68CD06e763A4B82C9B6d1D"
+      ]
+    },
+    {
+      "address": "0xa28194de3de7166ee81c2e13c864b9c7cca1b8ef",
+      "symbol": "PT-AIDaUSDT-14AUG2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-AIDaUSDT-14AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xBaA5aED0aFD90390F00B1915744Ad7e3296FB880"
       ]
     },
     {
@@ -5943,7 +7511,7 @@
       "symbol": "PT-sKAITO-31JUL2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-sKAITO-31JUL2025",
       "matches": [
         {
           "chainKey": "base",
@@ -5958,7 +7526,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0xa46caC2243Ecd83A6a9Ad58232C1967EBD14D41B"
       ]
     },
     {
@@ -5986,6 +7555,39 @@
       ]
     },
     {
+      "address": "0xa36ecca8b7624d224f01cd6649c8afad3da12c3d",
+      "symbol": "SY-sENA",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sENA",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xdA57ABF95a7C21eB9df08fBAADa182F749F6C62F"
+      ]
+    },
+    {
+      "address": "0xa3ca92a69c6809607837bc3bd6b13e4c1e1e8ae9",
+      "symbol": "PT-sUSDaf-13NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDaf-13NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x233f5adf236CAB22C5DbDD3333a7EfD8267d7AEE"
+      ]
+    },
+    {
+      "address": "0xa3de5349b50baab12b9578a31f29eaa5d6682895",
+      "symbol": "PT-asUSDF-29MAY2025",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "PT-asUSDF-29MAY2025",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:pt:0x9E515a7115C86d7314159DbdAb41E555d5330Dfe"
+      ]
+    },
+    {
       "address": "0xA3e7E0Fa0b843e3A6b100701B6C1C9eBC272Df9F",
       "symbol": "SCP096",
       "decimals": 18,
@@ -6006,6 +7608,17 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xa42c63686f45c124f2034152b4bb0cc63ce3ff52",
+      "symbol": "PT-uniBTC-18DEC2025",
+      "decimals": 8,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-uniBTC-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x4c60AB7cE24D4D7268317f44b6DC3d6530864E86"
       ]
     },
     {
@@ -6052,6 +7665,18 @@
       ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0xa47e357d68523ace098366888ad6b50e8d85f431",
+      "symbol": "SY-yvBalancer-GHO-USDf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-yvBalancer-GHO-USDf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x51026Ab8B54767e67f7f5543C86bF718cf00Cb4C",
+        "pendle:ethereum:sy:0x715055DA20BDEC5c70e344aab8DEBD80d682dC1F"
       ]
     },
     {
@@ -6105,7 +7730,7 @@
       "symbol": "PT-USR-25SEP2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-USR-25SEP2025",
       "matches": [
         {
           "chainKey": "base",
@@ -6120,7 +7745,19 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0x715509Bde846104cF2cCeBF6fdF7eF1BB874Bc45"
+      ]
+    },
+    {
+      "address": "0xa780d7f775b4eff6846a8c28981f086bc6a7d637",
+      "symbol": "SY-sUSDf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x45F163E583D34b8E276445dd3Da9aE077D137d72"
       ]
     },
     {
@@ -6172,6 +7809,29 @@
       ]
     },
     {
+      "address": "0xA99F6e6785Da0F5d6fB42495Fe424BCE029Eeb3E",
+      "symbol": "PENDLE",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "PENDLE",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xA99F6e6785Da0F5d6fB42495Fe424BCE029Eeb3E",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0xa9da5457FFC301d7c98fB38105f551a665511aF3",
       "symbol": "SY-Silo-20-USDC.e",
       "decimals": 6,
@@ -6191,7 +7851,30 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:sonic:sy:0xaCfAD541698437F6EF0E728C56A50CE35C73cC3e"
+      ]
+    },
+    {
+      "address": "0xaa68ca9c69a4ff22203ce189ce4448d7401875e8",
+      "symbol": "SY-swETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-swETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x69295970dd33B135417C9b866d03C6f59f022f8b"
+      ]
+    },
+    {
+      "address": "0xab365c0879024481e4ad3b47bd6fea9c10014fbc",
+      "symbol": "PT-sUSDf-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDf-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x45F163E583D34b8E276445dd3Da9aE077D137d72"
       ]
     },
     {
@@ -6238,6 +7921,28 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xabf8165dd7a90ab75878161db15bf85f6f781d9b",
+      "symbol": "SY-sUSDE",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDE",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xb6aC3d5da138918aC4E84441e924a20daA60dBdd"
+      ]
+    },
+    {
+      "address": "0xac0047886a985071476a1186be89222659970d65",
+      "symbol": "SY-weETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-weETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x95a9504f246cd65bf91c2c550a53F7f415227eD1"
       ]
     },
     {
@@ -6357,6 +8062,28 @@
       ]
     },
     {
+      "address": "0xad7ee9712c279b619101706252db3b3d1e6756ab",
+      "symbol": "PT-ysUSDC-30OCT2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-ysUSDC-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xB8091eAA116Dd111FaF072f4Eb94B1e6a14076e1"
+      ]
+    },
+    {
+      "address": "0xae08c57475cb850751ad161917ea941e2552cdf8",
+      "symbol": "SY-asdPENDLE",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-asdPENDLE",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xfa19d3a9F73180c9E73D2811e0b66EEED612f728"
+      ]
+    },
+    {
       "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "symbol": "USDC",
       "decimals": 6,
@@ -6377,6 +8104,17 @@
       ],
       "sources": [
         "manual:Arbitrum:USDC"
+      ]
+    },
+    {
+      "address": "0xb10da2f9147f9cf2b8826877cd0c95c18a0f42dc",
+      "symbol": "PT-cUSDO-20NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-cUSDO-20NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x3F53eb4c57c7E7118BE8566bCd503EA502639581"
       ]
     },
     {
@@ -6404,10 +8142,10 @@
     },
     {
       "address": "0xB1847B85da0595C6f72B0757Ee292Bd472DCa45e",
-      "symbol": null,
+      "symbol": "PT-aBasGHO-31JUL2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-aBasGHO-31JUL2025",
       "matches": [
         {
           "chainKey": "base",
@@ -6424,7 +8162,41 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0x6144511E1BD935c258B7b9075F120474dF1b1e5f"
+      ]
+    },
+    {
+      "address": "0xb1b9150f2085f6a553b547099977181ca802752a",
+      "symbol": "SY-agETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-agETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x1B089668c0833BaaF1C523A7Ed3d6D8CCfEE840b"
+      ]
+    },
+    {
+      "address": "0xb253eff1104802b97ac7e3ac9fdd73aece295a2c",
+      "symbol": "PT-stETH-30DEC2027",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-stETH-30DEC2027",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x34280882267ffa6383B363E278B027Be083bBe3b"
+      ]
+    },
+    {
+      "address": "0xb258a604282f765fc752e5afd88974a5d6b40166",
+      "symbol": "SY-sdeUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sdeUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x446c8AB198C848871c767aDd10a8938A259e9ff6"
       ]
     },
     {
@@ -6447,7 +8219,20 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0x727cEbAcfb10fFd353Fc221D06A862B437eC1735",
+        "pendle:sonic:sy:0x4E82347Bc41CFD5d62cEF483C7f0a739a8158963"
+      ]
+    },
+    {
+      "address": "0xb2dbc10f4fa6113ac75eea254806f6a2aa4bf20b",
+      "symbol": "SY tETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY tETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x3DAF20E46708E556570159Eaf98eeE53A1A5b8A4"
       ]
     },
     {
@@ -6471,6 +8256,28 @@
       ],
       "sources": [
         "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xb5130e951e5d8d77ac2fd1ca40982d03b2483782",
+      "symbol": "SY-mEDGE",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-mEDGE",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x8322B96F7aFF9Bf405A5A321C7CA5aaC748716e0"
+      ]
+    },
+    {
+      "address": "0xb5202e3055964b88c8c4c33bcf2346dbbfcf3a9b",
+      "symbol": "PT-cUSDO-20NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-cUSDO-20NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xfaA442D3bAbF60633c191C6A932a811893275C12"
       ]
     },
     {
@@ -6544,6 +8351,28 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xb81a3526793a6f7d0201e00f40f4e58cc9cd9025",
+      "symbol": "SY-sUSDaf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDaf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x233f5adf236CAB22C5DbDD3333a7EfD8267d7AEE"
+      ]
+    },
+    {
+      "address": "0xb87f94b29ebad80a5d47c4df96a9638cab37b43b",
+      "symbol": "PT-slvlUSD-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-slvlUSD-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x5BB8f0e1ddb85881658D31A2440629DFaB466936"
       ]
     },
     {
@@ -6642,6 +8471,17 @@
       ]
     },
     {
+      "address": "0xba04c9a4297484aa671fd3425364994cf2ac8037",
+      "symbol": "SY-Curve-GHOUSR",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-Curve-GHOUSR",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x1a249b03362C1bFFfEa062F3bD7096C58cA07279"
+      ]
+    },
+    {
       "address": "0xba71Cb8Ef2d59dE7399745793657838829E0B147",
       "symbol": "STAMP",
       "decimals": 18,
@@ -6712,6 +8552,28 @@
       ]
     },
     {
+      "address": "0xbbe895c942a6da17e9381325b7ee41a60ced6fb5",
+      "symbol": "SY-sUSDaf",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDaf",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xB8d8d70B813EF60Dd47c6ebb320Df4ACF691361a"
+      ]
+    },
+    {
+      "address": "0xbc6736d346a5ebc0debc997397912cd9b8fae10a",
+      "symbol": "PT-USDe-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USDe-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x6d98a2b6CDbF44939362a3E99793339Ba2016aF4"
+      ]
+    },
+    {
       "address": "0xbd33da1f9a0Cc70224e9a71C80Baa92Fd0Eb82d0",
       "symbol": "BRM",
       "decimals": 18,
@@ -6732,6 +8594,17 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xbdd578ab1a6af894b9abe1c9d97f183005e07b1d",
+      "symbol": "SY-AIDaUSDC",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-AIDaUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x47306E3Cb4E325042556864B38aA0CBE8D928bE5"
       ]
     },
     {
@@ -6783,6 +8656,17 @@
       ]
     },
     {
+      "address": "0xbe27993204ec64238f71a527b4c4d5f4949034c3",
+      "symbol": "PT-wstkscUSD-29MAY2025",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-wstkscUSD-29MAY2025",
+      "matches": [],
+      "sources": [
+        "pendle:sonic:pt:0x6e4e95FaB7db1f0524b4b0a05F0b9c96380b7Dfa"
+      ]
+    },
+    {
       "address": "0xBf5E60ddf654085F80DAe9DD33Ec0E345773E1F8",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -6803,6 +8687,17 @@
       ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0xc01cde799245a25e6eabc550b36a47f6f83cc0f1",
+      "symbol": "SY-sUSDE",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sUSDE",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xA36b60A14A1A5247912584768C6e53E1a269a9F7"
       ]
     },
     {
@@ -6875,6 +8770,17 @@
       ]
     },
     {
+      "address": "0xc21eb911833f283c7e9b05398f2b2f803d8dcee3",
+      "symbol": "PT-agETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-agETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x1B089668c0833BaaF1C523A7Ed3d6D8CCfEE840b"
+      ]
+    },
+    {
       "address": "0xC22b928E91FDF3367ED4568b682BCC082a7DC4eE",
       "symbol": "TRUMP",
       "decimals": 8,
@@ -6895,6 +8801,17 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xc347584b415715b1b66774b2899fef2fd3b56d6e",
+      "symbol": "PT-staking-USDS-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-staking-USDS-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xff43e751f2f07BbF84Da1fc1fa12cE116bF447E5"
       ]
     },
     {
@@ -6922,8 +8839,30 @@
       ]
     },
     {
+      "address": "0xc40febf5a33b8c92b187d9be0fd3fe0ac2e4b07c",
+      "symbol": "SY-mUSDC",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "SY-mUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:base:sy:0x3124D41708edbdC7995A55183e802E3D9d0D5Ef1"
+      ]
+    },
+    {
+      "address": "0xc430db19339a3051192233b4c49f9ab3dc6d16b7",
+      "symbol": "SY-uniETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-uniETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xC9904994EF8d0614314d66800718d2A213502F9b"
+      ]
+    },
+    {
       "address": "0xC438B0c0E80A8Fa1B36898d1b36A3fc2eC371C54",
-      "symbol": "SHIT",
+      "symbol": "BLEP",
       "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "SHIT",
@@ -6936,12 +8875,23 @@
           "isContract": true,
           "isErc20Like": true,
           "decimals": 18,
-          "symbol": "SHIT",
+          "symbol": "BLEP",
           "errors": []
         }
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xc4a9d8b486f388cc0e4168d2904277e8c8372fa3",
+      "symbol": "SY-aSonUSDC",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-aSonUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:sonic:sy:0x3F5EA53d1160177445B1898afbB16da111182418"
       ]
     },
     {
@@ -6991,6 +8941,17 @@
       ]
     },
     {
+      "address": "0xc5e17741d6717acda377fb3a13174d912e968c6d",
+      "symbol": "PT-sUSP-28AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSP-28AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x4F76C940fc4F11A621CC0f04b51bD5f61D50984d"
+      ]
+    },
+    {
       "address": "0xC5ECdAfBEDe3c8436C9C09E60bFFaC3731A9B28E",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -7019,7 +8980,7 @@
       "symbol": "SY-iBGT",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "SY-iBGT",
       "matches": [
         {
           "chainKey": "berachain",
@@ -7034,7 +8995,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:sy:0x227d4a2E5734b500fA0bEd940E4df54bDda25636"
       ]
     },
     {
@@ -7082,6 +9044,39 @@
       ],
       "sources": [
         "config:Ethereum:TOKENS"
+      ]
+    },
+    {
+      "address": "0xc71c923445abdfc2c9b50292d8498745330f18ab",
+      "symbol": "SY-vyUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-vyUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x8AF9872eeE05c7Ca1c24295426E4d71b4AF5B559"
+      ]
+    },
+    {
+      "address": "0xc781c0cc527cb8c351be3a64c690216c535c6f36",
+      "symbol": "SY-LBTC",
+      "decimals": 8,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-LBTC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xefA9339980fFEE3304Af4822B80484BfcC6f35Ee"
+      ]
+    },
+    {
+      "address": "0xc7c6bfe2d67893887ba7969c176fee9dba1d63d7",
+      "symbol": "SY-sGHO",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-sGHO",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xD4f6592DE90024e541187527d7F1dE83F6Cb6a52"
       ]
     },
     {
@@ -7133,6 +9128,17 @@
       ]
     },
     {
+      "address": "0xc93374d3044e61743547c1845071e94f6fd5123b",
+      "symbol": "SY-ysyBOLD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-ysyBOLD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x1BD78377DFbCA2043e38b692D2E0b32396b4772d"
+      ]
+    },
+    {
       "address": "0xC9904994EF8d0614314d66800718d2A213502F9b",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -7154,6 +9160,17 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xc9e9c85b33e87fde85c44dbf72b4b842a071551d",
+      "symbol": "SY-syrupUSDC",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-syrupUSDC",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x9A63FA80b5DDFd3Cab23803fdB93ad2c18F3d5aa"
       ]
     },
     {
@@ -7250,6 +9267,17 @@
       ]
     },
     {
+      "address": "0xcb95d32b87d2eceb196af2152147de371af3c7c9",
+      "symbol": "PT-reUSD-18DEC2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-reUSD-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xa8F21c9D0aFb46382EAD7C33e79f00eF9666e122"
+      ]
+    },
+    {
       "address": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
       "symbol": "cbBTC",
       "decimals": 8,
@@ -7296,6 +9324,29 @@
       ]
     },
     {
+      "address": "0xcbc72d92b2dc8187414f6734718563898740c0bc",
+      "symbol": "SY-stETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-stETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x34280882267ffa6383B363E278B027Be083bBe3b",
+        "pendle:ethereum:sy:0xC374f7eC85F8C7DE3207a10bB1978bA104bdA3B2"
+      ]
+    },
+    {
+      "address": "0xcc31d0c049eb8bc29a265eb81b25c89325f2f78f",
+      "symbol": "PT-sUSN-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSN-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xbdf3EA4673116698219c08A9AD6B51e4E68d22ab"
+      ]
+    },
+    {
       "address": "0xCC781b043933c10a04409b22aaDa3a3D1A7f29D4",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -7316,6 +9367,17 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xcce7d12f683c6dae700154f0badf779c0ba1f89a",
+      "symbol": "PT-syrupUSDC-28AUG2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-syrupUSDC-28AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x9A63FA80b5DDFd3Cab23803fdB93ad2c18F3d5aa"
       ]
     },
     {
@@ -7342,6 +9404,17 @@
       ]
     },
     {
+      "address": "0xce789b855ff263d86cee15d8bf5eba9ba6e2d066",
+      "symbol": "PT-rswETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-rswETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xC5ECdAfBEDe3c8436C9C09E60bFFaC3731A9B28E"
+      ]
+    },
+    {
       "address": "0xD009A734028e3aa0839eB69DAB4A594AbcfAE728",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -7362,6 +9435,17 @@
       ],
       "sources": [
         "config:Ethereum:PENDLE_STATIC"
+      ]
+    },
+    {
+      "address": "0xd0a4b74a6b62aa2b6c02349463d9041606608f36",
+      "symbol": "PT-tUSDe-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-tUSDe-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x07b1711d4af74Af661DDe3b774741993B79fC59C"
       ]
     },
     {
@@ -7435,6 +9519,28 @@
       ]
     },
     {
+      "address": "0xd2cd73fa955aba07f5c3f53a1e01744a2b857daf",
+      "symbol": "PT-fGHO-18DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-fGHO-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x1821eC9c2D2C13f6b89D21301B93BD8D6667712b"
+      ]
+    },
+    {
+      "address": "0xd2d0ed784f01dde636d9925da760e87f3ac5e721",
+      "symbol": "PT-liquidBeraETH-28AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-liquidBeraETH-28AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x2d3BBC6e3FfeB584FC34B8C433F7170741Ad75c1"
+      ]
+    },
+    {
       "address": "0xD302d7fD2c9375a433018fDfA5613Be6Ad3f18E3",
       "symbol": "SY-stk-EPendle",
       "decimals": 18,
@@ -7501,6 +9607,17 @@
       ],
       "sources": [
         "manual:sonic"
+      ]
+    },
+    {
+      "address": "0xd3f2cc98cf302365582757fcd6288efb92e8d254",
+      "symbol": "SY-yUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-yUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x4708E55da780a953FDed696CecB0E19164bA72f4"
       ]
     },
     {
@@ -7669,7 +9786,7 @@
       "symbol": "PT-dWBERA-30OCT2025",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-dWBERA-30OCT2025",
       "matches": [
         {
           "chainKey": "berachain",
@@ -7684,7 +9801,19 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:pt:0x5200C9900436f649B4659dFc79213837DcCCaAB1"
+      ]
+    },
+    {
+      "address": "0xd94790375bf143fa845628e4ff748c0a42a81533",
+      "symbol": "SY-slpETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-slpETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x73d1C0B9B931654a6755d9319d800B8e81Ad27cA"
       ]
     },
     {
@@ -7708,6 +9837,28 @@
       ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0xd9bb4fe05c409c603b5138e00455523866335299",
+      "symbol": "PT-EBTC-18DEC2025",
+      "decimals": 8,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-EBTC-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x6c6668df3916AD01e54397F54ba9deDdBaFeEb50"
+      ]
+    },
+    {
+      "address": "0xd9f7db5c3c0d51ab3e60fdf215c04e2d3cb95c49",
+      "symbol": "SY-spETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-spETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x39174Ed417F8FDf60890e4b24609F69c59D302eB"
       ]
     },
     {
@@ -7781,11 +9932,44 @@
       ]
     },
     {
+      "address": "0xdb63cfad2fe43132606cfef60c8ca3468c487677",
+      "symbol": "PT-vyUSD-27NOV2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-vyUSD-27NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x8AF9872eeE05c7Ca1c24295426E4d71b4AF5B559"
+      ]
+    },
+    {
+      "address": "0xdbc00a45e7530017e553fbfa340be32de89ea27b",
+      "symbol": "PT-tBTC-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-tBTC-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x9F4C227b0fB30a02430D573D657c76AC2de4cEE7"
+      ]
+    },
+    {
+      "address": "0xdbf6fec5a012a13c456bac3b67c3b9cf2830a122",
+      "symbol": "PT-csUSDL-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-csUSDL-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x56C4200915D74A7cae45dFa57aB33725B0439193"
+      ]
+    },
+    {
       "address": "0xdc9b87e5eFD6Ca2BeAa33dDe9c544E1e98345De4",
       "symbol": "PT-USDe-25SEP2025",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-USDe-25SEP2025",
       "matches": [
         {
           "chainKey": "berachain",
@@ -7800,7 +9984,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:pt:0x0651C3F8BA59e312529d9A92FCebD8Bb159cbAed"
       ]
     },
     {
@@ -7827,6 +10012,17 @@
       ]
     },
     {
+      "address": "0xdcfdf8434e8fdfff2dd7dfc9299877e813348ee7",
+      "symbol": "PT-RUSD-30OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-RUSD-30OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x04EEb15A3A96b679eEd0a5F490ef89Ec5477F045"
+      ]
+    },
+    {
       "address": "0xDd32691dc601C14eae73b675420adB5215DEa72f",
       "symbol": "USD",
       "decimals": null,
@@ -7839,7 +10035,7 @@
       "symbol": "PT-iBGT-26JUN2025",
       "decimals": 18,
       "chainKey": "berachain",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-iBGT-26JUN2025",
       "matches": [
         {
           "chainKey": "berachain",
@@ -7854,7 +10050,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:berachain:pt:0x227d4a2E5734b500fA0bEd940E4df54bDda25636"
       ]
     },
     {
@@ -7912,6 +10109,40 @@
       ]
     },
     {
+      "address": "0xe22deabf5b174437092ae9ac79761b03ef178ca8",
+      "symbol": "SY-WOUSD",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-WOUSD",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xa8eeA676ba075A9B1630Bd9c2468Df6D804C4344"
+      ]
+    },
+    {
+      "address": "0xe388A9a5bFD958106ADeB79df10084a8b1D9a5aB",
+      "symbol": "LORDY",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xe388A9a5bFD958106ADeB79df10084a8b1D9a5aB",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "LORDY",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0xe3CE880CbDe82a343B424c105E98164672851a8D",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -7939,7 +10170,7 @@
       "symbol": "PT-cbETH-25DEC2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-cbETH-25DEC2025",
       "matches": [
         {
           "chainKey": "base",
@@ -7954,7 +10185,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0x483f2e223c58a5eF19c4B32fbC6dE57709749cb3"
       ]
     },
     {
@@ -7962,7 +10194,7 @@
       "symbol": "PT-yvBal-GHO-USR-25SEP2025",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": null,
+      "sourceSymbol": "PT-yvBal-GHO-USR-25SEP2025",
       "matches": [
         {
           "chainKey": "base",
@@ -7977,7 +10209,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:pt:0xA6b8cFE75Ca5e1b2A527AA255d10521FAaF24b61"
       ]
     },
     {
@@ -8037,6 +10270,28 @@
       ]
     },
     {
+      "address": "0xe6a934089bbee34f832060ce98848359883749b3",
+      "symbol": "PT-sUSDE-27NOV2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sUSDE-27NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xb6aC3d5da138918aC4E84441e924a20daA60dBdd"
+      ]
+    },
+    {
+      "address": "0xe770f7ef6c0667dc274194063e23621a82bb0c59",
+      "symbol": "SY-tETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-tETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0xEbF7FD1ec45F505175D92dB4D180B8f323C17875"
+      ]
+    },
+    {
       "address": "0xE8a41c62BB4d5863C6eadC96792cFE90A1f37C47",
       "symbol": "wstkscETH",
       "decimals": 18,
@@ -8057,6 +10312,17 @@
       ],
       "sources": [
         "manual:sonic"
+      ]
+    },
+    {
+      "address": "0xe8f1c9804770e11ab73395be54686ad656601e9e",
+      "symbol": "PT-clisBNB-24APR2025",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "PT-clisBNB-24APR2025",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:pt:0x1d9D27f0b89181cF1593aC2B36A37B444Eb66bEE"
       ]
     },
     {
@@ -8103,6 +10369,17 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xe98acd91c3021967120bcc0d46af49d55833650b",
+      "symbol": "PT-LBTC-18DEC2025",
+      "decimals": 8,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-LBTC-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xefA9339980fFEE3304Af4822B80484BfcC6f35Ee"
       ]
     },
     {
@@ -8153,6 +10430,17 @@
       ]
     },
     {
+      "address": "0xec3b5e45dd278d5ab9cdb31754b54db314e9d52a",
+      "symbol": "PT-USDf-29JAN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USDf-29JAN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xc65B7a0f8Fc97e1D548860d866f4304E039EF016"
+      ]
+    },
+    {
       "address": "0xeC3Fb79d229EF53C8B5Cd64c171097FfC8A00Dc5",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -8173,6 +10461,28 @@
       ],
       "sources": [
         "config:Mantle:PENDLE_MARKETS"
+      ]
+    },
+    {
+      "address": "0xec443e7e0e745348e500084892c89218b3ba4683",
+      "symbol": "PT-USR-24APR2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "PT-USR-24APR2025",
+      "matches": [],
+      "sources": [
+        "pendle:base:pt:0xE15578523937ed7F08E8F7a1Fa8a021E07025a08"
+      ]
+    },
+    {
+      "address": "0xec535ae692f414c45cc4e2610d66ffd1cbddb02b",
+      "symbol": "SY-stEUR",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-stEUR",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x593b67a445E836D0b4e9186D7604C53b0aE6A74b"
       ]
     },
     {
@@ -8199,6 +10509,17 @@
       ]
     },
     {
+      "address": "0xed5cc19927e3a4ac20e4a9e9e433ddd99138504e",
+      "symbol": "SY-ysWETH",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-ysWETH",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x2B10CffFC3e49F4aaE294d86072E5D2ec6332118"
+      ]
+    },
+    {
       "address": "0xEDa1D0e1681D59dea451702963d6287b844Cb94C",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -8219,6 +10540,28 @@
       ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
+      ]
+    },
+    {
+      "address": "0xee9bfff7da99e6f85abc4f7fc33f5278473124e0",
+      "symbol": "SY-tUSDe",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-tUSDe",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x07b1711d4af74Af661DDe3b774741993B79fC59C"
+      ]
+    },
+    {
+      "address": "0xef2f8f0a3159ca952572d1e41336f0e0af10413b",
+      "symbol": "PT-USDf-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USDf-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x4D2A10CC91F70C21A7c90C3b1A09498cD88e1435"
       ]
     },
     {
@@ -8246,6 +10589,17 @@
       ]
     },
     {
+      "address": "0xf14f2113dbf38f142df9f3933a3936af734c847d",
+      "symbol": "PT-slpUSDC-25SEP2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-slpUSDC-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x3b548078063221e6F9c3eEB9de5894B4E5551FcB"
+      ]
+    },
+    {
       "address": "0xf176fB51F4eB826136a54FDc71C50fCd2202E272",
       "symbol": "SY-rsETH",
       "decimals": 18,
@@ -8266,6 +10620,39 @@
       ],
       "sources": [
         "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xf1c9a56010b76ed39a3dca7e3bb25d7ed75e61c1",
+      "symbol": "PT-uniETH-25JUN2026",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-uniETH-25JUN2026",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xC9904994EF8d0614314d66800718d2A213502F9b"
+      ]
+    },
+    {
+      "address": "0xf3dbde762e5b67fad09d88da3dfd38a83f753ffe",
+      "symbol": "SY-USDe",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SY-USDe",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:sy:0x6d98a2b6CDbF44939362a3E99793339Ba2016aF4"
+      ]
+    },
+    {
+      "address": "0xf3f491e5608f8b8a6fd9e9d66a4a4036d7fd282c",
+      "symbol": "PT-pUSDe-16OCT2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-pUSDe-16OCT2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xf4C449d6a2D1840625211769779ADA42857d04dD"
       ]
     },
     {
@@ -8314,6 +10701,28 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xf577439af94dc7434143380cd43dee77b0cff607",
+      "symbol": "PT-eWETH-2-18DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-eWETH-2-18DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x2CbB8eFe9a7ff340768A1b672475111672e7527e"
+      ]
+    },
+    {
+      "address": "0xf580cf6b26251541f323bbda1f31cc8f91a0ca78",
+      "symbol": "PT-yUSD-27NOV2025",
+      "decimals": 6,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-yUSD-27NOV2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x4708E55da780a953FDed696CecB0E19164bA72f4"
       ]
     },
     {
@@ -8412,11 +10821,22 @@
       ]
     },
     {
+      "address": "0xf99985822fb361117fcf3768d34a6353e6022f5f",
+      "symbol": "PT-stETH-25DEC2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-stETH-25DEC2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xC374f7eC85F8C7DE3207a10bB1978bA104bdA3B2"
+      ]
+    },
+    {
       "address": "0xf9b738C2e7aDC4f299C57aFd0890B925A5efeA6f",
-      "symbol": "MINKY",
+      "symbol": "SHIT",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": "MINKY",
+      "sourceSymbol": "SHIT",
       "matches": [
         {
           "chainKey": "base",
@@ -8424,10 +10844,11 @@
           "chainName": "Base",
           "address": "0xf9b738C2e7aDC4f299C57aFd0890B925A5efeA6f",
           "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "MINKY",
-          "errors": []
+          "isErc20Like": false,
+          "errors": [
+            "decimals: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/",
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
         }
       ],
       "sources": [
@@ -8455,6 +10876,17 @@
       ],
       "sources": [
         "config:Ethereum:PENDLE_STATIC"
+      ]
+    },
+    {
+      "address": "0xfa56005cdf111725a8e5395fc90cd33135bccae8",
+      "symbol": "PT-sUSDX-1SEP2025",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "PT-sUSDX-1SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:binancechain:pt:0xE08fC3054450053cd341da695f72b18E6110ffFC"
       ]
     },
     {
@@ -8505,6 +10937,39 @@
       ]
     },
     {
+      "address": "0xfb74333df04cfc5f141b337677b78d28129004d5",
+      "symbol": "PT-lvlUSD-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-lvlUSD-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0x8F661231F737c2F704362fDF64b8d847ba511F81"
+      ]
+    },
+    {
+      "address": "0xfc66d247f577bfc87df8a5267c43676c4a088b8b",
+      "symbol": "PT-sENA-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-sENA-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xdA57ABF95a7C21eB9df08fBAADa182F749F6C62F"
+      ]
+    },
+    {
+      "address": "0xfcb43e1b5da5059dadde1575af613ea867796a13",
+      "symbol": "PT-liquidBera-BTC-scaled18-28AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-liquidBera-BTC-scaled18-28AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xD009A734028e3aa0839eB69DAB4A594AbcfAE728"
+      ]
+    },
+    {
       "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
       "symbol": "USDT",
       "decimals": 18,
@@ -8534,6 +10999,17 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
+    },
+    {
+      "address": "0xfe72382695dc280e7392a0be795128a126e9b7ae",
+      "symbol": "PT-tETH-25SEP2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-tETH-25SEP2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xEbF7FD1ec45F505175D92dB4D180B8f323C17875"
+      ]
     },
     {
       "address": "0xFF0C532FDB8Cd566Ae169C1CB157ff2Bdc83E105",
@@ -8626,7 +11102,8 @@
         }
       ],
       "sources": [
-        "manual:pendle"
+        "manual:pendle",
+        "pendle:base:sy:0xd7C3CEce4bd8FF41aDE50D59ecE7bc91DC2545c1"
       ]
     },
     {
@@ -8673,6 +11150,17 @@
       ],
       "sources": [
         "config:hyperliquid:Tokens"
+      ]
+    },
+    {
+      "address": "0xffec096c087c13cc268497b89a613cace4df9a48",
+      "symbol": "PT-USDS-14AUG2025",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "PT-USDS-14AUG2025",
+      "matches": [],
+      "sources": [
+        "pendle:ethereum:pt:0xdacE1121e10500e9e29d071F01593fD76B000f08"
       ]
     }
   ]
