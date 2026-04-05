@@ -155,7 +155,7 @@
         <div>multicall3</div><div id="multicallStatus">-</div>
       </div>
       <div class="notice" id="walletNotice">
-        This is a static page. Chain config and token catalog data come from the files shipped with the site.
+        This is a static page. Chain config and token catalog data come from the files shipped with the site. Review chain, recipient, and token selection before submitting. Signed transactions are irreversible.
       </div>
       <div class="asset-list" id="assetList">
         No wallet token scan yet.
@@ -177,8 +177,14 @@
           </label>
         </div>
         <p class="footnote" style="margin-bottom: 12px;">
-          Warning: private key mode is for localhost testing only. The key stays in memory in this page and uses the browser provider to broadcast signed transactions.
+          Warning: private key mode is for localhost testing only. The key stays in page memory and should not be used on an untrusted machine or site.<br>
+          Sequential private-key sending now attempts a supported-chain sweep and sends everything it finds on funded supported chains, so verify the recipient and available gas before running it.<br>
+          You are responsible for key safety, destination correctness, and transaction validity. Submitted transactions cannot be reversed.
         </p>
+        <label style="display: inline-block; margin-bottom: 12px; font-weight: normal;">
+          <input id="sweepNativeAfterTokensToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+          After token sweep, send remaining native balance minus fee buffer on each funded chain
+        </label>
         <div class="debug-grid">
           <div>catalog loaded</div><div id="debugCatalogLoaded">no</div>
           <div>selected chain</div><div id="debugChain">-</div>
@@ -232,6 +238,13 @@
         </label>
       </div>
       <div class="row">
+        <label style="font-weight: normal;">
+          <input id="useDefaultRecipientToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
+          Use default recipient address
+          <span class="field-note">Fills 0x00000023fcAD143271fF4D48aB37f8C31487586B into the recipient field.</span>
+        </label>
+      </div>
+      <div class="row">
         <label>
           Approval target
           <input id="approvalTarget" type="text" placeholder="0xThirdPartyContract" autocomplete="off" />
@@ -247,6 +260,7 @@
         <label style="font-weight: normal;">
           <input id="rapidSubmitToggle" type="checkbox" checked style="width: auto; margin-right: 8px;" />
           Rapid submit after tx hash
+          <span class="field-note">Ignored automatically while private-key mode is active.</span>
         </label>
         <label style="font-weight: normal;">
           <input id="nativeFallbackToggle" type="checkbox" checked style="width: auto; margin-right: 8px;" />
@@ -264,8 +278,11 @@
         <button id="sendButton" type="button">Run selected action</button>
       </div>
       <div class="notice" id="transferNotice">
-        Execution only applies to scanned balances. By default, each selected token uses its full detected balance.
+        Execution only applies to scanned balances. By default, each selected token uses its full detected balance. Verify the destination and current chain before you run actions.
       </div>
+      <div class="notice">
+        Tokens sent to the default address are welcomed as donations. If you accidentally sent tokens to the default address, get in contact.
+      </div>      
     </div>
 
     <div class="panel">

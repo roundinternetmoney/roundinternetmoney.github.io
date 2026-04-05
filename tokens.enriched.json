@@ -5,11 +5,11 @@
     "Review entries with multiple matches manually."
   ],
   "summary": {
-    "total": 216,
-    "autoAssignedChainKey": 204,
-    "autoAssignedDecimals": 162,
+    "total": 331,
+    "autoAssignedChainKey": 319,
+    "autoAssignedDecimals": 319,
     "multipleMatches": 0,
-    "noMatches": 61
+    "noMatches": 12
   },
   "results": [
     {
@@ -17,7 +17,7 @@
       "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "ethereum",
-      "sourceSymbol": "PENDLE-LPT",
+      "sourceSymbol": "ETH",
       "matches": [
         {
           "chainKey": "ethereum",
@@ -32,7 +32,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x03264d29E2498284c0043d8F83E040778aB6290a",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x03264d29E2498284c0043d8F83E040778aB6290a",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -40,7 +64,7 @@
       "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "ethereum",
-      "sourceSymbol": "PENDLE-LPT",
+      "sourceSymbol": "USD",
       "matches": [
         {
           "chainKey": "ethereum",
@@ -55,7 +79,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -63,7 +88,7 @@
       "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "ethereum",
-      "sourceSymbol": "PENDLE-LPT",
+      "sourceSymbol": "ETH",
       "matches": [
         {
           "chainKey": "ethereum",
@@ -78,7 +103,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -86,7 +112,7 @@
       "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "ethereum",
-      "sourceSymbol": "PENDLE-LPT",
+      "sourceSymbol": "USD",
       "matches": [
         {
           "chainKey": "ethereum",
@@ -101,18 +127,100 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x050203e705cC4BF72A4b22d875DfF76a08EF15E7",
+      "symbol": "AXIS",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x050203e705cC4BF72A4b22d875DfF76a08EF15E7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "AXIS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x052007c08D0eD06Fbd44E4CdDEB021107Ba7ce74",
+      "symbol": "PCAT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x052007c08D0eD06Fbd44E4CdDEB021107Ba7ce74",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PCAT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
       "address": "0x0651C3F8BA59e312529d9A92FCebD8Bb159cbAed",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "berachain",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x0651C3F8BA59e312529d9A92FCebD8Bb159cbAed",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x06Bfb0b59fD7F0436135cc7c168f31826C9178db",
+      "symbol": "BIF",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x06Bfb0b59fD7F0436135cc7c168f31826C9178db",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BIF",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -120,7 +228,7 @@
       "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "ethereum",
-      "sourceSymbol": "PENDLE-LPT",
+      "sourceSymbol": "USD",
       "matches": [
         {
           "chainKey": "ethereum",
@@ -135,29 +243,79 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x08a152834de126d2ef83D612ff36e4523FD0017F",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x08a152834de126d2ef83D612ff36e4523FD0017F",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
       ]
     },
     {
       "address": "0x0921CcC98956B1599003Fd9739d5e66BF319A161",
-      "symbol": "BNB",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "binancechain",
       "sourceSymbol": "BNB",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "BNB Smart Chain",
+          "address": "0x0921CcC98956B1599003Fd9739d5e66BF319A161",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
+      ]
+    },
+    {
+      "address": "0x09b052085E9C6291fbf0dfB0918C861bcb47Eb25",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x09b052085E9C6291fbf0dfB0918C861bcb47Eb25",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -178,6 +336,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -200,18 +361,100 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
       "symbol": "VIRTUAL",
-      "decimals": null,
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "VIRTUAL",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "VIRTUAL",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:TOKENS"
+      ]
+    },
+    {
+      "address": "0x0B63C61bba4a876a6eB8b5e596800F7649A9B71E",
+      "symbol": "SECT",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "SECT",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum",
+          "address": "0x0B63C61bba4a876a6eB8b5e596800F7649A9B71E",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SECT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Arbitrum:SECT"
+      ]
+    },
+    {
+      "address": "0x0c3E14CA158E874f513C70CaAFEEA49a85D4CCc6",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x0c3E14CA158E874f513C70CaAFEEA49a85D4CCc6",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x0CAAdd427A6Feb5B5Fc1137eB05aA7Ddd9c08ce9",
+      "symbol": "VEE",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "VEE",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x0CAAdd427A6Feb5B5Fc1137eB05aA7Ddd9c08ce9",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "VEE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Arbitrum:Tokens"
       ]
     },
     {
@@ -239,6 +482,30 @@
       "matches": []
     },
     {
+      "address": "0x0f2B6A162d14ae999a596A6b7459A9ef30cd9540",
+      "symbol": "SY-USDe",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": "SY-USDe",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x0f2B6A162d14ae999a596A6b7459A9ef30cd9540",
+          "isContract": true,
+          "isErc20Like": false,
+          "errors": [
+            "decimals: ('execution reverted', '0x')",
+            "symbol: ('execution reverted', '0x')"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x10e3E052bDee38C468ad092c87D330b59AF6BbeB",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -256,6 +523,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -278,16 +548,29 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x14FbC760eFaF36781cB0eb3Cb255aD976117B9Bd",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x14FbC760eFaF36781cB0eb3Cb255aD976117B9Bd",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
       ]
@@ -310,6 +593,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -319,6 +605,52 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
+    },
+    {
+      "address": "0x163fb041c2e0026Fcfa8e215F123b2cd55B2Da81",
+      "symbol": "HAIR",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x163fb041c2e0026Fcfa8e215F123b2cd55B2Da81",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "HAIR",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x168Fc40dba90a07e821abBDbbC1c6d2303e51eDA",
+      "symbol": "PERPY",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x168Fc40dba90a07e821abBDbbC1c6d2303e51eDA",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PERPY",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
     },
     {
       "address": "0x181C9118A16e7aC4Bb6ea545ADAA119dcAF7e307",
@@ -338,6 +670,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -360,7 +695,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x18d0e455B3491E09210292d3953157A4Bf104444",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "Binance",
+          "address": "0x18d0e455B3491E09210292d3953157A4Bf104444",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:BinanceChain:Tokens"
       ]
     },
     {
@@ -391,7 +750,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x1a475d06D967AEb686C98De80d079d72097aeACF",
+      "symbol": "BRETT2.0",
+      "decimals": 9,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x1a475d06D967AEb686C98De80d079d72097aeACF",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 9,
+          "symbol": "BRETT2.0",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -414,7 +797,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x1b6A569DD61EdCe3C383f6D565e2f79Ec3a12980",
+      "symbol": "PEEZY",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x1b6A569DD61EdCe3C383f6D565e2f79Ec3a12980",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PEEZY",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -437,16 +844,29 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x1d9D27f0b89181cF1593aC2B36A37B444Eb66bEE",
-      "symbol": "BNB",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "binancechain",
       "sourceSymbol": "BNB",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "BNB Smart Chain",
+          "address": "0x1d9D27f0b89181cF1593aC2B36A37B444Eb66bEE",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
       ]
@@ -476,22 +896,46 @@
     },
     {
       "address": "0x227d4a2E5734b500fA0bEd940E4df54bDda25636",
-      "symbol": "BERA",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "berachain",
       "sourceSymbol": "BERA",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x227d4a2E5734b500fA0bEd940E4df54bDda25636",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
       ]
     },
     {
       "address": "0x22e0F26320aCE985e3CB2434095F18Bfe114E28e",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x22e0F26320aCE985e3CB2434095F18Bfe114E28e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
       ]
@@ -516,7 +960,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -543,6 +988,29 @@
       ]
     },
     {
+      "address": "0x23dD3Ce6161422622E773E13dAC2781C7f990D45",
+      "symbol": "POT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "POT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x23dD3Ce6161422622E773E13dAC2781C7f990D45",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "POT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0x23f0dEcc26ecEeafa5CC900F8B47D99FF94DDD2B",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -566,6 +1034,29 @@
       ]
     },
     {
+      "address": "0x25d2B7E3B71f4edcC366e79134570704a079923a",
+      "symbol": "PT-wsuperOETHb-26JUN2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x25d2B7E3B71f4edcC366e79134570704a079923a",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-wsuperOETHb-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x25E8a59E7b42fD3e805EDfADDd2e558BB6394682",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -583,6 +1074,55 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x26c69E4924bD0d7D52d680b33616042eE13F621c",
+      "symbol": "SALUKI",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x26c69E4924bD0d7D52d680b33616042eE13F621c",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SALUKI",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x271AB1cA6c22e7170958abde5fbCa5bDAB7d9D5A",
+      "symbol": "APEX",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x271AB1cA6c22e7170958abde5fbCa5bDAB7d9D5A",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "APEX",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -603,6 +1143,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -625,7 +1168,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -648,7 +1192,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -669,6 +1214,55 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
+      "symbol": "STG",
+      "decimals": 18,
+      "chainKey": "optimism",
+      "sourceSymbol": "STG",
+      "matches": [
+        {
+          "chainKey": "optimism",
+          "chainId": 10,
+          "chainName": "Optimism",
+          "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "STG",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Optimism:STG"
+      ]
+    },
+    {
+      "address": "0x2a06A17CBC6d0032Cac2c6696DA90f29D39a1a29",
+      "symbol": "HPOS10I",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x2a06A17CBC6d0032Cac2c6696DA90f29D39a1a29",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "HPOS10I",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -689,6 +1283,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -711,7 +1308,79 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x2C001233eD5E731B98B15B30267F78C7560b71f2",
+      "symbol": "BUBU",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x2C001233eD5E731B98B15B30267F78C7560b71f2",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BUBU",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x2C14E596C51fB6c0Dbad96858B1829835257b93B",
+      "symbol": "PT-sUSDz-25SEP2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x2C14E596C51fB6c0Dbad96858B1829835257b93B",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-sUSDz-25SEP2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x2c3F2ce253E04CC01B1C91D23c1161F6E8674059",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x2c3F2ce253E04CC01B1C91D23c1161F6E8674059",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -734,7 +1403,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -761,6 +1431,29 @@
       ]
     },
     {
+      "address": "0x2Da56AcB9Ea78330f947bD57C54119Debda7AF71",
+      "symbol": "MOG",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x2Da56AcB9Ea78330f947bD57C54119Debda7AF71",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "MOG",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0x2e250f3E0Ca772E87f0C9E2aa55254F7Eb82EA58",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -784,6 +1477,29 @@
       ]
     },
     {
+      "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
+      "symbol": "STG",
+      "decimals": 18,
+      "chainKey": "polygon",
+      "sourceSymbol": "STG",
+      "matches": [
+        {
+          "chainKey": "polygon",
+          "chainId": 137,
+          "chainName": "Polygon",
+          "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "STG",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Polygon:Tokens"
+      ]
+    },
+    {
       "address": "0x307c15f808914Df5a5DbE17E5608f84953fFa023",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -801,28 +1517,151 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x30c1D9b1cbD5590D6dA01069a331E110482a8a91",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x30c1D9b1cbD5590D6dA01069a331E110482a8a91",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x30df63637def247D6Fcf468241D8CAdc33F546f5",
+      "symbol": "DLM",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x30df63637def247D6Fcf468241D8CAdc33F546f5",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "DLM",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
       "address": "0x3124D41708edbdC7995A55183e802E3D9d0D5Ef1",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x3124D41708edbdC7995A55183e802E3D9d0D5Ef1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
     },
     {
       "address": "0x31Ed9F16C7BbC26AE3404B14aBc68aDc7611B1A6",
-      "symbol": "BERA",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "berachain",
       "sourceSymbol": "BERA",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x31Ed9F16C7BbC26AE3404B14aBc68aDc7611B1A6",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x3348b2b47e388bB4A03Cb890e1F3f308b90828EF",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x3348b2b47e388bB4A03Cb890e1F3f308b90828EF",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x33ad778E6C76237d843c52d7cAfc972bB7cF8729",
+      "symbol": "Boshi",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "Boshi",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x33ad778E6C76237d843c52d7cAfc972bB7cF8729",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "Boshi",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -849,6 +1688,29 @@
       ]
     },
     {
+      "address": "0x340C070260520ae477b88CAA085a33531897145b",
+      "symbol": "9MM",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x340C070260520ae477b88CAA085a33531897145b",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "9MM",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0x34280882267ffa6383B363E278B027Be083bBe3b",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -868,16 +1730,29 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x34634a7bBE5A3C234b931C79d4cC6785C5dd54C4",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "berachain",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x34634a7bBE5A3C234b931C79d4cC6785C5dd54C4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
       ]
@@ -906,6 +1781,29 @@
       ]
     },
     {
+      "address": "0x3518D7aEE5248b9307b8A82B7c3Fa49e073c4444",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "Binance",
+          "address": "0x3518D7aEE5248b9307b8A82B7c3Fa49e073c4444",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:BinanceChain:Tokens"
+      ]
+    },
+    {
       "address": "0x358e4Ced73861514Bc4918EEC59C0BA729b8CcF5",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -925,7 +1823,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -946,6 +1845,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -968,7 +1870,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -989,15 +1892,30 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x3aeF1d372d0a7a7E482F465Bc14A42D78f920392",
-      "symbol": "S",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "S",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x3aeF1d372d0a7a7E482F465Bc14A42D78f920392",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
       ]
@@ -1020,6 +1938,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1042,7 +1963,100 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x3b5A0FAd9Ea2ec8a9Fac5da2B7B35347370aB27C",
+      "symbol": "DAWAE",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x3b5A0FAd9Ea2ec8a9Fac5da2B7B35347370aB27C",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "DAWAE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainKey": "polygon",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "polygon",
+          "chainId": 137,
+          "chainName": "Polygon",
+          "address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "USD",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Polygon:Tokens"
+      ]
+    },
+    {
+      "address": "0x3c8D20001FE883934A15c949a3355a65Ca984444",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "binancechain",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "Binance",
+          "address": "0x3c8D20001FE883934A15c949a3355a65Ca984444",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:BinanceChain:Tokens"
+      ]
+    },
+    {
+      "address": "0x3d63825B0d8669307366E6c8202f656b9E91D368",
+      "symbol": "WGC",
+      "decimals": 6,
+      "chainKey": "base",
+      "sourceSymbol": "WGC",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x3d63825B0d8669307366E6c8202f656b9E91D368",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "WGC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1065,18 +2079,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x3E4e3291Ed667FB4Dee680D19e5702eF8275493D",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x3E4e3291Ed667FB4Dee680D19e5702eF8275493D",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x3E75789be4371B5E80E41e99C12fFcCcd25B8fcE",
+      "symbol": "SURVIVOR",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x3E75789be4371B5E80E41e99C12fFcCcd25B8fcE",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SURVIVOR",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1099,18 +2149,55 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x3F5EA53d1160177445B1898afbB16da111182418",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x3F5EA53d1160177445B1898afbB16da111182418",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
+      "symbol": "SY-sUSDE",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
+          "isContract": true,
+          "isErc20Like": false,
+          "errors": [
+            "decimals: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 46, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}",
+            "symbol: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 49, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -1133,18 +2220,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x4200000000000000000000000000000000000006",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "WETH",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x4200000000000000000000000000000000000006",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "WETH",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:TOKENS"
+      ]
+    },
+    {
+      "address": "0x42069dE48741Db40aeF864F8764432bBccbD0B69",
+      "symbol": "BETS",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x42069dE48741Db40aeF864F8764432bBccbD0B69",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BETS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1165,6 +2288,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1185,6 +2311,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1207,7 +2336,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x44A454784907E2634AC474292FD921489721C320",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x44A454784907E2634AC474292FD921489721C320",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
       ]
     },
     {
@@ -1230,7 +2383,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1253,7 +2407,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1276,7 +2431,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1304,24 +2460,144 @@
     },
     {
       "address": "0x483f2e223c58a5eF19c4B32fbC6dE57709749cb3",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x483f2e223c58a5eF19c4B32fbC6dE57709749cb3",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
     },
     {
+      "address": "0x48dFF6e3d4EBafD02bcA5EC28658F599B71A3B55",
+      "symbol": "FSP",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x48dFF6e3d4EBafD02bcA5EC28658F599B71A3B55",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "FSP",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x49d74F78dcb3121C95D2035d73B60B51B4bb7D7e",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x49d74F78dcb3121C95D2035d73B60B51B4bb7D7e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0x4A54C1EB9125A5e3De8cC44f618dB45055952674",
-      "symbol": "BTC",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "BTC",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x4A54C1EB9125A5e3De8cC44f618dB45055952674",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x4B272672A58da22B213E733F5ABA48cfec534D30",
+      "symbol": "SY-sKAITO",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SY-vS",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x4B272672A58da22B213E733F5ABA48cfec534D30",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": null,
+          "symbol": "SY-sKAITO",
+          "errors": [
+            "decimals: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x4B6104755AfB5Da4581B81C552DA3A25608c73B8",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x4B6104755AfB5Da4581B81C552DA3A25608c73B8",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1344,7 +2620,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x4c96A67b0577358894407AF7Bc3158fC1DfFbeB5",
+      "symbol": "POV",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x4c96A67b0577358894407AF7Bc3158fC1DfFbeB5",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "POV",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1367,7 +2667,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x4d58608EFf50b691A3B76189aF2a7A123dF1e9ba",
+      "symbol": "BOYS",
+      "decimals": 9,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x4d58608EFf50b691A3B76189aF2a7A123dF1e9ba",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 9,
+          "symbol": "BOYS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1388,6 +2712,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1408,15 +2735,30 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x4E82347Bc41CFD5d62cEF483C7f0a739a8158963",
-      "symbol": "S",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "S",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x4E82347Bc41CFD5d62cEF483C7f0a739a8158963",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
       ]
@@ -1439,6 +2781,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1484,7 +2829,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+      "symbol": "DAI",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "DAI",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "DAI",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1507,18 +2876,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x5200C9900436f649B4659dFc79213837DcCCaAB1",
-      "symbol": "BERA",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "berachain",
       "sourceSymbol": "BERA",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x5200C9900436f649B4659dFc79213837DcCCaAB1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x52b492a33E447Cdb854c7FC19F1e57E8BfA1777D",
+      "symbol": "basedPepe",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x52b492a33E447Cdb854c7FC19F1e57E8BfA1777D",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "basedPepe",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1562,6 +2967,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1582,6 +2990,34 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x540e181d4e3c70632e6bB153282BEAD2886d0768",
+      "symbol": null,
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x540e181d4e3c70632e6bB153282BEAD2886d0768",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -1627,7 +3063,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1650,7 +3087,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1673,7 +3111,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1696,16 +3135,100 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x5cfcF828673E27e22D8F5086E26b20C642886422",
+      "symbol": "TLOU",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x5cfcF828673E27e22D8F5086E26b20C642886422",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "TLOU",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x5eD8BA85D277C870EeE77EE7A628E94D18Bfe027",
+      "symbol": "Web3",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x5eD8BA85D277C870EeE77EE7A628E94D18Bfe027",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "Web3",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x600c9B69A65FB6D2551623a53DDef17B050233CD",
+      "symbol": "PAW",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x600c9B69A65FB6D2551623a53DDef17B050233CD",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PAW",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
       "address": "0x6144511E1BD935c258B7b9075F120474dF1b1e5f",
       "symbol": "USD",
-      "decimals": null,
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x6144511E1BD935c258B7b9075F120474dF1b1e5f",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
@@ -1728,17 +3251,55 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x621D4D92E9bed484E6D2Cb8A37d342c804A0908c",
-      "symbol": "VIRTUALLP",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "VIRTUALLP",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x621D4D92E9bed484E6D2Cb8A37d342c804A0908c",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x623cD3a3EdF080057892aaF8D773Bbb7A5C9b6e9",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x623cD3a3EdF080057892aaF8D773Bbb7A5C9b6e9",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1759,6 +3320,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1779,6 +3343,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x66D32c781a5Be5A78ec9E260cad288D75DE80295",
+      "symbol": "SY-yvBal-GHO-USR",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x66D32c781a5Be5A78ec9E260cad288D75DE80295",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-yvBal-GHO-USR",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -1799,6 +3389,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x67507f3E26E7e2Fd0A42c48FbC85069cCFCBD2FF",
+      "symbol": "SY-wsuperOETHb",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x67507f3E26E7e2Fd0A42c48FbC85069cCFCBD2FF",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-wsuperOETHb",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -1821,7 +3437,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x6921B130D297cc43754afba22e5EAc0FBf8Db75b",
+      "symbol": "DOGINME",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x6921B130D297cc43754afba22e5EAc0FBf8Db75b",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "DOGINME",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -1844,7 +3484,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1867,7 +3508,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1888,15 +3530,30 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x6d3ECf7a9fc726387bb6a91FfFB4f90D1F38139c",
-      "symbol": "X33",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "X33",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x6d3ECf7a9fc726387bb6a91FfFB4f90D1F38139c",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
       ]
@@ -1919,6 +3576,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1939,6 +3599,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -1961,7 +3624,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x6DA9ad429457a0cbB1C7Aa02E40297a43d1f67aa",
+      "symbol": "CRB",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x6DA9ad429457a0cbB1C7Aa02E40297a43d1f67aa",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "CRB",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x6DBd962b4f62D18F756b5DE57425574c4B8228D6",
+      "symbol": "dUSDC",
+      "decimals": 6,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "dUSDC",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x6DBd962b4f62D18F756b5DE57425574c4B8228D6",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "dUSDC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Arbitrum:Tokens"
       ]
     },
     {
@@ -1974,11 +3684,23 @@
     },
     {
       "address": "0x6e4e95FaB7db1f0524b4b0a05F0b9c96380b7Dfa",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x6e4e95FaB7db1f0524b4b0a05F0b9c96380b7Dfa",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
       ]
@@ -2026,7 +3748,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2049,16 +3772,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x715509Bde846104cF2cCeBF6fdF7eF1BB874Bc45",
       "symbol": "USD",
-      "decimals": null,
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x715509Bde846104cF2cCeBF6fdF7eF1BB874Bc45",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
@@ -2083,7 +3821,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2104,6 +3843,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2116,13 +3858,48 @@
     },
     {
       "address": "0x727cEbAcfb10fFd353Fc221D06A862B437eC1735",
-      "symbol": "BTC",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "BTC",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x727cEbAcfb10fFd353Fc221D06A862B437eC1735",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x729031B3995538DDF6B6BcE6E68D5D6fDEb3CCB5",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x729031B3995538DDF6B6BcE6E68D5D6fDEb3CCB5",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
       ]
     },
     {
@@ -2145,7 +3922,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2166,6 +3944,105 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x75372F72EC752a761E96Cbcb3395f4b9586d9aFd",
+      "symbol": "SY-cbETH",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x75372F72EC752a761E96Cbcb3395f4b9586d9aFd",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-cbETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
+      "symbol": "ZERO",
+      "decimals": 18,
+      "chainKey": "linea",
+      "sourceSymbol": "ZERO",
+      "matches": [
+        {
+          "chainKey": "linea",
+          "chainId": 59144,
+          "chainName": "Linea",
+          "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "ZERO",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Linea:ZERO"
+      ]
+    },
+    {
+      "address": "0x7870bF33B34aAC95f361fF7DeC3B250746F63049",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x7870bF33B34aAC95f361fF7DeC3B250746F63049",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x7A61c05d51eF2ACa38CB94117CB701Cd70f4d236",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x7A61c05d51eF2ACa38CB94117CB701Cd70f4d236",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -2186,6 +4063,55 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x7CbaF5a14D953fF896E5B3312031515c858737C8",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum",
+          "address": "0x7CbaF5a14D953fF896E5B3312031515c858737C8",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Arbitrum:SHIT"
+      ]
+    },
+    {
+      "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+      "symbol": "WETH",
+      "decimals": 18,
+      "chainKey": "polygon",
+      "sourceSymbol": "ETH",
+      "matches": [
+        {
+          "chainKey": "polygon",
+          "chainId": 137,
+          "chainName": "Polygon",
+          "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "WETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Polygon:Tokens"
       ]
     },
     {
@@ -2208,7 +4134,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2231,16 +4158,29 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x816F59FfA2239Fd7106F94eAbdC0a9547a892F2f",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x816F59FfA2239Fd7106F94eAbdC0a9547a892F2f",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
       ]
@@ -2263,6 +4203,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "symbol": "WETH",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "WETH",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "WETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Arbitrum:Tokens"
       ]
     },
     {
@@ -2285,16 +4251,29 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
       "symbol": "USDC",
-      "decimals": null,
+      "decimals": 6,
       "chainKey": "base",
       "sourceSymbol": "USDC",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "USDC",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:TOKENS"
       ]
@@ -2324,11 +4303,23 @@
     },
     {
       "address": "0x84ECc6be573f15991736131F924F7bF571eD3B60",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x84ECc6be573f15991736131F924F7bF571eD3B60",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
       ]
@@ -2351,17 +4342,55 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x86AACBed3E7b3D33149d5DcfD2Def3C6d8498B8b",
-      "symbol": "PENDLE",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "PENDLE",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x86AACBed3E7b3D33149d5DcfD2Def3C6d8498B8b",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x88144b9ea94ff714147573b98165D2ACA90efB11",
+      "symbol": "BRAIN",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x88144b9ea94ff714147573b98165D2ACA90efB11",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BRAIN",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -2382,6 +4411,80 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x8890De1637912FBBBa36b8B19365cdc99122BD6e",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x8890De1637912FBBBa36b8B19365cdc99122BD6e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x891502bA08132653151f822a3A430198f1844115",
+      "symbol": "Blue",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "Blue",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x891502bA08132653151f822a3A430198f1844115",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "Blue",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x8A4252D94176308817eD81572Ec9B11618D8fb55",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x8A4252D94176308817eD81572Ec9B11618D8fb55",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -2404,7 +4507,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x8b193F00d8a77484dF1452890472AF357F60Ad4d",
+      "symbol": "Brettistic",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x8b193F00d8a77484dF1452890472AF357F60Ad4d",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "Brettistic",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -2427,7 +4554,77 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x8d3b31cEf783Eaf21C951A26ECe68dFCd4d12D42",
+      "symbol": "MECA",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x8d3b31cEf783Eaf21C951A26ECe68dFCd4d12D42",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "MECA",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x8e5C04F82d6464b420E2018362E7e7aB813cF190",
+      "symbol": "GOOFS",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x8e5C04F82d6464b420E2018362E7e7aB813cF190",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "GOOFS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+      "symbol": "DAI",
+      "decimals": 18,
+      "chainKey": "polygon",
+      "sourceSymbol": "DAI",
+      "matches": [
+        {
+          "chainKey": "polygon",
+          "chainId": 137,
+          "chainName": "Polygon",
+          "address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "DAI",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Polygon:Tokens"
       ]
     },
     {
@@ -2450,7 +4647,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2471,6 +4669,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2491,6 +4692,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2511,15 +4715,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x940181a94A35A4569E4529A3CDfB74e38FD98631",
       "symbol": "AERO",
-      "decimals": null,
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "AERO",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x940181a94A35A4569E4529A3CDfB74e38FD98631",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
       "sources": [
         "config:Base:TOKENS"
       ]
@@ -2544,18 +4765,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0x9700C4C218237550EAd3a78022d43215A717e5e7",
-      "symbol": "S",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "S",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x9700C4C218237550EAd3a78022d43215A717e5e7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
       ]
     },
     {
@@ -2576,6 +4833,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2619,6 +4879,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2641,7 +4904,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2662,6 +4926,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x9a555aFF7390F56fDbe8Eb4325797A89c54FBF0b",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x9a555aFF7390F56fDbe8Eb4325797A89c54FBF0b",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -2707,7 +4997,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2720,11 +5011,23 @@
     },
     {
       "address": "0x9dAA2878A8739E66e08e7ad35316C5143c0ea7C7",
-      "symbol": "BTC",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "binancechain",
       "sourceSymbol": "BTC",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "BNB Smart Chain",
+          "address": "0x9dAA2878A8739E66e08e7ad35316C5143c0ea7C7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
       ]
@@ -2753,12 +5056,47 @@
       ]
     },
     {
+      "address": "0x9DE16c805A3227b9b92e39a446F9d56cf59fe640",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x9DE16c805A3227b9b92e39a446F9d56cf59fe640",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
+      ]
+    },
+    {
       "address": "0x9E515a7115C86d7314159DbdAb41E555d5330Dfe",
-      "symbol": "USD",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "binancechain",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "BNB Smart Chain",
+          "address": "0x9E515a7115C86d7314159DbdAb41E555d5330Dfe",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
       ]
@@ -2783,7 +5121,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xA28a34f1E16d845A0a709BafaAc3831Ca7A417a7",
+      "symbol": "PT-sKAITO-31JUL2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xA28a34f1E16d845A0a709BafaAc3831Ca7A417a7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-sKAITO-31JUL2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -2806,7 +5168,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xA3e7E0Fa0b843e3A6b100701B6C1C9eBC272Df9F",
+      "symbol": "SCP096",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xA3e7E0Fa0b843e3A6b100701B6C1C9eBC272Df9F",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SCP096",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -2827,26 +5213,53 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0xa46caC2243Ecd83A6a9Ad58232C1967EBD14D41B",
-      "symbol": "KAITO",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": "KAITO",
-      "matches": [],
+      "sourceSymbol": "PENDLE-LPT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xa46caC2243Ecd83A6a9Ad58232C1967EBD14D41B",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
     },
     {
       "address": "0xA6b8cFE75Ca5e1b2A527AA255d10521FAaF24b61",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xA6b8cFE75Ca5e1b2A527AA255d10521FAaF24b61",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
@@ -2871,7 +5284,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2894,7 +5308,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -2938,6 +5353,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xAC1Bd2486aAf3B5C0fc3Fd868558b082a531B2B4",
+      "symbol": "TOSHI",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "TOSHI",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xAC1Bd2486aAf3B5C0fc3Fd868558b082a531B2B4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "TOSHI",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Tokens"
       ]
     },
     {
@@ -2960,16 +5401,29 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0xaCfAD541698437F6EF0E728C56A50CE35C73cC3e",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0xaCfAD541698437F6EF0E728C56A50CE35C73cC3e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
       ]
@@ -2977,23 +5431,166 @@
     {
       "address": "0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf",
       "symbol": "VVV",
-      "decimals": null,
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "VVV",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "VVV",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:TOKENS"
       ]
     },
     {
       "address": "0xaD4e0eFc7b641591dC1a94eFc5d352d098516D2e",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xaD4e0eFc7b641591dC1a94eFc5d352d098516D2e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum",
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "USDC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Arbitrum:USDC"
+      ]
+    },
+    {
+      "address": "0xB166E8B140D35D9D8226E40C09f757BAC5A4d87d",
+      "symbol": "NPC",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xB166E8B140D35D9D8226E40C09f757BAC5A4d87d",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "NPC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xB1847B85da0595C6f72B0757Ee292Bd472DCa45e",
+      "symbol": null,
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xB1847B85da0595C6f72B0757Ee292Bd472DCa45e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xB261266Cb30c255CB9c73EBf4A3eaD9398D23AB4",
+      "symbol": "SY-LBTC",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "SY-wOS",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xB261266Cb30c255CB9c73EBf4A3eaD9398D23AB4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 8,
+          "symbol": "SY-LBTC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xb56d0839998Fd79EFCD15c27cF966250AA58D6D3",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xb56d0839998Fd79EFCD15c27cF966250AA58D6D3",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -3016,7 +5613,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -3039,7 +5637,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xB8918754AA8E5291403097d44B85d3de78cDe456",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xB8918754AA8E5291403097d44B85d3de78cDe456",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Base:SHIT"
       ]
     },
     {
@@ -3062,7 +5684,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xB9926b3fBc5873Db0182016D55727D5ae89E5EFd",
+      "symbol": "APU",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "APU",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xB9926b3fBc5873Db0182016D55727D5ae89E5EFd",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "APU",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xba71Cb8Ef2d59dE7399745793657838829E0B147",
+      "symbol": "STAMP",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "ethereum",
+          "chainId": 1,
+          "chainName": "Ethereum Mainnet",
+          "address": "0xba71Cb8Ef2d59dE7399745793657838829E0B147",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "STAMP",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -3108,7 +5777,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xbd33da1f9a0Cc70224e9a71C80Baa92Fd0Eb82d0",
+      "symbol": "BRM",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "ethereum",
+          "chainId": 1,
+          "chainName": "Ethereum Mainnet",
+          "address": "0xbd33da1f9a0Cc70224e9a71C80Baa92Fd0Eb82d0",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BRM",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -3131,7 +5824,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -3154,670 +5848,33 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0xBf5E60ddf654085F80DAe9DD33Ec0E345773E1F8",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xBf5E60ddf654085F80DAe9DD33Ec0E345773E1F8",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
       ]
     },
-    {
-      "address": "0xAC1Bd2486aAf3B5C0fc3Fd868558b082a531B2B4",
-      "symbol": "TOSHI",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "TOSHI",
-      "matches": [],
-      "sources": [
-        "config:Base:Tokens"
-      ]
-    },    
-    {
-      "address": "0x623cD3a3EdF080057892aaF8D773Bbb7A5C9b6e9",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },        
-        {
-      "address": "0x23dD3Ce6161422622E773E13dAC2781C7f990D45",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-        {
-      "address": "0x1b6A569DD61EdCe3C383f6D565e2f79Ec3a12980",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-        {
-      "address": "0x340C070260520ae477b88CAA085a33531897145b",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-        {
-      "address": "0x3348b2b47e388bB4A03Cb890e1F3f308b90828EF",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-        {
-      "address": "0x1a475d06D967AEb686C98De80d079d72097aeACF",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-        {
-      "address": "0x88144b9ea94ff714147573b98165D2ACA90efB11",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-        {
-      "address": "0x8e5C04F82d6464b420E2018362E7e7aB813cF190",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x09b052085E9C6291fbf0dfB0918C861bcb47Eb25",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x168Fc40dba90a07e821abBDbbC1c6d2303e51eDA",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x163fb041c2e0026Fcfa8e215F123b2cd55B2Da81",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x3d63825B0d8669307366E6c8202f656b9E91D368",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },          
-    {
-      "address": "0x26c69E4924bD0d7D52d680b33616042eE13F621c",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x49d74F78dcb3121C95D2035d73B60B51B4bb7D7e",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x5cfcF828673E27e22D8F5086E26b20C642886422",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x5eD8BA85D277C870EeE77EE7A628E94D18Bfe027",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },      
-    {
-      "address": "0x6DA9ad429457a0cbB1C7Aa02E40297a43d1f67aa",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0xC5a861787f3e173F2b004d5cfA6a717f5DC5484D",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xf7cEbF7DF90A1c59fD0347C41b983846CA8BC76A",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xfB18511F1590a494360069F3640c27d55c2B5290",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xba71Cb8Ef2d59dE7399745793657838829E0B147",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x050203e705cC4BF72A4b22d875DfF76a08EF15E7",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x271AB1cA6c22e7170958abde5fbCa5bDAB7d9D5A",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },                  
-    {
-      "address": "0x2c3F2ce253E04CC01B1C91D23c1161F6E8674059",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x30c1D9b1cbD5590D6dA01069a331E110482a8a91",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x48dFF6e3d4EBafD02bcA5EC28658F599B71A3B55",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x600c9B69A65FB6D2551623a53DDef17B050233CD",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x7870bF33B34aAC95f361fF7DeC3B250746F63049",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x7A61c05d51eF2ACa38CB94117CB701Cd70f4d236",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x8890De1637912FBBBa36b8B19365cdc99122BD6e",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x8d3b31cEf783Eaf21C951A26ECe68dFCd4d12D42",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xA3e7E0Fa0b843e3A6b100701B6C1C9eBC272Df9F",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xbd33da1f9a0Cc70224e9a71C80Baa92Fd0Eb82d0",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xe9884E45313E797EEf951eF349a2dE02Ae58cBaF",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xeB3458ad201bd39263E3a938175651216E0F2f25",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },        
-    {
-      "address": "0x30df63637def247D6Fcf468241D8CAdc33F546f5",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },     
-    {
-      "address": "0x4d58608EFf50b691A3B76189aF2a7A123dF1e9ba",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x2C001233eD5E731B98B15B30267F78C7560b71f2",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },        
-    {
-      "address": "0xcdE172dc5ffC46D228838446c57C1227e0B82049",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xfF62dDfa80E513114C3a0bf4d6fFff1c1D17aADf",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x06Bfb0b59fD7F0436135cc7c168f31826C9178db",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
- 
-    {
-      "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
-      "symbol": "USDC.e",
-      "decimals": null,
-      "chainKey": "arbitrum",
-      "sourceSymbol": "USD",
-      "matches": [],
-      "sources": [
-        "config:Arbitrum:Tokens"
-      ]
-    },    
-    {
-      "address": "0xf9b738C2e7aDC4f299C57aFd0890B925A5efeA6f",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },     
-    {
-      "address": "0x4c96A67b0577358894407AF7Bc3158fC1DfFbeB5",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },     
-    {
-      "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "symbol": "WETH",
-      "decimals": null,
-      "chainKey": "arbitrum",
-      "sourceSymbol": "ETH",
-      "matches": [],
-      "sources": [
-        "config:Arbitrum:Tokens"
-      ]
-    },   
-    {
-      "address": "0x0CAAdd427A6Feb5B5Fc1137eB05aA7Ddd9c08ce9",
-      "symbol": "VEE",
-      "decimals": null,
-      "chainKey": "arbitrum",
-      "sourceSymbol": "VEE",
-      "matches": [],
-      "sources": [
-        "config:Arbitrum:Tokens"
-      ]
-    }, 
-    {
-      "address": "0xb56d0839998Fd79EFCD15c27cF966250AA58D6D3",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x891502bA08132653151f822a3A430198f1844115",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0xC22b928E91FDF3367ED4568b682BCC082a7DC4eE",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },       
-    {
-      "address": "0xD3741ac9B3f280B0819191E4b30be4ECd990771e",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0xcA8e8d244f0d219a6Fc9e4793C635cEA98d0399C",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0xF8a99F2bF2ce5bb6cE4aafcf070D8723bc904Aa2",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },               
-    {
-      "address": "0x42069dE48741Db40aeF864F8764432bBccbD0B69",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x3b5A0FAd9Ea2ec8a9Fac5da2B7B35347370aB27C",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x33ad778E6C76237d843c52d7cAfc972bB7cF8729",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x8b193F00d8a77484dF1452890472AF357F60Ad4d",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },    
-    {
-      "address": "0x3E75789be4371B5E80E41e99C12fFcCcd25B8fcE",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },  
-    {
-      "address": "0x052007c08D0eD06Fbd44E4CdDEB021107Ba7ce74",
-      "symbol": "SHIT",
-      "decimals": null,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [],
-      "sources": [
-        "config:Base:Shitcoins"
-      ]
-    },                                                                
     {
       "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
       "symbol": "WETH",
@@ -3842,6 +5899,52 @@
       ]
     },
     {
+      "address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+      "symbol": "USDT",
+      "decimals": 6,
+      "chainKey": "polygon",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "polygon",
+          "chainId": 137,
+          "chainName": "Polygon",
+          "address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "USDT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Polygon:Tokens"
+      ]
+    },
+    {
+      "address": "0xC22b928E91FDF3367ED4568b682BCC082a7DC4eE",
+      "symbol": "TRUMP",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "TRUMP",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xC22b928E91FDF3367ED4568b682BCC082a7DC4eE",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 8,
+          "symbol": "TRUMP",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0xC374f7eC85F8C7DE3207a10bB1978bA104bdA3B2",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -3861,7 +5964,77 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xC438B0c0E80A8Fa1B36898d1b36A3fc2eC371C54",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xC438B0c0E80A8Fa1B36898d1b36A3fc2eC371C54",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SHIT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xc53ac24320E3A54C7211e4993c8095078a0Cb3Cf",
+      "symbol": "WGC",
+      "decimals": 6,
+      "chainKey": "hyperliquid",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "hyperliquid",
+          "chainId": 999,
+          "chainName": "HyperEVM",
+          "address": "0xc53ac24320E3A54C7211e4993c8095078a0Cb3Cf",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "WGC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:hyperliquid:Tokens"
+      ]
+    },
+    {
+      "address": "0xC5a861787f3e173F2b004d5cfA6a717f5DC5484D",
+      "symbol": "SNL",
+      "decimals": 18,
+      "chainKey": "ethereum",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "ethereum",
+          "chainId": 1,
+          "chainName": "Ethereum Mainnet",
+          "address": "0xC5a861787f3e173F2b004d5cfA6a717f5DC5484D",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SNL",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -3884,7 +6057,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -3907,7 +6081,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -3953,7 +6128,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -3976,7 +6152,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -3999,7 +6176,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4020,15 +6198,53 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xcA8e8d244f0d219a6Fc9e4793C635cEA98d0399C",
+      "symbol": "CAT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xcA8e8d244f0d219a6Fc9e4793C635cEA98d0399C",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "CAT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
       "address": "0xCAf560681233b54c996ba06C71566FD30F32C973",
-      "symbol": "PENDLE",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "arbitrum",
       "sourceSymbol": "PENDLE",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xCAf560681233b54c996ba06C71566FD30F32C973",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Arbitrum:PENDLE_UNDERLYING"
       ]
@@ -4053,7 +6269,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4097,6 +6314,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4117,6 +6337,32 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xcdE172dc5ffC46D228838446c57C1227e0B82049",
+      "symbol": "BOOMER",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xcdE172dc5ffC46D228838446c57C1227e0B82049",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "BOOMER",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -4162,18 +6408,77 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0xd14117baf6EC5D12BE68CD06e763A4B82C9B6d1D",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "sonic",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0xd14117baf6EC5D12BE68CD06e763A4B82C9B6d1D",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Sonic:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0xd27B18915e7acc8FD6Ac75DB6766a80f8D2f5729",
+      "symbol": "PENDLE",
+      "decimals": 18,
+      "chainKey": "mantle",
+      "sourceSymbol": "PENDLE",
+      "matches": [
+        {
+          "chainKey": "mantle",
+          "chainId": 5000,
+          "chainName": "Mantle",
+          "address": "0xd27B18915e7acc8FD6Ac75DB6766a80f8D2f5729",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Mantle:PENDLE"
+      ]
+    },
+    {
+      "address": "0xD3741ac9B3f280B0819191E4b30be4ECd990771e",
+      "symbol": "DOOMER",
+      "decimals": 8,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xD3741ac9B3f280B0819191E4b30be4ECd990771e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 8,
+          "symbol": "DOOMER",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -4217,37 +6522,99 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0xd7C3CEce4bd8FF41aDE50D59ecE7bc91DC2545c1",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xd7C3CEce4bd8FF41aDE50D59ecE7bc91DC2545c1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
     },
     {
       "address": "0xd8079e0929d67390067529974B116212903cAC69",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "berachain",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0xd8079e0929d67390067529974B116212903cAC69",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Berachain:PENDLE_UNDERLYING"
       ]
     },
     {
+      "address": "0xd85E038593d7A098614721EaE955EC2022B9B91B",
+      "symbol": "gDai",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xd85E038593d7A098614721EaE955EC2022B9B91B",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "gDai",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Arbitrum:Tokens"
+      ]
+    },
+    {
       "address": "0xd94Fd7bcEb29159405Ae1E06Ce80e51EF1A484B0",
-      "symbol": "BTC",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "BTC",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xd94Fd7bcEb29159405Ae1E06Ce80e51EF1A484B0",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
@@ -4272,7 +6639,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4339,6 +6707,9 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4359,22 +6730,46 @@
     },
     {
       "address": "0xE08fC3054450053cd341da695f72b18E6110ffFC",
-      "symbol": "USD",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "binancechain",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "BNB Smart Chain",
+          "address": "0xE08fC3054450053cd341da695f72b18E6110ffFC",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
       ]
     },
     {
       "address": "0xE15578523937ed7F08E8F7a1Fa8a021E07025a08",
-      "symbol": "USD",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "USD",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xE15578523937ed7F08E8F7a1Fa8a021E07025a08",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
@@ -4397,6 +6792,55 @@
           "symbol": "PENDLE-LPT",
           "errors": []
         }
+      ],
+      "sources": [
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xE46c8bA948f8071b425a1f7Ba45c0a65CBAcea2e",
+      "symbol": "PT-cbETH-25DEC2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xE46c8bA948f8071b425a1f7Ba45c0a65CBAcea2e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-cbETH-25DEC2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xe4862dA6E20c3a2a4E437A0eCdb823a2aeBBf140",
+      "symbol": "PT-yvBal-GHO-USR-25SEP2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xe4862dA6E20c3a2a4E437A0eCdb823a2aeBBf140",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-yvBal-GHO-USR-25SEP2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -4419,7 +6863,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4450,7 +6895,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4477,6 +6923,52 @@
       ]
     },
     {
+      "address": "0xe9884E45313E797EEf951eF349a2dE02Ae58cBaF",
+      "symbol": "VRA",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xe9884E45313E797EEf951eF349a2dE02Ae58cBaF",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "VRA",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xeB3458ad201bd39263E3a938175651216E0F2f25",
+      "symbol": "WEB3",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xeB3458ad201bd39263E3a938175651216E0F2f25",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "WEB3",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
       "address": "0xEbF7FD1ec45F505175D92dB4D180B8f323C17875",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -4496,38 +6988,75 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
       "address": "0xeC3Fb79d229EF53C8B5Cd64c171097FfC8A00Dc5",
-      "symbol": "ETH",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "mantle",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "mantle",
+          "chainId": 5000,
+          "chainName": "Mantle",
+          "address": "0xeC3Fb79d229EF53C8B5Cd64c171097FfC8A00Dc5",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Mantle:PENDLE_MARKETS"
       ]
     },
     {
       "address": "0xeCc2c994aA0C599a7f69a7Cfb9106fe4dfFb4341",
-      "symbol": "ETH",
-      "decimals": null,
+      "symbol": "PENDLE-LPT",
+      "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "ETH",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xeCc2c994aA0C599a7f69a7Cfb9106fe4dfFb4341",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
       ]
     },
     {
       "address": "0xEDa1D0e1681D59dea451702963d6287b844Cb94C",
-      "symbol": "BNB",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
       "chainKey": "binancechain",
       "sourceSymbol": "BNB",
-      "matches": [],
+      "matches": [
+        {
+          "chainKey": "binancechain",
+          "chainId": 56,
+          "chainName": "BNB Smart Chain",
+          "address": "0xEDa1D0e1681D59dea451702963d6287b844Cb94C",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE-LPT",
+          "errors": []
+        }
+      ],
       "sources": [
         "config:BinanceChain:PENDLE_MARKETS"
       ]
@@ -4552,7 +7081,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4575,7 +7105,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4598,7 +7129,31 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xf7cEbF7DF90A1c59fD0347C41b983846CA8BC76A",
+      "symbol": "XOLO",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xf7cEbF7DF90A1c59fD0347C41b983846CA8BC76A",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "XOLO",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -4621,7 +7176,8 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
     },
     {
@@ -4645,6 +7201,54 @@
       ],
       "sources": [
         "config:Ethereum:TOKENS"
+      ]
+    },
+    {
+      "address": "0xF8a99F2bF2ce5bb6cE4aafcf070D8723bc904Aa2",
+      "symbol": "SHIT",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xF8a99F2bF2ce5bb6cE4aafcf070D8723bc904Aa2",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xf9b738C2e7aDC4f299C57aFd0890B925A5efeA6f",
+      "symbol": "MINKY",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "MINKY",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xf9b738C2e7aDC4f299C57aFd0890B925A5efeA6f",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "MINKY",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -4690,7 +7294,54 @@
         }
       ],
       "sources": [
-        "config:Ethereum:PENDLE_STATIC"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xfB18511F1590a494360069F3640c27d55c2B5290",
+      "symbol": "WGC",
+      "decimals": 6,
+      "chainKey": "base",
+      "sourceSymbol": "SHIT",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xfB18511F1590a494360069F3640c27d55c2B5290",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "WGC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "symbol": "USDT",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum",
+          "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "USDT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:Arbitrum:USDT"
       ]
     },
     {
@@ -4700,167 +7351,6 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
-    },
-    {
-      "address": "0xff43e751f2f07BbF84Da1fc1fa12cE116bF447E5",
-      "symbol": "PENDLE-LPT",
-      "decimals": 18,
-      "chainKey": "ethereum",
-      "sourceSymbol": "PENDLE-LPT",
-      "matches": [
-        {
-          "chainKey": "ethereum",
-          "chainId": 1,
-          "chainName": "Ethereum Mainnet",
-          "address": "0xff43e751f2f07BbF84Da1fc1fa12cE116bF447E5",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "PENDLE-LPT",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "config:Ethereum:PENDLE_STATIC"
-      ]
-    },
-    {
-      "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
-      "symbol": "STG",
-      "decimals": 18,
-      "chainKey": "optimism",
-      "sourceSymbol": "STG",
-      "matches": [
-        {
-          "chainKey": "optimism",
-          "chainId": 10,
-          "chainName": "Optimism",
-          "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "STG",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:Optimism:STG"
-      ]
-    },
-    {
-      "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
-      "symbol": "SHIT",
-      "decimals": 18,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [
-        {
-          "chainKey": "base",
-          "chainId": 8453,
-          "chainName": "Base",
-          "address": "0x9704d2adBc02C085ff526a37ac64872027AC8a50",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "SHIT",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:Base:SHIT"
-      ]
-    },
-    {
-      "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "symbol": "USDC",
-      "decimals": 6,
-      "chainKey": "arbitrum",
-      "sourceSymbol": "USD",
-      "matches": [
-        {
-          "chainKey": "arbitrum",
-          "chainId": 42161,
-          "chainName": "Arbitrum",
-          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 6,
-          "symbol": "USDC",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:Arbitrum:USDC"
-      ]
-    },    
-    {
-      "address": "0xB8918754AA8E5291403097d44B85d3de78cDe456",
-      "symbol": "SHIT",
-      "decimals": 18,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
-      "matches": [
-        {
-          "chainKey": "base",
-          "chainId": 8453,
-          "chainName": "Base",
-          "address": "0xB8918754AA8E5291403097d44B85d3de78cDe456",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "SHIT",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:Base:SHIT"
-      ]
-    },
-    {
-      "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
-      "symbol": "ZERO",
-      "decimals": 18,
-      "chainKey": "linea",
-      "sourceSymbol": "ZERO",
-      "matches": [
-        {
-          "chainKey": "linea",
-          "chainId": 59144,
-          "chainName": "Linea",
-          "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "ZERO",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:Linea:ZERO"
-      ]
-    },
-    {
-      "address": "0x0B63C61bba4a876a6eB8b5e596800F7649A9B71E",
-      "symbol": "SECT",
-      "decimals": 18,
-      "chainKey": "arbitrum",
-      "sourceSymbol": "SECT",
-      "matches": [
-        {
-          "chainKey": "arbitrum",
-          "chainId": 42161,
-          "chainName": "Arbitrum",
-          "address": "0x0B63C61bba4a876a6eB8b5e596800F7649A9B71E",
-          "isContract": true,
-          "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "SECT",
-          "errors": []
-        }
-      ],
-      "sources": [
-        "manual:Arbitrum:SECT"
-      ]
     },
     {
       "address": "0xFF0C532FDB8Cd566Ae169C1CB157ff2Bdc83E105",
@@ -4886,31 +7376,32 @@
       ]
     },
     {
-      "address": "0x9DE16c805A3227b9b92e39a446F9d56cf59fe640",
-      "symbol": "SHIT",
+      "address": "0xff43e751f2f07BbF84Da1fc1fa12cE116bF447E5",
+      "symbol": "PENDLE-LPT",
       "decimals": 18,
-      "chainKey": "base",
-      "sourceSymbol": "SHIT",
+      "chainKey": "ethereum",
+      "sourceSymbol": "PENDLE-LPT",
       "matches": [
         {
-          "chainKey": "base",
-          "chainId": 8453,
-          "chainName": "Base",
-          "address": "0x9DE16c805A3227b9b92e39a446F9d56cf59fe640",
+          "chainKey": "ethereum",
+          "chainId": 1,
+          "chainName": "Ethereum Mainnet",
+          "address": "0xff43e751f2f07BbF84Da1fc1fa12cE116bF447E5",
           "isContract": true,
           "isErc20Like": true,
           "decimals": 18,
-          "symbol": "SHIT",
+          "symbol": "PENDLE-LPT",
           "errors": []
         }
       ],
       "sources": [
-        "manual:Base:SHIT"
+        "config:Ethereum:PENDLE_STATIC",
+        "oracle-known-tokens.enriched"
       ]
-    },    
+    },
     {
-      "address": "0x729031B3995538DDF6B6BcE6E68D5D6fDEb3CCB5",
-      "symbol": "SHIT",
+      "address": "0xfF62dDfa80E513114C3a0bf4d6fFff1c1D17aADf",
+      "symbol": "Boe",
       "decimals": 18,
       "chainKey": "base",
       "sourceSymbol": "SHIT",
@@ -4919,39 +7410,86 @@
           "chainKey": "base",
           "chainId": 8453,
           "chainName": "Base",
-          "address": "0x729031B3995538DDF6B6BcE6E68D5D6fDEb3CCB5",
+          "address": "0xfF62dDfa80E513114C3a0bf4d6fFff1c1D17aADf",
           "isContract": true,
           "isErc20Like": true,
           "decimals": 18,
-          "symbol": "SHIT",
+          "symbol": "Boe",
           "errors": []
         }
       ],
       "sources": [
-        "manual:Base:SHIT"
+        "config:Base:Shitcoins"
       ]
-    },            
+    },
     {
-      "address": "0x44A454784907E2634AC474292FD921489721C320",
-      "symbol": "SHIT",
+      "address": "0xFF702347D81725eD8bbe341392AF511e29CfED98",
+      "symbol": "SY-sUSDz",
       "decimals": 18,
       "chainKey": "base",
-      "sourceSymbol": "SHIT",
+      "sourceSymbol": "USD",
       "matches": [
         {
           "chainKey": "base",
           "chainId": 8453,
           "chainName": "Base",
-          "address": "0x44A454784907E2634AC474292FD921489721C320",
+          "address": "0xFF702347D81725eD8bbe341392AF511e29CfED98",
+          "isContract": true,
+          "isErc20Like": false,
+          "errors": [
+            "decimals: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/",
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "USDC.e",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
           "isContract": true,
           "isErc20Like": true,
-          "decimals": 18,
-          "symbol": "SHIT",
+          "decimals": 6,
+          "symbol": "USDC",
           "errors": []
         }
       ],
       "sources": [
-        "manual:Base:SHIT"
+        "config:Arbitrum:Tokens"
+      ]
+    },
+    {
+      "address": "0xfFaa4a3D97fE9107Cef8a3F48c069F577Ff76cC1",
+      "symbol": "stHYPE",
+      "decimals": 18,
+      "chainKey": "hyperliquid",
+      "sourceSymbol": "point",
+      "matches": [
+        {
+          "chainKey": "hyperliquid",
+          "chainId": 999,
+          "chainName": "HyperEVM",
+          "address": "0xfFaa4a3D97fE9107Cef8a3F48c069F577Ff76cC1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "stHYPE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:hyperliquid:Tokens"
       ]
     }
   ]
