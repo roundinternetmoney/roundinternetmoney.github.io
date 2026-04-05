@@ -2,16 +2,43 @@
   "notes": [
     "Contracts were probed on the configured chains using web3.py.",
     "chainKey and decimals are auto-filled only when exactly one ERC-20-like deployment match was found.",
-    "Review entries with multiple matches manually."
+    "Review entries with multiple matches manually.",
+    "Pendle PT/SY entries can be merged locally with scripts/update_pendle_tokens.py."
   ],
   "summary": {
-    "total": 331,
-    "autoAssignedChainKey": 319,
-    "autoAssignedDecimals": 319,
+    "total": 376,
+    "autoAssignedChainKey": 364,
+    "autoAssignedDecimals": 364,
     "multipleMatches": 0,
-    "noMatches": 12
+    "noMatches": 12,
+    "pendleTokenScriptAdded": 0,
+    "pendleTokenScriptUpdated": 0,
+    "pendleMissingChainUpdates": 0
   },
   "results": [
+    {
+      "address": "0x02Adf72d5D06a9C92136562Eb237C07696833a84",
+      "symbol": "SY Aerodrome VIR/CBBTC",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "SY-feUSDhl",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x02Adf72d5D06a9C92136562Eb237C07696833a84",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY Aerodrome VIR/CBBTC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
     {
       "address": "0x02c1289dACb6d459FC784236e862bC504C991f81",
       "symbol": "PENDLE-LPT",
@@ -201,6 +228,29 @@
       ]
     },
     {
+      "address": "0x068DEf65B9dbAFf02b4ee54572a9Fa7dFb188EA3",
+      "symbol": "SY-Silo-46-scUSD",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-Silo-46-scUSD",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x068DEf65B9dbAFf02b4ee54572a9Fa7dFb188EA3",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "SY-Silo-46-scUSD",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x06Bfb0b59fD7F0436135cc7c168f31826C9178db",
       "symbol": "BIF",
       "decimals": 18,
@@ -366,6 +416,29 @@
       ]
     },
     {
+      "address": "0x0a9eD458E6c283D1E84237e3347333Aa08221d09",
+      "symbol": "SY-gUSDC",
+      "decimals": 6,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x0a9eD458E6c283D1E84237e3347333Aa08221d09",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "SY-gUSDC",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
       "symbol": "VIRTUAL",
       "decimals": 18,
@@ -386,6 +459,29 @@
       ],
       "sources": [
         "config:Base:TOKENS"
+      ]
+    },
+    {
+      "address": "0x0b6121b4c00ca4FbBb6516C11eB4BF61722E0f8d",
+      "symbol": "PT-gUSDC-26JUN2025",
+      "decimals": 6,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x0b6121b4c00ca4FbBb6516C11eB4BF61722E0f8d",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "PT-gUSDC-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -526,6 +622,29 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x1255638EFeca62e12E344E0b6B22ea853eC6e2c7",
+      "symbol": "PT-wstETH-26JUN2025",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x1255638EFeca62e12E344E0b6B22ea853eC6e2c7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-wstETH-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -729,6 +848,29 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
+    },
+    {
+      "address": "0x1942ee88b2ed1A848251f071Fb658922Ec8Fd4d9",
+      "symbol": "PT-stk-EPendle-26JUN2025",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x1942ee88b2ed1A848251f071Fb658922Ec8Fd4d9",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-stk-EPendle-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
     },
     {
       "address": "0x1a249b03362C1bFFfEa062F3bD7096C58cA07279",
@@ -1103,6 +1245,29 @@
       ]
     },
     {
+      "address": "0x2719e657ec3B3CbE521a18E640CA55799836376f",
+      "symbol": "PT-sUSDE-25SEP2025",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x2719e657ec3B3CbE521a18E640CA55799836376f",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-sUSDE-25SEP2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x271AB1cA6c22e7170958abde5fbCa5bDAB7d9D5A",
       "symbol": "APEX",
       "decimals": 18,
@@ -1123,6 +1288,29 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x27b1dAcd74688aF24a64BD3C9C1B143118740784",
+      "symbol": "SY-wanS",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-wanS",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x27b1dAcd74688aF24a64BD3C9C1B143118740784",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-wanS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -1617,6 +1805,29 @@
       ]
     },
     {
+      "address": "0x322e1d5384aa4ED66AeCa770B95686271de61dc3",
+      "symbol": "bUSDC-20",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "Silo-20-USD",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x322e1d5384aa4ED66AeCa770B95686271de61dc3",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "bUSDC-20",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x3348b2b47e388bB4A03Cb890e1F3f308b90828EF",
       "symbol": "SHIT",
       "decimals": 18,
@@ -2037,6 +2248,29 @@
       ]
     },
     {
+      "address": "0x3ce2972Ae5E7Ef2a6382644c6B75b6a333bcd604",
+      "symbol": "PT-x33-14AUG2025",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-x33-14AUG2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x3ce2972Ae5E7Ef2a6382644c6B75b6a333bcd604",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-x33-14AUG2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x3d63825B0d8669307366E6c8202f656b9E91D368",
       "symbol": "WGC",
       "decimals": 6,
@@ -2177,6 +2411,54 @@
       ]
     },
     {
+      "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
+      "symbol": "WETH",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": "ETH",
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
+          "isContract": true,
+          "isErc20Like": false,
+          "errors": [
+            "decimals: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 46, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}",
+            "symbol: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 49, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:entry"
+      ]
+    },     
+    {
+      "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
+      "symbol": "SY-sUSDE",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": "USD",
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
+          "isContract": true,
+          "isErc20Like": false,
+          "errors": [
+            "decimals: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 46, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}",
+            "symbol: The response was in an unexpected format and unable to be parsed. Response cannot include both \"error\" and \"result\". The raw response is: {'jsonrpc': '2.0', 'id': 49, 'error': {'code': 3, 'message': 'execution reverted'}, 'result': None}"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },    
+    {
       "address": "0x40Ae6da2d92aa3DCb7f8d7a7209FD12BDfcb7C85",
       "symbol": "SY-sUSDE",
       "decimals": 18,
@@ -2222,6 +2504,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x41D81Daf401a0AA7422a769243fa933f351a0D64",
+      "symbol": "SY-iBERA",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": "SY-liquidHYPE",
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x41D81Daf401a0AA7422a769243fa933f351a0D64",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-iBERA",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -2271,6 +2576,29 @@
       ]
     },
     {
+      "address": "0x420df605D062F8611EFb3F203BF258159b8FfFdE",
+      "symbol": "PT-stS-29MAY2025",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-stS-29MAY2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x420df605D062F8611EFb3F203BF258159b8FfFdE",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-stS-29MAY2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x433081C58a8BFF30060014134EEd2601E5922759",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2314,6 +2642,29 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x43FE057B02cE301a2b09C9873676032892566DE7",
+      "symbol": "PT-wcgUSD-26JUN2025",
+      "decimals": 6,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x43FE057B02cE301a2b09C9873676032892566DE7",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "PT-wcgUSD-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -2364,6 +2715,29 @@
       ]
     },
     {
+      "address": "0x455d5f11Fea33A8fa9D3e285930b478B6bF85265",
+      "symbol": "stkscETH",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "stkcETH",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x455d5f11Fea33A8fa9D3e285930b478B6bF85265",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "stkscETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:sonic"
+      ]
+    },
+    {
       "address": "0x45F163E583D34b8E276445dd3Da9aE077D137d72",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -2409,6 +2783,52 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x4665d514e82B2F9c78Fa2B984e450F33d9efc842",
+      "symbol": "SY-USR",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x4665d514e82B2F9c78Fa2B984e450F33d9efc842",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-USR",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x46eb02b9F47634c4fab3110CC7ADc1C6311DfAC1",
+      "symbol": "PT-wOS-29MAY2025",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-wOS-29MAY2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x46eb02b9F47634c4fab3110CC7ADc1C6311DfAC1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-wOS-29MAY2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -2479,6 +2899,29 @@
       ],
       "sources": [
         "config:Base:PENDLE_UNDERLYING"
+      ]
+    },
+    {
+      "address": "0x48b358b7bC013F24E2D59b3A0d4455f6e71Fe2d6",
+      "symbol": "PT-iBERA-26JUN2025",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x48b358b7bC013F24E2D59b3A0d4455f6e71Fe2d6",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-iBERA-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -3140,6 +3583,52 @@
       ]
     },
     {
+      "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+      "symbol": "PENDLE",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": "PENDLE",
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },    
+    {
+      "address": "0x5C4110eD760470f79E469a901Bd6fb45a65BE0F4",
+      "symbol": "SY-mPendle",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x5C4110eD760470f79E469a901Bd6fb45a65BE0F4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-mPendle",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x5cfcF828673E27e22D8F5086E26b20C642886422",
       "symbol": "TLOU",
       "decimals": 18,
@@ -3206,6 +3695,29 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x603e2d1Af3d0673f4af756B6E12a2044bFEbB714",
+      "symbol": "PT-Aerodrome VIR/CBBTC-26JUN2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x603e2d1Af3d0673f4af756B6E12a2044bFEbB714",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-Aerodrome VIR/CBBTC-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -3418,6 +3930,29 @@
       ]
     },
     {
+      "address": "0x685155D3BD593508Fe32Be39729810A591ED9c87",
+      "symbol": "PT-rETH-26JUN2025",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x685155D3BD593508Fe32Be39729810A591ED9c87",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-rETH-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x688b8eea04B9756da290C962bfBA988b11fC66dF",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -3486,6 +4021,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x69A23F16974024A1b6A5362ac2A11BFeEEFd5827",
+      "symbol": "SY-x33",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-x33",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x69A23F16974024A1b6A5362ac2A11BFeEEFd5827",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-x33",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -3753,6 +4311,29 @@
       ]
     },
     {
+      "address": "0x7076dEE976098B444f68C6382E8f062237879a9F",
+      "symbol": "SY-stS",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-stS",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x7076dEE976098B444f68C6382E8f062237879a9F",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-stS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x715055DA20BDEC5c70e344aab8DEBD80d682dC1F",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -3973,6 +4554,54 @@
       ]
     },
     {
+      "address": "0x77d07ab8466a57fB8615AEB75c37aBFF25c06Ebf",
+      "symbol": null,
+      "decimals": 6,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0x77d07ab8466a57fB8615AEB75c37aBFF25c06Ebf",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x77d8F09053c28FaF1E00Df6511b23125d438616f",
+      "symbol": "PT-Silo-20-USDC.e-17JUL2025",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-Silo-20-USDC.e-17JUL2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x77d8F09053c28FaF1E00Df6511b23125d438616f",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "PT-Silo-20-USDC.e-17JUL2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x78354f8DcCB269a615A7e0a24f9B0718FDC3C7A7",
       "symbol": "ZERO",
       "decimals": 18,
@@ -4018,6 +4647,29 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x789cA09b0B4bcc83062d817C43206f96bd464015",
+      "symbol": "PT-wanS-28AUG2025",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-wanS-28AUG2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x789cA09b0B4bcc83062d817C43206f96bd464015",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-wanS-28AUG2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -4136,6 +4788,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0x80c12D5b6Cc494632Bf11b03F09436c8B61Cc5Df",
+      "symbol": "SY-wstETH",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x80c12D5b6Cc494632Bf11b03F09436c8B61Cc5Df",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-wstETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -4465,6 +5140,29 @@
       ]
     },
     {
+      "address": "0x896f4D49916aC5cfC36d7a260a7039ba4Ea317b6",
+      "symbol": "SY-wstkscUSD",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-wstkscUSD",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x896f4D49916aC5cfC36d7a260a7039ba4Ea317b6",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "SY-wstkscUSD",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0x8A4252D94176308817eD81572Ec9B11618D8fb55",
       "symbol": "SHIT",
       "decimals": 18,
@@ -4579,6 +5277,29 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0x8Db96f2FcCf7Cdd74a60e8eFf5801df043cd11dE",
+      "symbol": "PT-rsETH-26JUN2025",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0x8Db96f2FcCf7Cdd74a60e8eFf5801df043cd11dE",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-rsETH-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -4813,6 +5534,29 @@
       ],
       "sources": [
         "manual:Base:SHIT"
+      ]
+    },
+    {
+      "address": "0x9731842eD581816913933c01De142C7EE412A8c8",
+      "symbol": "PT-Silo-46-scUSD-14AUG2025",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-Silo-46-scUSD-14AUG2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x9731842eD581816913933c01De142C7EE412A8c8",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "PT-Silo-46-scUSD-14AUG2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -5102,6 +5846,52 @@
       ]
     },
     {
+      "address": "0x9E88f2990C48315DacE55FFda9950FC287362109",
+      "symbol": "SY-dWBERA",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0x9E88f2990C48315DacE55FFda9950FC287362109",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-dWBERA",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0x9F0dF7799f6FDAd409300080cfF680f5A23df4b1",
+      "symbol": "wOS",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-Silo-46-scUSD",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0x9F0dF7799f6FDAd409300080cfF680f5A23df4b1",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "wOS",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:sonic"
+      ]
+    },
+    {
       "address": "0x9F4C227b0fB30a02430D573D657c76AC2de4cEE7",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -5123,6 +5913,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xa2161E75EDf50d70544e6588788A5732A3105c00",
+      "symbol": "PT-wstkscETH-29MAY2025",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "PT-wstkscETH-29MAY2025",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0xa2161E75EDf50d70544e6588788A5732A3105c00",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-wstkscETH-29MAY2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -5265,6 +6078,52 @@
       ]
     },
     {
+      "address": "0xa6C895EB332E91c5b3D00B7baeEAae478cc502DA",
+      "symbol": "SY-weETH",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xa6C895EB332E91c5b3D00B7baeEAae478cc502DA",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-weETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xa6F0A4D18B6f6DdD408936e81b7b3A8BEFA18e77",
+      "symbol": "PT-USR-25SEP2025",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xa6F0A4D18B6f6DdD408936e81b7b3A8BEFA18e77",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-USR-25SEP2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0xa8eeA676ba075A9B1630Bd9c2468Df6D804C4344",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -5310,6 +6169,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xa9da5457FFC301d7c98fB38105f551a665511aF3",
+      "symbol": "SY-Silo-20-USDC.e",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "SY-Silo-20-USDC.e",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0xa9da5457FFC301d7c98fB38105f551a665511aF3",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "SY-Silo-20-USDC.e",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -5569,6 +6451,29 @@
       ]
     },
     {
+      "address": "0xb33808ea0e883138680BA29311a220A7377cdb92",
+      "symbol": "PT-weETH-26JUN2025",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xb33808ea0e883138680BA29311a220A7377cdb92",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-weETH-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0xb56d0839998Fd79EFCD15c27cF966250AA58D6D3",
       "symbol": "SHIT",
       "decimals": 18,
@@ -5686,6 +6591,31 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xb8D98a102b0079B69FFbc760C8d857A31653e56e",
+      "symbol": "TOBY",
+      "decimals": 18,
+      "chainKey": "base",
+      "sourceSymbol": "TOBY",
+      "matches": [
+        {
+          "chainKey": "base",
+          "chainId": 8453,
+          "chainName": "Base",
+          "address": "0xb8D98a102b0079B69FFbc760C8d857A31653e56e",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": null,
+          "errors": [
+            "symbol: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/"
+          ]
+        }
+      ],
+      "sources": [
+        "config:Base:Shitcoins"
       ]
     },
     {
@@ -5899,6 +6829,29 @@
       ]
     },
     {
+      "address": "0xc0Cf4b266bE5B3229C49590B59E67A09c15b22f4",
+      "symbol": "SY-rETH",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xc0Cf4b266bE5B3229C49590B59E67A09c15b22f4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-rETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
       "symbol": "USDT",
       "decimals": 6,
@@ -6059,6 +7012,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xC61C866B6fDC36f88eC368b969C6d7cb810caFa9",
+      "symbol": "SY-iBGT",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0xC61C866B6fDC36f88eC368b969C6d7cb810caFa9",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-iBGT",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -6459,6 +7435,29 @@
       ]
     },
     {
+      "address": "0xD302d7fD2c9375a433018fDfA5613Be6Ad3f18E3",
+      "symbol": "SY-stk-EPendle",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xD302d7fD2c9375a433018fDfA5613Be6Ad3f18E3",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-stk-EPendle",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0xD3741ac9B3f280B0819191E4b30be4ECd990771e",
       "symbol": "DOOMER",
       "decimals": 8,
@@ -6479,6 +7478,29 @@
       ],
       "sources": [
         "config:Base:Shitcoins"
+      ]
+    },
+    {
+      "address": "0xd3DCe716f3eF535C5Ff8d041c1A41C3bd89b97aE",
+      "symbol": "scUSD",
+      "decimals": 6,
+      "chainKey": "sonic",
+      "sourceSymbol": "scUSD",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0xd3DCe716f3eF535C5Ff8d041c1A41C3bd89b97aE",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 6,
+          "symbol": "scUSD",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:sonic"
       ]
     },
     {
@@ -6525,6 +7547,52 @@
       ],
       "sources": [
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xd6Be2DC6767DA105B73e1e78f9A61fE4eB9b03E0",
+      "symbol": "PT-mPendle-26JUN2025",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xd6Be2DC6767DA105B73e1e78f9A61fE4eB9b03E0",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-mPendle-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
+      "address": "0xD6Eb81136884713E843936843E286FD2a85A205A",
+      "symbol": "PENDLE",
+      "decimals": 18,
+      "chainKey": "hyperliquid",
+      "sourceSymbol": "PENDLE",
+      "matches": [
+        {
+          "chainKey": "hyperliquid",
+          "chainId": 999,
+          "chainName": "HyperEVM",
+          "address": "0xD6Eb81136884713E843936843E286FD2a85A205A",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PENDLE",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "config:hyperliquid:Tokens"
       ]
     },
     {
@@ -6594,6 +7662,29 @@
       ],
       "sources": [
         "config:Arbitrum:Tokens"
+      ]
+    },
+    {
+      "address": "0xd8711F912e52A78d0DdD13Fca2555700c31d61F4",
+      "symbol": "PT-dWBERA-30OCT2025",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0xd8711F912e52A78d0DdD13Fca2555700c31d61F4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-dWBERA-30OCT2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -6690,6 +7781,29 @@
       ]
     },
     {
+      "address": "0xdc9b87e5eFD6Ca2BeAa33dDe9c544E1e98345De4",
+      "symbol": "PT-USDe-25SEP2025",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0xdc9b87e5eFD6Ca2BeAa33dDe9c544E1e98345De4",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-USDe-25SEP2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
+    },
+    {
       "address": "0xDCa1064Fac3cb8326a405018C2fae5158Fc0e97c",
       "symbol": "PENDLE-LPT",
       "decimals": 18,
@@ -6719,6 +7833,29 @@
       "chainKey": null,
       "sourceSymbol": "USD",
       "matches": []
+    },
+    {
+      "address": "0xdda59E4D1AC10C73B87AAb69686a806732e5F137",
+      "symbol": "PT-iBGT-26JUN2025",
+      "decimals": 18,
+      "chainKey": "berachain",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "berachain",
+          "chainId": 80094,
+          "chainName": "Berachain",
+          "address": "0xdda59E4D1AC10C73B87AAb69686a806732e5F137",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "PT-iBGT-26JUN2025",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
+      ]
     },
     {
       "address": "0xe06C3B972BA630cCF3392cEcdbe070690b4e6b55",
@@ -6897,6 +8034,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xE8a41c62BB4d5863C6eadC96792cFE90A1f37C47",
+      "symbol": "wstkscETH",
+      "decimals": 18,
+      "chainKey": "sonic",
+      "sourceSymbol": "wstkcETH",
+      "matches": [
+        {
+          "chainKey": "sonic",
+          "chainId": 146,
+          "chainName": "Sonic",
+          "address": "0xE8a41c62BB4d5863C6eadC96792cFE90A1f37C47",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "wstkscETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:sonic"
       ]
     },
     {
@@ -7083,6 +8243,29 @@
       "sources": [
         "config:Ethereum:PENDLE_STATIC",
         "oracle-known-tokens.enriched"
+      ]
+    },
+    {
+      "address": "0xf176fB51F4eB826136a54FDc71C50fCd2202E272",
+      "symbol": "SY-rsETH",
+      "decimals": 18,
+      "chainKey": "arbitrum",
+      "sourceSymbol": null,
+      "matches": [
+        {
+          "chainKey": "arbitrum",
+          "chainId": 42161,
+          "chainName": "Arbitrum One",
+          "address": "0xf176fB51F4eB826136a54FDc71C50fCd2202E272",
+          "isContract": true,
+          "isErc20Like": true,
+          "decimals": 18,
+          "symbol": "SY-rsETH",
+          "errors": []
+        }
+      ],
+      "sources": [
+        "manual:pendle"
       ]
     },
     {
@@ -7474,7 +8657,7 @@
       "symbol": "stHYPE",
       "decimals": 18,
       "chainKey": "hyperliquid",
-      "sourceSymbol": "point",
+      "sourceSymbol": "HYPE",
       "matches": [
         {
           "chainKey": "hyperliquid",
