@@ -1,0 +1,100 @@
+import type { ethers } from "ethers";
+
+export interface PendleChainConfig {
+  key: string;
+  name: string;
+  chainId: number;
+  rpcUrls: string[];
+  blockExplorerUrl: string;
+  multicall3: string;
+}
+
+export interface PendleCatalog {
+  generatedAt: string | null;
+  source: string;
+  markets: PendleMarketRecord[];
+}
+
+export interface PendleMarketRecord {
+  chainKey: string;
+  chainName: string;
+  chainId: number;
+  marketAddress: string;
+  underlyingLabel: string;
+  decimalsSY: number | null;
+  decimalsPT: number | null;
+  ptAddress?: string;
+  syAddress?: string;
+  ytAddress?: string;
+}
+
+export interface TokenOption {
+  address: string;
+  symbol: string;
+  decimals: number;
+}
+
+export interface PendleMarketView {
+  chainKey: string;
+  chainName: string;
+  marketAddress: string;
+  underlyingLabel: string;
+  ptAddress: string;
+  ptSymbol: string;
+  ptDecimals: number;
+  ptBalance: bigint;
+  syAddress: string;
+  sySymbol: string;
+  syDecimals: number;
+  syBalance: bigint;
+  ytAddress: string;
+  isExpired: boolean;
+  outputTokens: TokenOption[];
+  assetTokenAddress: string | null;
+}
+
+export interface CachedMarketResolution {
+  ptAddress: string;
+  syAddress: string;
+  ytAddress: string;
+  isExpired: boolean;
+}
+
+export interface CachedTokenMetadata {
+  symbol: string;
+  decimals: number;
+  outputs: string[];
+  assetTokenAddress: string | null;
+}
+
+export interface AppState {
+  browserProvider: ethers.BrowserProvider | null;
+  signer: ethers.JsonRpcSigner | null;
+  account: string | null;
+  selectedChainKey: string;
+  readProvider: ethers.JsonRpcProvider | null;
+  chainlistLoaded: boolean;
+  rpcCatalog: Record<string, string[]>;
+  marketResolutionCache: Record<string, CachedMarketResolution>;
+  tokenMetadataCache: Record<string, CachedTokenMetadata>;
+  routerMulticallSupport: Record<string, boolean>;
+  pendleMarkets: PendleMarketRecord[];
+  renderedMarkets: PendleMarketView[];
+}
+
+export interface Elements {
+  chainSelect: HTMLSelectElement;
+  connectButton: HTMLButtonElement;
+  refreshButton: HTMLButtonElement;
+  debugToggle: HTMLInputElement;
+  debugPanel: HTMLElement;
+  batchWalletRequestsToggle: HTMLInputElement;
+  sweepButton: HTMLButtonElement;
+  accountStatus: HTMLElement;
+  walletChainStatus: HTMLElement;
+  selectedChainStatus: HTMLElement;
+  marketCountStatus: HTMLInputElement;
+  notice: HTMLElement;
+  summary: HTMLElement;
+  marketList: HTMLElement;
+}

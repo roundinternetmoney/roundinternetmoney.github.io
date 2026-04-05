@@ -247,6 +247,42 @@ button {
   gap: 16px;
 }
 
+.summary-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 8px 12px;
+}
+
+.summary-grid div:nth-child(odd) {
+  font-weight: bold;
+}
+
+.compact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.market-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.market-meta {
+  text-align: right;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.market-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .banner-frame {
   padding: 16px;
   background: rgba(255, 255, 255, 0.4);
@@ -261,7 +297,17 @@ button {
 
   .row,
   .split-grid,
-  .site-hero {
+  .site-hero,
+  .summary-grid,
+  .market-columns {
     grid-template-columns: 1fr;
+  }
+
+  .market-card-header {
+    flex-direction: column;
+  }
+
+  .market-meta {
+    text-align: left;
   }
 }
