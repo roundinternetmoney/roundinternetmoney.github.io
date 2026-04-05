@@ -86,6 +86,12 @@ export interface AppState {
   scanCache: Record<string, ScanCacheEntry>;
   scanVersion: number;
   skipNextChainChangedScan: boolean;
+  loading: {
+    active: boolean;
+    label: string;
+    current: number;
+    total: number;
+  };
 }
 
 export interface Elements {
@@ -95,6 +101,10 @@ export interface Elements {
   tokenSelectionMode: HTMLSelectElement;
   connectButton: HTMLButtonElement;
   scanBalancesButton: HTMLButtonElement;
+  loadingPanel: HTMLElement;
+  loadingLabel: HTMLElement;
+  loadingProgressBar: HTMLElement;
+  loadingProgressText: HTMLElement;
   debugToggle: HTMLInputElement;
   debugPanel: HTMLElement;
   sweepNativeAfterTokensToggle: HTMLInputElement;

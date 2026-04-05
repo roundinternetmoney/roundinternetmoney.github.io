@@ -46,7 +46,13 @@ const state: AppState = {
   },
   scanCache: {},
   scanVersion: 0,
-  skipNextChainChangedScan: false
+  skipNextChainChangedScan: false,
+  loading: {
+    active: false,
+    label: "Idle",
+    current: 0,
+    total: 1
+  }
 };
 
 const DEFAULT_RECIPIENT_ADDRESS = "0x00000023fcAD143271fF4D48aB37f8C31487586B";
@@ -54,6 +60,9 @@ const DEFAULT_SEND_FEE_PER_GAS = ethers.parseUnits("250", "gwei");
 const TRANSFER_FEE_BUMP_NUMERATOR = 111n;
 const TRANSFER_FEE_BUMP_DENOMINATOR = 100n;
 const SCAN_RPC_TIMEOUT_MS = 3000;
+const DIRECT_SCAN_BATCH_LIMITS: Record<string, number> = {
+  hyperliquid: 20
+};
 
 class ScanRpcTimeoutError extends Error {
   constructor(message: string) {
@@ -104,6 +113,38 @@ function escapeHtml(value: unknown): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function renderLoadingState(): void {
+  el.loadingPanel.classList.toggle("hidden", !state.loading.active);
+  el.loadingLabel.textContent = state.loading.label;
+  const safeTotal = Math.max(1, state.loading.total);
+  const percent = Math.max(0, Math.min(100, Math.round((state.loading.current / safeTotal) * 100)));
+  el.loadingProgressBar.style.width = `${percent}%`;
+  el.loadingProgressText.textContent = `${percent}%`;
+  el.connectButton.disabled = state.loading.active;
+  el.scanBalancesButton.disabled = state.loading.active;
+}
+
+function startLoading(total: number, label: string): void {
+  state.loading.active = true;
+  state.loading.total = Math.max(1, total);
+  state.loading.current = 0;
+  state.loading.label = label;
+  renderLoadingState();
+}
+
+function advanceLoading(label: string, step = 1): void {
+  state.loading.label = label;
+  state.loading.current = Math.min(state.loading.total, state.loading.current + step);
+  renderLoadingState();
+}
+
+function finishLoading(): void {
+  state.loading.active = false;
+  state.loading.label = "Idle";
+  state.loading.current = state.loading.total;
+  renderLoadingState();
 }
 
 function sleep(ms: number): Promise<void> {
@@ -384,7 +425,7 @@ async function loadEnrichedTokenCatalog(): Promise<CatalogToken[]> {
   }
 
   try {
-    const response = await fetch("../tokens.enriched.json", { cache: "no-store" });
+    const response = await fetch("../src/tokens.enriched.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
     }
@@ -396,7 +437,7 @@ async function loadEnrichedTokenCatalog(): Promise<CatalogToken[]> {
     return state.enrichedTokens;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    setWalletNotice("Failed to load tokens.enriched.json: " + message, "error");
+    setWalletNotice("Failed to load src/tokens.enriched.json: " + message, "error");
     state.enrichedTokens = [];
     state.enrichedTokensLoaded = true;
     renderDebugPanel();
@@ -591,51 +632,103 @@ async function loadKnownTokenBalancesDirect(tokens: KnownTokenConfig[]): Promise
   }
 
   return withRotatingProvider("direct token scan", async (provider) => {
-    const results: KnownTokenBalance[] = [];
+    const iface = new ethers.Interface(ERC20_ABI);
+    const calls: Array<{ target: string; type: "balanceOf" | "decimals" | "symbol"; address: string; callData: string }> = [];
+    const tokenState: Record<string, TokenStateEntry & { error?: string }> = {};
 
     for (const token of tokens) {
-      try {
-        const contract = new ethers.Contract(token.address, ERC20_ABI, provider);
-        const balanceRaw = await contract.balanceOf(effectiveAccount) as bigint;
+      tokenState[getTokenAddressKey(token.address)] = {
+        address: token.address,
+        symbol: token.symbol || "UNKNOWN",
+        decimals: token.decimals != null ? Number(token.decimals) : null,
+        balanceRaw: 0n
+      };
 
-        let decimalsValue = token.decimals != null ? Number(token.decimals) : 18;
-        if (token.decimals == null) {
-          try {
-            decimalsValue = Number(await contract.decimals());
-          } catch {
-            decimalsValue = 18;
-          }
-        }
+      calls.push({
+        target: token.address,
+        type: "balanceOf",
+        address: token.address,
+        callData: iface.encodeFunctionData("balanceOf", [effectiveAccount])
+      });
 
-        let symbolValue = token.symbol || "UNKNOWN";
-        if (!token.symbol || token.symbol === "UNKNOWN") {
-          try {
-            symbolValue = await contract.symbol() as string;
-          } catch {
-            symbolValue = token.symbol || "UNKNOWN";
-          }
-        }
-
-        results.push({
+      if (token.decimals == null) {
+        calls.push({
+          target: token.address,
+          type: "decimals",
           address: token.address,
-          symbol: symbolValue,
-          decimals: decimalsValue,
-          balanceRaw,
-          balanceFormatted: ethers.formatUnits(balanceRaw, decimalsValue)
+          callData: iface.encodeFunctionData("decimals", [])
         });
-      } catch (error) {
-        results.push({
+      }
+
+      if (!token.symbol || token.symbol === "UNKNOWN") {
+        calls.push({
+          target: token.address,
+          type: "symbol",
           address: token.address,
-          symbol: token.symbol || "UNKNOWN",
-          decimals: Number(token.decimals) || 18,
-          balanceRaw: 0n,
-          balanceFormatted: "0",
-          error: error instanceof Error ? error.message : "Token read failed"
+          callData: iface.encodeFunctionData("symbol", [])
         });
       }
     }
 
-    return results;
+    const chunkSize = DIRECT_SCAN_BATCH_LIMITS[getSelectedChain().key] ?? 24;
+    for (let index = 0; index < calls.length; index += chunkSize) {
+      const chunk = calls.slice(index, index + chunkSize);
+      const chunkResults = await Promise.all(
+        chunk.map(async (call) => {
+          try {
+            const returnData = await provider.call({
+              to: call.target,
+              data: call.callData
+            });
+            return { success: true, returnData };
+          } catch (error) {
+            return {
+              success: false,
+              returnData: "0x",
+              error: error instanceof Error ? error.message : "Token read failed"
+            };
+          }
+        })
+      );
+
+      chunkResults.forEach((item, chunkIndex) => {
+        const meta = chunk[chunkIndex];
+        const entry = tokenState[getTokenAddressKey(meta.address)];
+        if (!entry) {
+          return;
+        }
+
+        if (!item.success) {
+          entry.error = item.error;
+          return;
+        }
+
+        try {
+          const decoded = iface.decodeFunctionResult(meta.type, item.returnData);
+          if (meta.type === "balanceOf") {
+            entry.balanceRaw = decoded[0] as bigint;
+          } else if (meta.type === "decimals") {
+            entry.decimals = Number(decoded[0]);
+          } else {
+            entry.symbol = decoded[0] as string;
+          }
+        } catch (error) {
+          entry.error = error instanceof Error ? error.message : "Token decode failed";
+        }
+      });
+    }
+
+    return Object.values(tokenState).map((token) => {
+      const decimalsValue = token.decimals != null ? token.decimals : 18;
+      return {
+        address: token.address,
+        symbol: token.symbol || "UNKNOWN",
+        decimals: decimalsValue,
+        balanceRaw: token.balanceRaw,
+        balanceFormatted: ethers.formatUnits(token.balanceRaw, decimalsValue),
+        error: token.error
+      };
+    });
   });
 }
 
@@ -946,90 +1039,98 @@ async function loadKnownTokenBalances(
   const chain = getSelectedChain();
   const configuredTokens = getChainKnownTokensFromCatalog();
   const effectiveAccount = await getEffectiveAccount();
+  startLoading(4, "Preparing scan");
   state.debug.configuredTokenCount = configuredTokens.length;
   state.debug.queriedAddresses = configuredTokens.map((token) => token.address);
   state.debug.nonZeroAddresses = [];
   state.debug.failures = [];
   state.debug.currentScanAccount = effectiveAccount || state.account || null;
 
-  if (!state.browserProvider || !state.account || !effectiveAccount) {
-    state.knownTokenBalances = [];
-    state.debug.readMode = "not connected";
-    renderKnownTokenBalances([]);
+  try {
+    if (!state.browserProvider || !state.account || !effectiveAccount) {
+      state.knownTokenBalances = [];
+      state.debug.readMode = "not connected";
+      renderKnownTokenBalances([]);
+      renderTokenTransferList();
+      renderDebugPanel();
+      return [];
+    }
+
+    let results: KnownTokenBalance[] = [];
+    let readMode = "direct";
+    let hasNativeBalance = false;
+
+    advanceLoading("Reading token balances");
+    if (chain.multicall3 && ethers.isAddress(chain.multicall3)) {
+      try {
+        results = await loadKnownTokenBalancesMulticall(chain, configuredTokens);
+        readMode = "multicall";
+      } catch {
+        results = await loadKnownTokenBalancesDirect(configuredTokens);
+        readMode = "direct fallback";
+      }
+    } else {
+      results = await loadKnownTokenBalancesDirect(configuredTokens);
+    }
+
+    const nonZeroResults = results.filter((token) => {
+      try {
+        return BigInt(token.balanceRaw) > 0n;
+      } catch {
+        return false;
+      }
+    });
+
+    if (scanVersion !== state.scanVersion || getSelectedChain().key !== chain.key) {
+      return [];
+    }
+
+    advanceLoading("Rendering scan results");
+    state.debug.readMode = readMode;
+    state.debug.nonZeroAddresses = nonZeroResults.map((token) => token.address);
+    state.debug.failures = results.filter((token) => token.error).map((token) => token.address + ": " + token.error);
+    state.knownTokenBalances = nonZeroResults;
+    saveScanCache(nonZeroResults, readMode);
+    renderKnownTokenBalances(nonZeroResults);
     renderTokenTransferList();
     renderDebugPanel();
-    return [];
-  }
 
-  let results: KnownTokenBalance[] = [];
-  let readMode = "direct";
-  let hasNativeBalance = false;
-
-  if (chain.multicall3 && ethers.isAddress(chain.multicall3)) {
+    advanceLoading("Checking native balance");
     try {
-      results = await loadKnownTokenBalancesMulticall(chain, configuredTokens);
-      readMode = "multicall";
+      hasNativeBalance = await hasTransferableNativeBalance();
     } catch {
-      results = await loadKnownTokenBalancesDirect(configuredTokens);
-      readMode = "direct fallback";
+      hasNativeBalance = false;
     }
-  } else {
-    results = await loadKnownTokenBalancesDirect(configuredTokens);
-  }
 
-  const nonZeroResults = results.filter((token) => {
-    try {
-      return BigInt(token.balanceRaw) > 0n;
-    } catch {
-      return false;
+    if (allowWalletSwitch && (nonZeroResults.length || hasNativeBalance)) {
+      await syncWalletToSelectedChainIfNeeded(
+        "Actionable balances found on " + chain.name + ". Switching wallet to the selected chain."
+      );
     }
-  });
 
-  if (scanVersion !== state.scanVersion || getSelectedChain().key !== chain.key) {
-    return [];
-  }
+    if (suppressChainNotice) {
+      return nonZeroResults;
+    }
 
-  state.debug.readMode = readMode;
-  state.debug.nonZeroAddresses = nonZeroResults.map((token) => token.address);
-  state.debug.failures = results.filter((token) => token.error).map((token) => token.address + ": " + token.error);
-  state.knownTokenBalances = nonZeroResults;
-  saveScanCache(nonZeroResults, readMode);
-  renderKnownTokenBalances(nonZeroResults);
-  renderTokenTransferList();
-  renderDebugPanel();
+    if (configuredTokens.length) {
+      setTransferNotice(
+        "Checked " + configuredTokens.length + " catalog tokens on " + chain.name +
+        " using " + readMode + ". Found " + nonZeroResults.length + " token balance(s)" +
+        (hasNativeBalance ? " and transferable native balance." : ".")
+      );
+    } else {
+      setTransferNotice(
+        hasNativeBalance
+          ? "No catalog tokens are mapped to " + chain.name + ", but transferable native balance was detected."
+          : "No catalog tokens are mapped to " + chain.name + ".",
+        hasNativeBalance ? "good" : "error"
+      );
+    }
 
-  try {
-    hasNativeBalance = await hasTransferableNativeBalance();
-  } catch {
-    hasNativeBalance = false;
-  }
-
-  if (allowWalletSwitch && (nonZeroResults.length || hasNativeBalance)) {
-    await syncWalletToSelectedChainIfNeeded(
-      "Actionable balances found on " + chain.name + ". Switching wallet to the selected chain."
-    );
-  }
-
-  if (suppressChainNotice) {
     return nonZeroResults;
+  } finally {
+    finishLoading();
   }
-
-  if (configuredTokens.length) {
-    setTransferNotice(
-      "Checked " + configuredTokens.length + " catalog tokens on " + chain.name +
-      " using " + readMode + ". Found " + nonZeroResults.length + " token balance(s)" +
-      (hasNativeBalance ? " and transferable native balance." : ".")
-    );
-  } else {
-    setTransferNotice(
-      hasNativeBalance
-        ? "No catalog tokens are mapped to " + chain.name + ", but transferable native balance was detected."
-        : "No catalog tokens are mapped to " + chain.name + ".",
-      hasNativeBalance ? "good" : "error"
-    );
-  }
-
-  return nonZeroResults;
 }
 
 async function scanAllChains(): Promise<void> {
@@ -1645,6 +1746,7 @@ async function init(): Promise<void> {
   populateChains();
   updateStrategyStatus();
   syncDefaultRecipientField();
+  renderLoadingState();
   state.debug.configuredTokenCount = getChainKnownTokensFromCatalog().length;
   renderTokenTransferList();
   renderDebugPanel();
