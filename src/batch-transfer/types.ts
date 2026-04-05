@@ -85,6 +85,7 @@ export interface AppState {
   debug: DebugState;
   scanCache: Record<string, ScanCacheEntry>;
   scanVersion: number;
+  skipNextChainChangedScan: boolean;
 }
 
 export interface Elements {
@@ -96,8 +97,10 @@ export interface Elements {
   scanBalancesButton: HTMLButtonElement;
   debugToggle: HTMLInputElement;
   debugPanel: HTMLElement;
+  sweepNativeAfterTokensToggle: HTMLInputElement;
   sendButton: HTMLButtonElement;
   singleRecipient: HTMLInputElement;
+  useDefaultRecipientToggle: HTMLInputElement;
   maxTokenTransfers: HTMLInputElement;
   approvalTarget: HTMLInputElement;
   actionModeDisplay: HTMLInputElement;

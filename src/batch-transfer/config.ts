@@ -64,6 +64,51 @@ export const APP_CONFIG: AppConfig = {
       multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
     },
     {
+      key: "sonic",
+      name: "Sonic",
+      chainId: 146,
+      rpcUrls: ["https://rpc.soniclabs.com"],
+      blockExplorerUrls: ["https://sonicscan.org"],
+      nativeCurrency: { name: "Sonic", symbol: "S", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "berachain",
+      name: "Berachain",
+      chainId: 80094,
+      rpcUrls: ["https://rpc.berachain.com"],
+      blockExplorerUrls: ["https://berascan.com"],
+      nativeCurrency: { name: "BERA", symbol: "BERA", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "mantle",
+      name: "Mantle",
+      chainId: 5000,
+      rpcUrls: ["https://rpc.mantle.xyz"],
+      blockExplorerUrls: ["https://mantlescan.xyz"],
+      nativeCurrency: { name: "Mantle", symbol: "MNT", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "binancechain",
+      name: "BNB Smart Chain",
+      chainId: 56,
+      rpcUrls: ["https://bsc-dataseed.bnbchain.org"],
+      blockExplorerUrls: ["https://bscscan.com"],
+      nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
+      key: "monad",
+      name: "Monad",
+      chainId: 143,
+      rpcUrls: ["https://rpc.monad.xyz"],
+      blockExplorerUrls: ["https://monadscan.com"],
+      nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
+      multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
+    },
+    {
       key: "zksync",
       name: "ZKsync",
       chainId: 324,
@@ -76,7 +121,7 @@ export const APP_CONFIG: AppConfig = {
       key: "polygon",
       name: "Polygon",
       chainId: 137,
-      rpcUrls: ["https://polygon-rpc.com"],
+      rpcUrls: [],
       blockExplorerUrls: ["https://polygonscan.com"],
       nativeCurrency: { name: "POL", symbol: "POL", decimals: 18 },
       multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11"
