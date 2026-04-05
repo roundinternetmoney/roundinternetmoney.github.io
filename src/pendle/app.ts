@@ -20,6 +20,7 @@ import type {
   PendleChainConfig,
   PendleMarketRecord,
   PendleMarketView,
+  QueuedRouterCall,
   TokenOption
 } from "./types";
 
@@ -35,7 +36,14 @@ const state: AppState = {
   tokenMetadataCache: {},
   routerMulticallSupport: {},
   pendleMarkets: [],
-  renderedMarkets: []
+  renderedMarkets: [],
+  loading: {
+    active: false,
+    label: "Idle",
+    current: 0,
+    total: 1
+  },
+  queuedRouterCalls: []
 };
 
 const READ_RPC_TIMEOUT_MS = 3000;
@@ -44,6 +52,10 @@ const WALLET_CALLS_STATUS_CONFIRMED = 200;
 const WALLET_CALLS_STATUS_OFFCHAIN_FAILED = 400;
 const WALLET_CALLS_STATUS_CHAIN_FAILED = 500;
 const WALLET_CALLS_STATUS_PARTIAL_FAILED = 600;
+const PT_SYMBOL_DATE_SUFFIX = /-(\d{1,2}[A-Z]{3}\d{4})$/;
+const DIRECT_CALL_BATCH_LIMITS: Record<string, number> = {
+  hyperliquid: 20
+};
 
 type WalletBatchCall = {
   to: string;
@@ -64,10 +76,20 @@ function getElements(): Elements {
     chainSelect: byId<HTMLSelectElement>("chainSelect"),
     connectButton: byId<HTMLButtonElement>("connectButton"),
     refreshButton: byId<HTMLButtonElement>("refreshButton"),
+    activeMarketsOnlyToggle: byId<HTMLInputElement>("activeMarketsOnlyToggle"),
+    loadingPanel: byId("loadingPanel"),
+    loadingSpinner: byId("loadingSpinner"),
+    loadingLabel: byId("loadingLabel"),
+    loadingProgressBar: byId("loadingProgressBar"),
+    loadingProgressText: byId("loadingProgressText"),
     debugToggle: byId<HTMLInputElement>("debugToggle"),
     debugPanel: byId("debugPanel"),
     batchWalletRequestsToggle: byId<HTMLInputElement>("batchWalletRequestsToggle"),
     sweepButton: byId<HTMLButtonElement>("sweepButton"),
+    queuedCallsPanel: byId("queuedCallsPanel"),
+    queuedCallsList: byId("queuedCallsList"),
+    queueSubmitButton: byId<HTMLButtonElement>("queueSubmitButton"),
+    queueClearButton: byId<HTMLButtonElement>("queueClearButton"),
     accountStatus: byId("accountStatus"),
     walletChainStatus: byId("walletChainStatus"),
     selectedChainStatus: byId("selectedChainStatus"),
@@ -94,6 +116,38 @@ function getMarketCacheKey(chainKey: string, marketAddress: string): string {
 
 function getTokenCacheKey(chainKey: string, tokenAddress: string): string {
   return `${chainKey}:${tokenAddress.toLowerCase()}`;
+}
+
+function escapeHtml(value: unknown): string {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function inferIsExpiredFromPtSymbol(symbol: string | null | undefined): boolean {
+  if (!symbol) {
+    return false;
+  }
+
+  const match = symbol.trim().toUpperCase().match(PT_SYMBOL_DATE_SUFFIX);
+  if (!match) {
+    return false;
+  }
+
+  const raw = match[1];
+  const day = Number(raw.slice(0, -7));
+  const monthCode = raw.slice(-7, -4);
+  const year = Number(raw.slice(-4));
+  const monthIndex = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"].indexOf(monthCode);
+  if (!day || monthIndex < 0 || !year) {
+    return false;
+  }
+
+  const expiryUtc = Date.UTC(year, monthIndex, day, 23, 59, 59, 999);
+  return Date.now() > expiryUtc;
 }
 
 function hasDecodableReturnData(result: { success: boolean; returnData: string } | undefined): result is { success: true; returnData: string } {
@@ -131,14 +185,82 @@ function setNotice(message: string, kind?: "error" | "good"): void {
   elements.notice.className = kind ? `notice ${kind}` : "notice";
 }
 
+function renderLoadingState(): void {
+  elements.loadingPanel.classList.toggle("hidden", !state.loading.active);
+  elements.loadingLabel.textContent = state.loading.label;
+  const safeTotal = Math.max(1, state.loading.total);
+  const percent = Math.max(0, Math.min(100, Math.round((state.loading.current / safeTotal) * 100)));
+  elements.loadingProgressBar.style.width = `${percent}%`;
+  elements.loadingProgressText.textContent = `${percent}%`;
+  elements.connectButton.disabled = state.loading.active;
+  elements.refreshButton.disabled = state.loading.active;
+  elements.chainSelect.disabled = state.loading.active;
+}
+
+function startLoading(total: number, label: string): void {
+  state.loading.active = true;
+  state.loading.total = Math.max(1, total);
+  state.loading.current = 0;
+  state.loading.label = label;
+  renderLoadingState();
+}
+
+function advanceLoading(label: string, step = 1): void {
+  state.loading.label = label;
+  state.loading.current = Math.min(state.loading.total, state.loading.current + step);
+  renderLoadingState();
+}
+
+function finishLoading(): void {
+  state.loading.active = false;
+  state.loading.label = "Idle";
+  state.loading.current = state.loading.total;
+  renderLoadingState();
+}
+
 function useBatchWalletRequests(): boolean {
   return Boolean(elements.batchWalletRequestsToggle.checked);
+}
+
+function useActiveMarketsOnly(): boolean {
+  return Boolean(elements.activeMarketsOnlyToggle.checked);
 }
 
 function renderDebugPanel(): void {
   elements.debugPanel.classList.toggle("hidden", !elements.debugToggle.checked);
   const hasSweepableMarkets = state.renderedMarkets.some((view) => view.ptBalance > 0n || view.syBalance > 0n);
   elements.sweepButton.disabled = !state.account || !hasSweepableMarkets || !useBatchWalletRequests();
+  renderQueuedCalls();
+}
+
+function renderQueuedCalls(): void {
+  if (!state.queuedRouterCalls.length) {
+    elements.queuedCallsPanel.textContent = "No queued router calls.";
+    elements.queueSubmitButton.disabled = true;
+    elements.queueClearButton.disabled = true;
+    return;
+  }
+
+  elements.queuedCallsPanel.innerHTML = state.queuedRouterCalls
+    .map((call, index) => `${index + 1}. ${escapeHtml(call.label)}`)
+    .join("<br>");
+  elements.queueSubmitButton.disabled = !state.account;
+  elements.queueClearButton.disabled = false;
+}
+
+function upsertQueuedRouterCall(call: QueuedRouterCall): void {
+  const existingIndex = state.queuedRouterCalls.findIndex((item) => item.id === call.id);
+  if (existingIndex >= 0) {
+    state.queuedRouterCalls[existingIndex] = call;
+  } else {
+    state.queuedRouterCalls.push(call);
+  }
+  renderQueuedCalls();
+}
+
+function clearQueuedRouterCalls(): void {
+  state.queuedRouterCalls = [];
+  renderQueuedCalls();
 }
 
 function populateChainSelect(): void {
@@ -167,7 +289,17 @@ async function loadPendleConfig(): Promise<void> {
       marketAddress: ethers.getAddress(market.marketAddress),
       ptAddress: market.ptAddress ? ethers.getAddress(market.ptAddress) : undefined,
       syAddress: market.syAddress ? ethers.getAddress(market.syAddress) : undefined,
-      ytAddress: market.ytAddress ? ethers.getAddress(market.ytAddress) : undefined
+      ytAddress: market.ytAddress ? ethers.getAddress(market.ytAddress) : undefined,
+      assetTokenAddress: market.assetTokenAddress ? ethers.getAddress(market.assetTokenAddress) : undefined,
+      redeemOptions: Array.isArray(market.redeemOptions)
+        ? market.redeemOptions
+            .filter((option) => option && ethers.isAddress(option.address))
+            .map((option) => ({
+              address: ethers.getAddress(option.address),
+              symbol: option.symbol,
+              decimals: option.decimals
+            }))
+        : []
     }))
     .sort((left, right) => left.marketAddress.localeCompare(right.marketAddress));
 }
@@ -213,7 +345,14 @@ function isLikelyKeyedRpcUrl(url: string): boolean {
 
   return [
     "alchemy.com",
+    "ankr.com",
+    "api.securerpc.com",
+    "bitstack.com",
+    "builder0x69.io",
+    "eth-mainnet-public.unifra.io",
+    "flashbots.net",
     "infura.io",
+    "payload.de",
     "quicknode.com",
     "chainstack.com",
     "tenderly.co",
@@ -262,7 +401,7 @@ async function loadChainlistRpcs(): Promise<Record<string, string[]>> {
 }
 
 function getRpcUrlsForChain(chain: PendleChainConfig): string[] {
-  const dynamic = state.rpcCatalog[chain.key] || [];
+  const dynamic = (state.rpcCatalog[chain.key] || []).slice(0, 4);
   const merged = [...(chain.rpcUrls || []), ...dynamic]
     .map(sanitizeRpcUrl)
     .filter((value): value is string => Boolean(value))
@@ -344,21 +483,72 @@ async function aggregateCalls(
   const chain = getSelectedChain();
   const multicall = chain.multicall3;
   if (!multicall) {
-    throw new Error(`Multicall3 unavailable on ${chain.name}`);
+    const fallbackResults: Array<{ success: boolean; returnData: string }> = [];
+    const chunkSize = DIRECT_CALL_BATCH_LIMITS[chain.key] ?? 24;
+
+    for (let index = 0; index < calls.length; index += chunkSize) {
+      const chunk = calls.slice(index, index + chunkSize);
+      const chunkResults = await Promise.all(
+        chunk.map(async (call) => {
+          try {
+            const returnData = await provider.call({
+              to: call.target,
+              data: call.callData
+            });
+            return { success: true, returnData };
+          } catch {
+            return { success: false, returnData: "0x" };
+          }
+        })
+      );
+      fallbackResults.push(...chunkResults);
+    }
+
+    if (calls.length > 0 && !fallbackResults.some((item) => item.success && item.returnData && item.returnData !== "0x")) {
+      throw new Error(`No decodable direct-call responses from ${chain.name}`);
+    }
+
+    return fallbackResults;
   }
 
   const contract = new ethers.Contract(multicall, MULTICALL3_ABI, provider);
   const results: Array<{ success: boolean; returnData: string }> = [];
-  const chunkSize = 100;
+  const chunkSize = 80;
+  let successfulResponses = 0;
 
-  for (let index = 0; index < calls.length; index += chunkSize) {
-    const chunk = calls.slice(index, index + chunkSize).map((call) => ({
+  const runChunk = async (
+    chunk: Array<{ target: string; allowFailure?: boolean; callData: string }>
+  ): Promise<Array<{ success: boolean; returnData: string }>> => {
+    const normalized = chunk.map((call) => ({
       target: call.target,
       allowFailure: call.allowFailure ?? true,
       callData: call.callData
     }));
-    const response = (await contract.aggregate3(chunk)) as Array<{ success: boolean; returnData: string }>;
+
+    try {
+      const response = (await contract.aggregate3(normalized)) as Array<{ success: boolean; returnData: string }>;
+      successfulResponses += response.filter((item) => item.success && item.returnData && item.returnData !== "0x").length;
+      return response;
+    } catch (error) {
+      if (normalized.length === 1) {
+        return [{ success: false, returnData: "0x" }];
+      }
+
+      const midpoint = Math.ceil(normalized.length / 2);
+      const left = await runChunk(normalized.slice(0, midpoint));
+      const right = await runChunk(normalized.slice(midpoint));
+      return [...left, ...right];
+    }
+  };
+
+  for (let index = 0; index < calls.length; index += chunkSize) {
+    const chunk = calls.slice(index, index + chunkSize);
+    const response = await runChunk(chunk);
     results.push(...response);
+  }
+
+  if (calls.length > 0 && successfulResponses === 0) {
+    throw new Error(`No decodable multicall responses from ${chain.name}`);
   }
 
   return results;
@@ -453,49 +643,62 @@ async function switchWalletChain(): Promise<void> {
 
 async function loadMarketViews(): Promise<PendleMarketView[]> {
   const chain = getSelectedChain();
-  const marketRecords = state.pendleMarkets.filter((item) => item.chainKey === chain.key);
-  elements.marketCountStatus.value = `${marketRecords.length} configured`;
+  const allChainMarketRecords = state.pendleMarkets.filter((item) => item.chainKey === chain.key);
+  const resolvedChainMarketRecords = allChainMarketRecords.filter((record) => record.ptAddress && record.syAddress);
+  elements.marketCountStatus.value = `${resolvedChainMarketRecords.length} resolved / ${allChainMarketRecords.length} total`;
 
   if (!state.account) {
     return [];
   }
 
-  const marketInterface = new ethers.Interface(MARKET_ABI);
+  startLoading(6, `Refreshing ${chain.name} wallet view`);
+
   const erc20Interface = new ethers.Interface(ERC20_ABI);
-  const syInterface = new ethers.Interface(SY_ABI);
-  const missingMarketRecords = marketRecords.filter((record) => !state.marketResolutionCache[getMarketCacheKey(chain.key, record.marketAddress)]);
-  if (missingMarketRecords.length) {
-    await withRotatingProvider("resolve Pendle markets", async (provider) => {
-      const marketCalls = missingMarketRecords.flatMap((item) => [
-        { target: item.marketAddress, callData: marketInterface.encodeFunctionData("readTokens") },
-        { target: item.marketAddress, callData: marketInterface.encodeFunctionData("isExpired") }
-      ]);
-      const marketResults = await aggregateCalls(provider, marketCalls);
+  advanceLoading("Preparing resolved market list");
+  for (const record of resolvedChainMarketRecords) {
+    const cacheKey = getMarketCacheKey(chain.key, record.marketAddress);
+    if (record.ptAddress && record.syAddress) {
+      const prior = state.marketResolutionCache[cacheKey];
+      state.marketResolutionCache[cacheKey] = {
+        syAddress: ethers.getAddress(record.syAddress),
+        ptAddress: ethers.getAddress(record.ptAddress),
+        ytAddress: record.ytAddress ? ethers.getAddress(record.ytAddress) : ethers.ZeroAddress,
+        isExpired: inferIsExpiredFromPtSymbol(record.ptSymbol) || prior?.isExpired || false
+      };
+    }
 
-      for (let index = 0; index < missingMarketRecords.length; index += 1) {
-        const record = missingMarketRecords[index];
-        const tokensResult = marketResults[index * 2];
-        const expiredResult = marketResults[index * 2 + 1];
-        if (!tokensResult?.success || !expiredResult?.success) {
-          continue;
-        }
+    if (record.ptAddress && record.ptSymbol && record.decimalsPT !== null) {
+      state.tokenMetadataCache[getTokenCacheKey(chain.key, record.ptAddress)] = {
+        symbol: record.ptSymbol,
+        decimals: record.decimalsPT,
+        outputs: [],
+        assetTokenAddress: null,
+        assetTokenDecimals: null
+      };
+    }
 
-        const resolvedTokens = decodeTupleResult<[string, string, string]>(marketInterface, "readTokens", tokensResult);
-        const isExpired = decodeSingleResult<boolean>(marketInterface, "isExpired", expiredResult);
-        if (!resolvedTokens || isExpired === null) {
-          continue;
-        }
-        const [resolvedSyAddress, resolvedPtAddress, resolvedYtAddress] = resolvedTokens;
-        state.marketResolutionCache[getMarketCacheKey(chain.key, record.marketAddress)] = {
-          syAddress: record.syAddress ? ethers.getAddress(record.syAddress) : ethers.getAddress(resolvedSyAddress),
-          ptAddress: record.ptAddress ? ethers.getAddress(record.ptAddress) : ethers.getAddress(resolvedPtAddress),
-          ytAddress: record.ytAddress ? ethers.getAddress(record.ytAddress) : ethers.getAddress(resolvedYtAddress),
-          isExpired
-        };
-      }
-      return true;
-    });
+    if (record.syAddress && record.sySymbol && record.decimalsSY !== null) {
+      const existing = state.tokenMetadataCache[getTokenCacheKey(chain.key, record.syAddress)];
+      state.tokenMetadataCache[getTokenCacheKey(chain.key, record.syAddress)] = {
+        symbol: record.sySymbol,
+        decimals: record.decimalsSY,
+        outputs: Array.isArray(record.redeemOptions) ? record.redeemOptions.map((option) => option.address) : (existing?.outputs ?? []),
+        assetTokenAddress: record.assetTokenAddress ?? existing?.assetTokenAddress ?? null,
+        assetTokenDecimals: record.assetTokenDecimals ?? existing?.assetTokenDecimals ?? null
+      };
+    }
   }
+
+  const marketRecords = resolvedChainMarketRecords.filter((record) => {
+    if (!useActiveMarketsOnly()) {
+      return true;
+    }
+    const cachedResolution = state.marketResolutionCache[getMarketCacheKey(chain.key, record.marketAddress)];
+    return cachedResolution ? !cachedResolution.isExpired : true;
+  });
+  elements.marketCountStatus.value = useActiveMarketsOnly()
+    ? `${marketRecords.length} active / ${resolvedChainMarketRecords.length} resolved`
+    : `${marketRecords.length} resolved / ${allChainMarketRecords.length} total`;
 
   const tokenEntries: Array<{ key: string; tokenAddress: string; type: "pt" | "sy"; marketAddress: string }> = [];
   const marketTokenData = new Map<string, CachedMarketResolution>();
@@ -512,23 +715,17 @@ async function loadMarketViews(): Promise<PendleMarketView[]> {
   }
 
   const missingTokenEntries = tokenEntries.filter((entry) => !state.tokenMetadataCache[getTokenCacheKey(chain.key, entry.tokenAddress)]);
+  advanceLoading(
+    useActiveMarketsOnly()
+      ? "Loading missing PT and SY token metadata for active markets"
+      : "Loading missing PT and SY token metadata"
+  );
   if (missingTokenEntries.length) {
     await withRotatingProvider("load Pendle token metadata", async (provider) => {
-      const tokenCalls = missingTokenEntries.flatMap((entry) => {
-        const calls = [
-          { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("symbol") },
-          { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("decimals") }
-        ];
-
-        if (entry.type === "sy") {
-          calls.push(
-            { target: entry.tokenAddress, callData: syInterface.encodeFunctionData("getTokensOut") },
-            { target: entry.tokenAddress, callData: syInterface.encodeFunctionData("assetInfo") }
-          );
-        }
-
-        return calls;
-      });
+      const tokenCalls = missingTokenEntries.flatMap((entry) => [
+        { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("symbol") },
+        { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("decimals") }
+      ]);
       const tokenResults = await aggregateCalls(provider, tokenCalls);
 
       let cursor = 0;
@@ -536,42 +733,21 @@ async function loadMarketViews(): Promise<PendleMarketView[]> {
         const symbolResult = tokenResults[cursor++];
         const decimalsResult = tokenResults[cursor++];
         if (!symbolResult?.success || !decimalsResult?.success) {
-          if (entry.type === "sy") {
-            cursor += 2;
-          }
           continue;
         }
 
         const symbol = decodeSingleResult<string>(erc20Interface, "symbol", symbolResult);
         const decimals = decodeSingleResult<bigint>(erc20Interface, "decimals", decimalsResult);
         if (!symbol || decimals === null) {
-          if (entry.type === "sy") {
-            cursor += 2;
-          }
           continue;
         }
         const metadata: CachedTokenMetadata = {
           symbol,
           decimals: Number(decimals),
           outputs: [],
-          assetTokenAddress: null
+          assetTokenAddress: null,
+          assetTokenDecimals: null
         };
-
-        if (entry.type === "sy") {
-          const outputsResult = tokenResults[cursor++];
-          const assetInfoResult = tokenResults[cursor++];
-          const outputs = decodeSingleResult<string[]>(syInterface, "getTokensOut", outputsResult);
-          if (outputs) {
-            metadata.outputs = outputs.map((value) => ethers.getAddress(value));
-          }
-          const assetInfo = decodeTupleResult<[bigint, string, bigint]>(syInterface, "assetInfo", assetInfoResult);
-          if (assetInfo) {
-            const [, assetTokenAddress] = assetInfo;
-            if (assetTokenAddress !== ethers.ZeroAddress) {
-              metadata.assetTokenAddress = ethers.getAddress(assetTokenAddress);
-            }
-          }
-        }
 
         state.tokenMetadataCache[getTokenCacheKey(chain.key, entry.tokenAddress)] = metadata;
       }
@@ -579,55 +755,14 @@ async function loadMarketViews(): Promise<PendleMarketView[]> {
     });
   }
 
-  const outputTokenAddresses = [...new Set(
-    tokenEntries.flatMap((entry) => {
-      if (entry.type !== "sy") {
-        return [];
-      }
-      const metadata = state.tokenMetadataCache[getTokenCacheKey(chain.key, entry.tokenAddress)];
-      if (!metadata) {
-        return [];
-      }
-      const addresses = [...metadata.outputs];
-      if (metadata.assetTokenAddress) {
-        addresses.push(metadata.assetTokenAddress);
-      }
-      return addresses;
-    })
-  )];
-
-  const missingOutputTokenAddresses = outputTokenAddresses.filter((address) => !state.tokenMetadataCache[getTokenCacheKey(chain.key, address)]);
-  if (missingOutputTokenAddresses.length) {
-    await withRotatingProvider("load Pendle output token metadata", async (provider) => {
-      const outputTokenCalls = missingOutputTokenAddresses.flatMap((tokenAddress) => [
-        { target: tokenAddress, callData: erc20Interface.encodeFunctionData("symbol") },
-        { target: tokenAddress, callData: erc20Interface.encodeFunctionData("decimals") }
-      ]);
-      const outputTokenResults = await aggregateCalls(provider, outputTokenCalls);
-
-      for (let index = 0; index < missingOutputTokenAddresses.length; index += 1) {
-        const symbolResult = outputTokenResults[index * 2];
-        const decimalsResult = outputTokenResults[index * 2 + 1];
-        if (!symbolResult?.success || !decimalsResult?.success) {
-          continue;
-        }
-        const symbol = decodeSingleResult<string>(erc20Interface, "symbol", symbolResult);
-        const decimals = decodeSingleResult<bigint>(erc20Interface, "decimals", decimalsResult);
-        if (!symbol || decimals === null) {
-          continue;
-        }
-        state.tokenMetadataCache[getTokenCacheKey(chain.key, missingOutputTokenAddresses[index])] = {
-          symbol,
-          decimals: Number(decimals),
-          outputs: [],
-          assetTokenAddress: null
-        };
-      }
-      return true;
-    });
-  }
-
   const balancesByKey = new Map<string, bigint>();
+  advanceLoading(
+    tokenEntries.length
+      ? useActiveMarketsOnly()
+        ? "Scanning PT and SY balances on active markets"
+        : "Scanning PT and SY balances"
+      : "No PT or SY balances to scan"
+  );
   if (tokenEntries.length) {
     await withRotatingProvider("load Pendle balances", async (provider) => {
       const balanceCalls = tokenEntries.map((entry) => ({
@@ -648,6 +783,8 @@ async function loadMarketViews(): Promise<PendleMarketView[]> {
       return true;
     });
   }
+
+  advanceLoading("Building balance view");
 
   const views: PendleMarketView[] = [];
   for (const record of marketRecords) {
@@ -677,19 +814,15 @@ async function loadMarketViews(): Promise<PendleMarketView[]> {
       syBalance: balancesByKey.get(`${record.marketAddress}:sy`) ?? 0n,
       ytAddress: tokenData.ytAddress,
       isExpired: tokenData.isExpired,
-      outputTokens: syMetadata.outputs
-        .map((address) => {
-          const metadata = state.tokenMetadataCache[getTokenCacheKey(chain.key, address)];
-          if (!metadata) {
-            return null;
-          }
-          return {
-            address,
-            symbol: metadata.symbol,
-            decimals: metadata.decimals
-          };
-        })
-        .filter((value): value is TokenOption => Boolean(value)),
+      outputTokens: Array.isArray(record.redeemOptions) && record.redeemOptions.length
+        ? record.redeemOptions
+        : syMetadata.assetTokenAddress
+          ? [{
+              address: syMetadata.assetTokenAddress,
+              symbol: `Asset ${formatAddress(syMetadata.assetTokenAddress)}`,
+              decimals: syMetadata.assetTokenDecimals ?? syMetadata.decimals
+            }]
+          : [],
       assetTokenAddress: syMetadata.assetTokenAddress
     });
   }
@@ -703,6 +836,12 @@ async function loadMarketViews(): Promise<PendleMarketView[]> {
     return left.marketAddress.localeCompare(right.marketAddress);
   });
 
+  advanceLoading(
+    useActiveMarketsOnly()
+      ? `Prepared ${views.length} active market cards`
+      : `Prepared ${views.length} market cards`
+  );
+  advanceLoading("Rendering market cards");
   return views;
 }
 
@@ -714,6 +853,48 @@ function chooseDefaultOutputToken(view: PendleMarketView): TokenOption | null {
     }
   }
   return view.outputTokens[0] ?? null;
+}
+
+async function ensureSyAssetToken(view: PendleMarketView): Promise<TokenOption | null> {
+  const existing = chooseDefaultOutputToken(view);
+  if (existing) {
+    return existing;
+  }
+
+  const syInterface = new ethers.Interface(SY_ABI);
+  const chain = getSelectedChain();
+  const metadata = state.tokenMetadataCache[getTokenCacheKey(chain.key, view.syAddress)];
+
+  const assetInfo = await withRotatingProvider("load SY asset token", async (provider) => {
+    const result = await aggregateCalls(provider, [
+      { target: view.syAddress, callData: syInterface.encodeFunctionData("assetInfo") }
+    ]);
+    return decodeTupleResult<[bigint, string, bigint]>(syInterface, "assetInfo", result[0]);
+  });
+
+  if (!assetInfo) {
+    return null;
+  }
+
+  const [, assetTokenAddress, assetTokenDecimals] = assetInfo;
+  if (assetTokenAddress === ethers.ZeroAddress) {
+    return null;
+  }
+
+  const normalizedAddress = ethers.getAddress(assetTokenAddress);
+  state.tokenMetadataCache[getTokenCacheKey(chain.key, view.syAddress)] = {
+    symbol: metadata?.symbol ?? view.sySymbol,
+    decimals: metadata?.decimals ?? view.syDecimals,
+    outputs: metadata?.outputs ?? [],
+    assetTokenAddress: normalizedAddress,
+    assetTokenDecimals: Number(assetTokenDecimals)
+  };
+
+  return {
+    address: normalizedAddress,
+    symbol: `Asset ${formatAddress(normalizedAddress)}`,
+    decimals: Number(assetTokenDecimals)
+  };
 }
 
 function renderSummary(): void {
@@ -757,7 +938,7 @@ function renderMarkets(): void {
         const selected = token.address === defaultOutput?.address ? " selected" : "";
         return `<option value="${token.address}"${selected}>${token.symbol} [${formatAddress(token.address)}]</option>`;
       })
-      .join("");
+      .join("") || `<option value="">Load asset token on submit</option>`;
 
     return `
       <article class="panel market-card" data-market-index="${index}">
@@ -797,6 +978,7 @@ function renderMarkets(): void {
         </div>
         <div class="actions compact-actions">
           <button class="swap-pt-button" type="button"${view.ptBalance > 0n ? "" : " disabled"}>Swap PT -> SY</button>
+          <button class="queue-pt-router-button" type="button"${view.ptBalance > 0n && view.isExpired ? "" : " disabled"}>Queue router PT -> SY</button>
         </div>
         <div class="row">
           <label>
@@ -823,7 +1005,8 @@ function renderMarkets(): void {
           </label>
         </div>
         <div class="actions compact-actions">
-          <button class="redeem-sy-button" type="button"${view.syBalance > 0n && view.outputTokens.length > 0 ? "" : " disabled"}>Redeem SY -> token</button>
+          <button class="redeem-sy-button" type="button"${view.syBalance > 0n ? "" : " disabled"}>Redeem SY -> token</button>
+          <button class="queue-sy-router-button" type="button"${view.syBalance > 0n ? "" : " disabled"}>Queue router SY -> token</button>
         </div>
       </article>
     `;
@@ -1049,7 +1232,8 @@ async function performSyRedeem(view: PendleMarketView, card: HTMLElement): Promi
     throw new Error("SY redeem inputs are missing");
   }
 
-  const selectedOutput = view.outputTokens.find((token) => token.address === redeemTokenSelect.value);
+  const selectedOutput = view.outputTokens.find((token) => token.address === redeemTokenSelect.value)
+    ?? await ensureSyAssetToken(view);
   if (!selectedOutput) {
     throw new Error("Choose a redeem token first");
   }
@@ -1075,6 +1259,106 @@ async function performSyRedeem(view: PendleMarketView, card: HTMLElement): Promi
   resultDisplay.value = "SY redeem confirmed";
 }
 
+async function buildQueuedPtRouterCall(view: PendleMarketView, card: HTMLElement): Promise<QueuedRouterCall> {
+  if (!view.isExpired) {
+    throw new Error("Only expired PT positions can be queued for router multicall");
+  }
+
+  const amountInput = card.querySelector<HTMLInputElement>(".pt-amount");
+  const minSyInput = card.querySelector<HTMLInputElement>(".pt-min-sy-out");
+  if (!amountInput || !minSyInput) {
+    throw new Error("PT queue inputs are missing");
+  }
+
+  const amount = parseAmount(amountInput.value, view.ptDecimals);
+  const minSyOut = parseAmount(minSyInput.value || "0", view.syDecimals);
+  const router = new ethers.Contract(PENDLE_ROUTER_V4, PENDLE_ROUTER_ABI);
+
+  return {
+    id: `pt:${view.marketAddress.toLowerCase()}`,
+    marketAddress: view.marketAddress,
+    label: `${view.underlyingLabel}: expired PT -> SY ${formatBalance(amount, view.ptDecimals)} ${view.ptSymbol}`,
+    target: PENDLE_ROUTER_V4,
+    callData: router.interface.encodeFunctionData("exitPostExpToSy", [
+      state.account,
+      view.marketAddress,
+      amount,
+      0n,
+      minSyOut
+    ]),
+    approvalTokenAddress: view.ptAddress,
+    approvalAmount: amount
+  };
+}
+
+async function buildQueuedSyRouterCall(view: PendleMarketView, card: HTMLElement): Promise<QueuedRouterCall> {
+  const amountInput = card.querySelector<HTMLInputElement>(".sy-amount");
+  const minTokenInput = card.querySelector<HTMLInputElement>(".sy-min-token-out");
+  const redeemTokenSelect = card.querySelector<HTMLSelectElement>(".redeem-token-select");
+  if (!amountInput || !minTokenInput || !redeemTokenSelect) {
+    throw new Error("SY queue inputs are missing");
+  }
+
+  const selectedOutput = view.outputTokens.find((token) => token.address === redeemTokenSelect.value)
+    ?? await ensureSyAssetToken(view);
+  if (!selectedOutput) {
+    throw new Error("Choose a redeem token first");
+  }
+
+  const amount = parseAmount(amountInput.value, view.syDecimals);
+  const minTokenOut = parseAmount(minTokenInput.value || "0", selectedOutput.decimals);
+  const router = new ethers.Contract(PENDLE_ROUTER_V4, PENDLE_ROUTER_ABI);
+
+  return {
+    id: `sy:${view.marketAddress.toLowerCase()}:${selectedOutput.address.toLowerCase()}`,
+    marketAddress: view.marketAddress,
+    label: `${view.underlyingLabel}: SY -> ${selectedOutput.symbol} ${formatBalance(amount, view.syDecimals)} ${view.sySymbol}`,
+    target: PENDLE_ROUTER_V4,
+    callData: router.interface.encodeFunctionData("redeemSyToToken", [
+      state.account,
+      view.syAddress,
+      amount,
+      {
+        tokenOut: selectedOutput.address,
+        minTokenOut,
+        tokenRedeemSy: selectedOutput.address,
+        pendleSwap: ethers.ZeroAddress,
+        swapData: ZERO_SWAP_DATA
+      }
+    ]),
+    approvalTokenAddress: view.syAddress,
+    approvalAmount: amount
+  };
+}
+
+async function submitQueuedRouterMulticall(): Promise<void> {
+  if (!state.queuedRouterCalls.length) {
+    throw new Error("No queued router calls");
+  }
+
+  await connectAndSwitchForAction();
+  const router = new ethers.Contract(PENDLE_ROUTER_V4, PENDLE_ROUTER_ABI, state.signer);
+  if (!(await routerSupportsMulticall(router))) {
+    throw new Error("Pendle router multicall is not available on this chain");
+  }
+
+  for (const call of state.queuedRouterCalls) {
+    if (call.approvalTokenAddress && call.approvalAmount) {
+      await ensureApproval(call.approvalTokenAddress, call.approvalAmount);
+    }
+  }
+
+  const tx = await router.multicall(
+    state.queuedRouterCalls.map((call) => ({
+      target: call.target,
+      allowFailure: false,
+      callData: call.callData
+    }))
+  );
+  await tx.wait();
+  clearQueuedRouterCalls();
+}
+
 async function performBatchSweep(): Promise<void> {
   if (!useBatchWalletRequests()) {
     throw new Error("Enable batched sweep requests in debug mode first");
@@ -1089,10 +1373,20 @@ async function performBatchSweep(): Promise<void> {
   const ptSweepable = state.renderedMarkets.filter((view) => view.ptBalance > 0n);
   const activePtSweepable = ptSweepable.filter((view) => !view.isExpired);
   const expiredPtSweepable = ptSweepable.filter((view) => view.isExpired);
-  const sySweepable = state.renderedMarkets.filter((view) => view.syBalance > 0n && chooseDefaultOutputToken(view));
+  const syCandidates = state.renderedMarkets.filter((view) => view.syBalance > 0n);
+  const sySweepable: PendleMarketView[] = [];
+  const syOutputByAddress = new Map<string, TokenOption>();
+  for (const view of syCandidates) {
+    const outputToken = chooseDefaultOutputToken(view) ?? await ensureSyAssetToken(view);
+    if (!outputToken) {
+      continue;
+    }
+    sySweepable.push(view);
+    syOutputByAddress.set(view.syAddress.toLowerCase(), outputToken);
+  }
 
   const syCalls = sySweepable.map((view) => {
-    const outputToken = chooseDefaultOutputToken(view);
+    const outputToken = syOutputByAddress.get(view.syAddress.toLowerCase()) ?? chooseDefaultOutputToken(view);
     if (!outputToken) {
       return null;
     }
@@ -1177,7 +1471,7 @@ async function performBatchSweep(): Promise<void> {
       }
 
       for (const view of sySweepable) {
-        const outputToken = chooseDefaultOutputToken(view);
+        const outputToken = syOutputByAddress.get(view.syAddress.toLowerCase()) ?? chooseDefaultOutputToken(view);
         if (!outputToken) {
           continue;
         }
@@ -1248,7 +1542,7 @@ async function performBatchSweep(): Promise<void> {
       }
 
       for (const view of sySweepable) {
-        const outputToken = chooseDefaultOutputToken(view);
+        const outputToken = syOutputByAddress.get(view.syAddress.toLowerCase()) ?? chooseDefaultOutputToken(view);
         if (!outputToken) {
           continue;
         }
@@ -1277,16 +1571,20 @@ async function performBatchSweep(): Promise<void> {
 }
 
 async function refreshPageData(): Promise<void> {
-  const chain = getSelectedChain();
-  elements.selectedChainStatus.textContent = `${chain.name} (${chain.chainId})`;
-  await refreshWalletSession();
-  state.renderedMarkets = await loadMarketViews();
-  renderMarkets();
-  renderDebugPanel();
-  setNotice(
-    "Review min-out fields before sending. This page uses direct RouterV4 calls, no hosted SDK quote generation, no external aggregator routes, and empty Pendle limit-order data.",
-    "good"
-  );
+  try {
+    const chain = getSelectedChain();
+    elements.selectedChainStatus.textContent = `${chain.name} (${chain.chainId})`;
+    await refreshWalletSession();
+    state.renderedMarkets = await loadMarketViews();
+    renderMarkets();
+    renderDebugPanel();
+    setNotice(
+      "Review min-out fields before sending. This page uses direct RouterV4 calls, no hosted SDK quote generation, no external aggregator routes, and empty Pendle limit-order data.",
+      "good"
+    );
+  } finally {
+    finishLoading();
+  }
 }
 
 function bindEvents(): void {
@@ -1296,6 +1594,14 @@ function bindEvents(): void {
 
   elements.batchWalletRequestsToggle.addEventListener("change", () => {
     renderDebugPanel();
+  });
+
+  elements.activeMarketsOnlyToggle.addEventListener("change", async () => {
+    try {
+      await refreshPageData();
+    } catch (error) {
+      setNotice((error as Error).message, "error");
+    }
   });
 
   elements.connectButton.addEventListener("click", async () => {
@@ -1334,6 +1640,21 @@ function bindEvents(): void {
     }
   });
 
+  elements.queueSubmitButton.addEventListener("click", async () => {
+    try {
+      await submitQueuedRouterMulticall();
+      await refreshPageData();
+      setNotice("Queued Pendle router multicall submitted and confirmed.", "good");
+    } catch (error) {
+      setNotice((error as Error).message, "error");
+    }
+  });
+
+  elements.queueClearButton.addEventListener("click", () => {
+    clearQueuedRouterCalls();
+    setNotice("Cleared queued router calls.", "good");
+  });
+
   elements.marketList.addEventListener("click", async (event) => {
     const target = event.target as HTMLElement | null;
     if (!target) {
@@ -1355,9 +1676,17 @@ function bindEvents(): void {
       if (target.classList.contains("swap-pt-button")) {
         await performPtSwap(view, card);
         await refreshPageData();
+      } else if (target.classList.contains("queue-pt-router-button")) {
+        const queued = await buildQueuedPtRouterCall(view, card);
+        upsertQueuedRouterCall(queued);
+        setNotice("Queued expired PT router call.", "good");
       } else if (target.classList.contains("redeem-sy-button")) {
         await performSyRedeem(view, card);
         await refreshPageData();
+      } else if (target.classList.contains("queue-sy-router-button")) {
+        const queued = await buildQueuedSyRouterCall(view, card);
+        upsertQueuedRouterCall(queued);
+        setNotice("Queued SY router call.", "good");
       }
     } catch (error) {
       const resultDisplay = card.querySelector<HTMLInputElement>(".result-display");
@@ -1383,6 +1712,7 @@ function bindEvents(): void {
 
 async function main(): Promise<void> {
   populateChainSelect();
+  renderLoadingState();
   await loadPendleConfig();
   await loadChainlistRpcs();
   bindEvents();

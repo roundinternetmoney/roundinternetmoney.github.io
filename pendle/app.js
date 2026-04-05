@@ -23775,7 +23775,8 @@ var SUPPORTED_CHAIN_KEYS = [
   "binancechain",
   "sonic",
   "mantle",
-  "berachain"
+  "berachain",
+  "hyperliquid"
 ];
 var PENDLE_CHAIN_CONFIGS = APP_CONFIG.chains.filter((chain) => SUPPORTED_CHAIN_KEYS.includes(chain.key)).map((chain) => ({
   key: chain.key,
@@ -23799,7 +23800,14 @@ var state = {
   tokenMetadataCache: {},
   routerMulticallSupport: {},
   pendleMarkets: [],
-  renderedMarkets: []
+  renderedMarkets: [],
+  loading: {
+    active: false,
+    label: "Idle",
+    current: 0,
+    total: 1
+  },
+  queuedRouterCalls: []
 };
 var READ_RPC_TIMEOUT_MS = 3e3;
 var WALLET_CALLS_STATUS_PENDING = 100;
@@ -23807,6 +23815,10 @@ var WALLET_CALLS_STATUS_CONFIRMED = 200;
 var WALLET_CALLS_STATUS_OFFCHAIN_FAILED = 400;
 var WALLET_CALLS_STATUS_CHAIN_FAILED = 500;
 var WALLET_CALLS_STATUS_PARTIAL_FAILED = 600;
+var PT_SYMBOL_DATE_SUFFIX = /-(\d{1,2}[A-Z]{3}\d{4})$/;
+var DIRECT_CALL_BATCH_LIMITS = {
+  hyperliquid: 20
+};
 function getElements() {
   const byId = (id2) => {
     const element = document.getElementById(id2);
@@ -23819,10 +23831,20 @@ function getElements() {
     chainSelect: byId("chainSelect"),
     connectButton: byId("connectButton"),
     refreshButton: byId("refreshButton"),
+    activeMarketsOnlyToggle: byId("activeMarketsOnlyToggle"),
+    loadingPanel: byId("loadingPanel"),
+    loadingSpinner: byId("loadingSpinner"),
+    loadingLabel: byId("loadingLabel"),
+    loadingProgressBar: byId("loadingProgressBar"),
+    loadingProgressText: byId("loadingProgressText"),
     debugToggle: byId("debugToggle"),
     debugPanel: byId("debugPanel"),
     batchWalletRequestsToggle: byId("batchWalletRequestsToggle"),
     sweepButton: byId("sweepButton"),
+    queuedCallsPanel: byId("queuedCallsPanel"),
+    queuedCallsList: byId("queuedCallsList"),
+    queueSubmitButton: byId("queueSubmitButton"),
+    queueClearButton: byId("queueClearButton"),
     accountStatus: byId("accountStatus"),
     walletChainStatus: byId("walletChainStatus"),
     selectedChainStatus: byId("selectedChainStatus"),
@@ -23845,6 +23867,28 @@ function getMarketCacheKey(chainKey, marketAddress) {
 }
 function getTokenCacheKey(chainKey, tokenAddress) {
   return `${chainKey}:${tokenAddress.toLowerCase()}`;
+}
+function escapeHtml(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+function inferIsExpiredFromPtSymbol(symbol) {
+  if (!symbol) {
+    return false;
+  }
+  const match = symbol.trim().toUpperCase().match(PT_SYMBOL_DATE_SUFFIX);
+  if (!match) {
+    return false;
+  }
+  const raw = match[1];
+  const day = Number(raw.slice(0, -7));
+  const monthCode = raw.slice(-7, -4);
+  const year = Number(raw.slice(-4));
+  const monthIndex = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"].indexOf(monthCode);
+  if (!day || monthIndex < 0 || !year) {
+    return false;
+  }
+  const expiryUtc = Date.UTC(year, monthIndex, day, 23, 59, 59, 999);
+  return Date.now() > expiryUtc;
 }
 function hasDecodableReturnData(result) {
   return Boolean(result?.success && result.returnData && result.returnData !== "0x");
@@ -23875,13 +23919,70 @@ function setNotice(message, kind) {
   elements.notice.textContent = message;
   elements.notice.className = kind ? `notice ${kind}` : "notice";
 }
+function renderLoadingState() {
+  elements.loadingPanel.classList.toggle("hidden", !state.loading.active);
+  elements.loadingLabel.textContent = state.loading.label;
+  const safeTotal = Math.max(1, state.loading.total);
+  const percent = Math.max(0, Math.min(100, Math.round(state.loading.current / safeTotal * 100)));
+  elements.loadingProgressBar.style.width = `${percent}%`;
+  elements.loadingProgressText.textContent = `${percent}%`;
+  elements.connectButton.disabled = state.loading.active;
+  elements.refreshButton.disabled = state.loading.active;
+  elements.chainSelect.disabled = state.loading.active;
+}
+function startLoading(total, label) {
+  state.loading.active = true;
+  state.loading.total = Math.max(1, total);
+  state.loading.current = 0;
+  state.loading.label = label;
+  renderLoadingState();
+}
+function advanceLoading(label, step = 1) {
+  state.loading.label = label;
+  state.loading.current = Math.min(state.loading.total, state.loading.current + step);
+  renderLoadingState();
+}
+function finishLoading() {
+  state.loading.active = false;
+  state.loading.label = "Idle";
+  state.loading.current = state.loading.total;
+  renderLoadingState();
+}
 function useBatchWalletRequests() {
   return Boolean(elements.batchWalletRequestsToggle.checked);
+}
+function useActiveMarketsOnly() {
+  return Boolean(elements.activeMarketsOnlyToggle.checked);
 }
 function renderDebugPanel() {
   elements.debugPanel.classList.toggle("hidden", !elements.debugToggle.checked);
   const hasSweepableMarkets = state.renderedMarkets.some((view) => view.ptBalance > 0n || view.syBalance > 0n);
   elements.sweepButton.disabled = !state.account || !hasSweepableMarkets || !useBatchWalletRequests();
+  renderQueuedCalls();
+}
+function renderQueuedCalls() {
+  if (!state.queuedRouterCalls.length) {
+    elements.queuedCallsPanel.textContent = "No queued router calls.";
+    elements.queueSubmitButton.disabled = true;
+    elements.queueClearButton.disabled = true;
+    return;
+  }
+  elements.queuedCallsPanel.innerHTML = state.queuedRouterCalls.map((call, index) => `${index + 1}. ${escapeHtml(call.label)}`).join("<br>");
+  elements.queueSubmitButton.disabled = !state.account;
+  elements.queueClearButton.disabled = false;
+}
+function upsertQueuedRouterCall(call) {
+  const existingIndex = state.queuedRouterCalls.findIndex((item) => item.id === call.id);
+  if (existingIndex >= 0) {
+    state.queuedRouterCalls[existingIndex] = call;
+  } else {
+    state.queuedRouterCalls.push(call);
+  }
+  renderQueuedCalls();
+}
+function clearQueuedRouterCalls() {
+  state.queuedRouterCalls = [];
+  renderQueuedCalls();
 }
 function populateChainSelect() {
   elements.chainSelect.innerHTML = "";
@@ -23905,7 +24006,13 @@ async function loadPendleConfig() {
     marketAddress: ethers_exports.getAddress(market.marketAddress),
     ptAddress: market.ptAddress ? ethers_exports.getAddress(market.ptAddress) : void 0,
     syAddress: market.syAddress ? ethers_exports.getAddress(market.syAddress) : void 0,
-    ytAddress: market.ytAddress ? ethers_exports.getAddress(market.ytAddress) : void 0
+    ytAddress: market.ytAddress ? ethers_exports.getAddress(market.ytAddress) : void 0,
+    assetTokenAddress: market.assetTokenAddress ? ethers_exports.getAddress(market.assetTokenAddress) : void 0,
+    redeemOptions: Array.isArray(market.redeemOptions) ? market.redeemOptions.filter((option) => option && ethers_exports.isAddress(option.address)).map((option) => ({
+      address: ethers_exports.getAddress(option.address),
+      symbol: option.symbol,
+      decimals: option.decimals
+    })) : []
   })).sort((left, right) => left.marketAddress.localeCompare(right.marketAddress));
 }
 var ReadRpcTimeoutError = class extends Error {
@@ -23938,7 +24045,14 @@ function isLikelyKeyedRpcUrl(url) {
   }
   return [
     "alchemy.com",
+    "ankr.com",
+    "api.securerpc.com",
+    "bitstack.com",
+    "builder0x69.io",
+    "eth-mainnet-public.unifra.io",
+    "flashbots.net",
     "infura.io",
+    "payload.de",
     "quicknode.com",
     "chainstack.com",
     "tenderly.co",
@@ -23973,7 +24087,7 @@ async function loadChainlistRpcs() {
   }
 }
 function getRpcUrlsForChain(chain) {
-  const dynamic = state.rpcCatalog[chain.key] || [];
+  const dynamic = (state.rpcCatalog[chain.key] || []).slice(0, 4);
   const merged = [...chain.rpcUrls || [], ...dynamic].map(sanitizeRpcUrl).filter((value) => Boolean(value)).filter((value) => !isLikelyKeyedRpcUrl(value));
   return [...new Set(merged)];
 }
@@ -24036,19 +24150,61 @@ async function aggregateCalls(provider, calls) {
   const chain = getSelectedChain();
   const multicall = chain.multicall3;
   if (!multicall) {
-    throw new Error(`Multicall3 unavailable on ${chain.name}`);
+    const fallbackResults = [];
+    const chunkSize2 = DIRECT_CALL_BATCH_LIMITS[chain.key] ?? 24;
+    for (let index = 0; index < calls.length; index += chunkSize2) {
+      const chunk = calls.slice(index, index + chunkSize2);
+      const chunkResults = await Promise.all(
+        chunk.map(async (call) => {
+          try {
+            const returnData = await provider.call({
+              to: call.target,
+              data: call.callData
+            });
+            return { success: true, returnData };
+          } catch {
+            return { success: false, returnData: "0x" };
+          }
+        })
+      );
+      fallbackResults.push(...chunkResults);
+    }
+    if (calls.length > 0 && !fallbackResults.some((item) => item.success && item.returnData && item.returnData !== "0x")) {
+      throw new Error(`No decodable direct-call responses from ${chain.name}`);
+    }
+    return fallbackResults;
   }
   const contract = new ethers_exports.Contract(multicall, MULTICALL3_ABI, provider);
   const results = [];
-  const chunkSize = 100;
-  for (let index = 0; index < calls.length; index += chunkSize) {
-    const chunk = calls.slice(index, index + chunkSize).map((call) => ({
+  const chunkSize = 80;
+  let successfulResponses = 0;
+  const runChunk = async (chunk) => {
+    const normalized = chunk.map((call) => ({
       target: call.target,
       allowFailure: call.allowFailure ?? true,
       callData: call.callData
     }));
-    const response = await contract.aggregate3(chunk);
+    try {
+      const response = await contract.aggregate3(normalized);
+      successfulResponses += response.filter((item) => item.success && item.returnData && item.returnData !== "0x").length;
+      return response;
+    } catch (error) {
+      if (normalized.length === 1) {
+        return [{ success: false, returnData: "0x" }];
+      }
+      const midpoint = Math.ceil(normalized.length / 2);
+      const left = await runChunk(normalized.slice(0, midpoint));
+      const right = await runChunk(normalized.slice(midpoint));
+      return [...left, ...right];
+    }
+  };
+  for (let index = 0; index < calls.length; index += chunkSize) {
+    const chunk = calls.slice(index, index + chunkSize);
+    const response = await runChunk(chunk);
     results.push(...response);
+  }
+  if (calls.length > 0 && successfulResponses === 0) {
+    throw new Error(`No decodable multicall responses from ${chain.name}`);
   }
   return results;
 }
@@ -24127,45 +24283,54 @@ async function switchWalletChain() {
 }
 async function loadMarketViews() {
   const chain = getSelectedChain();
-  const marketRecords = state.pendleMarkets.filter((item) => item.chainKey === chain.key);
-  elements.marketCountStatus.value = `${marketRecords.length} configured`;
+  const allChainMarketRecords = state.pendleMarkets.filter((item) => item.chainKey === chain.key);
+  const resolvedChainMarketRecords = allChainMarketRecords.filter((record) => record.ptAddress && record.syAddress);
+  elements.marketCountStatus.value = `${resolvedChainMarketRecords.length} resolved / ${allChainMarketRecords.length} total`;
   if (!state.account) {
     return [];
   }
-  const marketInterface = new ethers_exports.Interface(MARKET_ABI);
+  startLoading(6, `Refreshing ${chain.name} wallet view`);
   const erc20Interface = new ethers_exports.Interface(ERC20_ABI);
-  const syInterface = new ethers_exports.Interface(SY_ABI);
-  const missingMarketRecords = marketRecords.filter((record) => !state.marketResolutionCache[getMarketCacheKey(chain.key, record.marketAddress)]);
-  if (missingMarketRecords.length) {
-    await withRotatingProvider("resolve Pendle markets", async (provider) => {
-      const marketCalls = missingMarketRecords.flatMap((item) => [
-        { target: item.marketAddress, callData: marketInterface.encodeFunctionData("readTokens") },
-        { target: item.marketAddress, callData: marketInterface.encodeFunctionData("isExpired") }
-      ]);
-      const marketResults = await aggregateCalls(provider, marketCalls);
-      for (let index = 0; index < missingMarketRecords.length; index += 1) {
-        const record = missingMarketRecords[index];
-        const tokensResult = marketResults[index * 2];
-        const expiredResult = marketResults[index * 2 + 1];
-        if (!tokensResult?.success || !expiredResult?.success) {
-          continue;
-        }
-        const resolvedTokens = decodeTupleResult(marketInterface, "readTokens", tokensResult);
-        const isExpired = decodeSingleResult(marketInterface, "isExpired", expiredResult);
-        if (!resolvedTokens || isExpired === null) {
-          continue;
-        }
-        const [resolvedSyAddress, resolvedPtAddress, resolvedYtAddress] = resolvedTokens;
-        state.marketResolutionCache[getMarketCacheKey(chain.key, record.marketAddress)] = {
-          syAddress: record.syAddress ? ethers_exports.getAddress(record.syAddress) : ethers_exports.getAddress(resolvedSyAddress),
-          ptAddress: record.ptAddress ? ethers_exports.getAddress(record.ptAddress) : ethers_exports.getAddress(resolvedPtAddress),
-          ytAddress: record.ytAddress ? ethers_exports.getAddress(record.ytAddress) : ethers_exports.getAddress(resolvedYtAddress),
-          isExpired
-        };
-      }
-      return true;
-    });
+  advanceLoading("Preparing resolved market list");
+  for (const record of resolvedChainMarketRecords) {
+    const cacheKey = getMarketCacheKey(chain.key, record.marketAddress);
+    if (record.ptAddress && record.syAddress) {
+      const prior = state.marketResolutionCache[cacheKey];
+      state.marketResolutionCache[cacheKey] = {
+        syAddress: ethers_exports.getAddress(record.syAddress),
+        ptAddress: ethers_exports.getAddress(record.ptAddress),
+        ytAddress: record.ytAddress ? ethers_exports.getAddress(record.ytAddress) : ethers_exports.ZeroAddress,
+        isExpired: inferIsExpiredFromPtSymbol(record.ptSymbol) || prior?.isExpired || false
+      };
+    }
+    if (record.ptAddress && record.ptSymbol && record.decimalsPT !== null) {
+      state.tokenMetadataCache[getTokenCacheKey(chain.key, record.ptAddress)] = {
+        symbol: record.ptSymbol,
+        decimals: record.decimalsPT,
+        outputs: [],
+        assetTokenAddress: null,
+        assetTokenDecimals: null
+      };
+    }
+    if (record.syAddress && record.sySymbol && record.decimalsSY !== null) {
+      const existing = state.tokenMetadataCache[getTokenCacheKey(chain.key, record.syAddress)];
+      state.tokenMetadataCache[getTokenCacheKey(chain.key, record.syAddress)] = {
+        symbol: record.sySymbol,
+        decimals: record.decimalsSY,
+        outputs: Array.isArray(record.redeemOptions) ? record.redeemOptions.map((option) => option.address) : existing?.outputs ?? [],
+        assetTokenAddress: record.assetTokenAddress ?? existing?.assetTokenAddress ?? null,
+        assetTokenDecimals: record.assetTokenDecimals ?? existing?.assetTokenDecimals ?? null
+      };
+    }
   }
+  const marketRecords = resolvedChainMarketRecords.filter((record) => {
+    if (!useActiveMarketsOnly()) {
+      return true;
+    }
+    const cachedResolution = state.marketResolutionCache[getMarketCacheKey(chain.key, record.marketAddress)];
+    return cachedResolution ? !cachedResolution.isExpired : true;
+  });
+  elements.marketCountStatus.value = useActiveMarketsOnly() ? `${marketRecords.length} active / ${resolvedChainMarketRecords.length} resolved` : `${marketRecords.length} resolved / ${allChainMarketRecords.length} total`;
   const tokenEntries = [];
   const marketTokenData = /* @__PURE__ */ new Map();
   for (const record of marketRecords) {
@@ -24180,112 +24345,44 @@ async function loadMarketViews() {
     );
   }
   const missingTokenEntries = tokenEntries.filter((entry) => !state.tokenMetadataCache[getTokenCacheKey(chain.key, entry.tokenAddress)]);
+  advanceLoading(
+    useActiveMarketsOnly() ? "Loading missing PT and SY token metadata for active markets" : "Loading missing PT and SY token metadata"
+  );
   if (missingTokenEntries.length) {
     await withRotatingProvider("load Pendle token metadata", async (provider) => {
-      const tokenCalls = missingTokenEntries.flatMap((entry) => {
-        const calls = [
-          { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("symbol") },
-          { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("decimals") }
-        ];
-        if (entry.type === "sy") {
-          calls.push(
-            { target: entry.tokenAddress, callData: syInterface.encodeFunctionData("getTokensOut") },
-            { target: entry.tokenAddress, callData: syInterface.encodeFunctionData("assetInfo") }
-          );
-        }
-        return calls;
-      });
+      const tokenCalls = missingTokenEntries.flatMap((entry) => [
+        { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("symbol") },
+        { target: entry.tokenAddress, callData: erc20Interface.encodeFunctionData("decimals") }
+      ]);
       const tokenResults = await aggregateCalls(provider, tokenCalls);
       let cursor = 0;
       for (const entry of missingTokenEntries) {
         const symbolResult = tokenResults[cursor++];
         const decimalsResult = tokenResults[cursor++];
         if (!symbolResult?.success || !decimalsResult?.success) {
-          if (entry.type === "sy") {
-            cursor += 2;
-          }
           continue;
         }
         const symbol = decodeSingleResult(erc20Interface, "symbol", symbolResult);
         const decimals = decodeSingleResult(erc20Interface, "decimals", decimalsResult);
         if (!symbol || decimals === null) {
-          if (entry.type === "sy") {
-            cursor += 2;
-          }
           continue;
         }
         const metadata = {
           symbol,
           decimals: Number(decimals),
           outputs: [],
-          assetTokenAddress: null
+          assetTokenAddress: null,
+          assetTokenDecimals: null
         };
-        if (entry.type === "sy") {
-          const outputsResult = tokenResults[cursor++];
-          const assetInfoResult = tokenResults[cursor++];
-          const outputs = decodeSingleResult(syInterface, "getTokensOut", outputsResult);
-          if (outputs) {
-            metadata.outputs = outputs.map((value) => ethers_exports.getAddress(value));
-          }
-          const assetInfo = decodeTupleResult(syInterface, "assetInfo", assetInfoResult);
-          if (assetInfo) {
-            const [, assetTokenAddress] = assetInfo;
-            if (assetTokenAddress !== ethers_exports.ZeroAddress) {
-              metadata.assetTokenAddress = ethers_exports.getAddress(assetTokenAddress);
-            }
-          }
-        }
         state.tokenMetadataCache[getTokenCacheKey(chain.key, entry.tokenAddress)] = metadata;
       }
       return true;
     });
   }
-  const outputTokenAddresses = [...new Set(
-    tokenEntries.flatMap((entry) => {
-      if (entry.type !== "sy") {
-        return [];
-      }
-      const metadata = state.tokenMetadataCache[getTokenCacheKey(chain.key, entry.tokenAddress)];
-      if (!metadata) {
-        return [];
-      }
-      const addresses = [...metadata.outputs];
-      if (metadata.assetTokenAddress) {
-        addresses.push(metadata.assetTokenAddress);
-      }
-      return addresses;
-    })
-  )];
-  const missingOutputTokenAddresses = outputTokenAddresses.filter((address) => !state.tokenMetadataCache[getTokenCacheKey(chain.key, address)]);
-  if (missingOutputTokenAddresses.length) {
-    await withRotatingProvider("load Pendle output token metadata", async (provider) => {
-      const outputTokenCalls = missingOutputTokenAddresses.flatMap((tokenAddress) => [
-        { target: tokenAddress, callData: erc20Interface.encodeFunctionData("symbol") },
-        { target: tokenAddress, callData: erc20Interface.encodeFunctionData("decimals") }
-      ]);
-      const outputTokenResults = await aggregateCalls(provider, outputTokenCalls);
-      for (let index = 0; index < missingOutputTokenAddresses.length; index += 1) {
-        const symbolResult = outputTokenResults[index * 2];
-        const decimalsResult = outputTokenResults[index * 2 + 1];
-        if (!symbolResult?.success || !decimalsResult?.success) {
-          continue;
-        }
-        const symbol = decodeSingleResult(erc20Interface, "symbol", symbolResult);
-        const decimals = decodeSingleResult(erc20Interface, "decimals", decimalsResult);
-        if (!symbol || decimals === null) {
-          continue;
-        }
-        state.tokenMetadataCache[getTokenCacheKey(chain.key, missingOutputTokenAddresses[index])] = {
-          symbol,
-          decimals: Number(decimals),
-          outputs: [],
-          assetTokenAddress: null
-        };
-      }
-      return true;
-    });
-  }
   const balancesByKey = /* @__PURE__ */ new Map();
+  advanceLoading(
+    tokenEntries.length ? useActiveMarketsOnly() ? "Scanning PT and SY balances on active markets" : "Scanning PT and SY balances" : "No PT or SY balances to scan"
+  );
   if (tokenEntries.length) {
     await withRotatingProvider("load Pendle balances", async (provider) => {
       const balanceCalls = tokenEntries.map((entry) => ({
@@ -24306,6 +24403,7 @@ async function loadMarketViews() {
       return true;
     });
   }
+  advanceLoading("Building balance view");
   const views = [];
   for (const record of marketRecords) {
     const tokenData = marketTokenData.get(record.marketAddress);
@@ -24332,17 +24430,11 @@ async function loadMarketViews() {
       syBalance: balancesByKey.get(`${record.marketAddress}:sy`) ?? 0n,
       ytAddress: tokenData.ytAddress,
       isExpired: tokenData.isExpired,
-      outputTokens: syMetadata.outputs.map((address) => {
-        const metadata = state.tokenMetadataCache[getTokenCacheKey(chain.key, address)];
-        if (!metadata) {
-          return null;
-        }
-        return {
-          address,
-          symbol: metadata.symbol,
-          decimals: metadata.decimals
-        };
-      }).filter((value) => Boolean(value)),
+      outputTokens: Array.isArray(record.redeemOptions) && record.redeemOptions.length ? record.redeemOptions : syMetadata.assetTokenAddress ? [{
+        address: syMetadata.assetTokenAddress,
+        symbol: `Asset ${formatAddress(syMetadata.assetTokenAddress)}`,
+        decimals: syMetadata.assetTokenDecimals ?? syMetadata.decimals
+      }] : [],
       assetTokenAddress: syMetadata.assetTokenAddress
     });
   }
@@ -24354,6 +24446,10 @@ async function loadMarketViews() {
     }
     return left.marketAddress.localeCompare(right.marketAddress);
   });
+  advanceLoading(
+    useActiveMarketsOnly() ? `Prepared ${views.length} active market cards` : `Prepared ${views.length} market cards`
+  );
+  advanceLoading("Rendering market cards");
   return views;
 }
 function chooseDefaultOutputToken(view) {
@@ -24364,6 +24460,41 @@ function chooseDefaultOutputToken(view) {
     }
   }
   return view.outputTokens[0] ?? null;
+}
+async function ensureSyAssetToken(view) {
+  const existing = chooseDefaultOutputToken(view);
+  if (existing) {
+    return existing;
+  }
+  const syInterface = new ethers_exports.Interface(SY_ABI);
+  const chain = getSelectedChain();
+  const metadata = state.tokenMetadataCache[getTokenCacheKey(chain.key, view.syAddress)];
+  const assetInfo = await withRotatingProvider("load SY asset token", async (provider) => {
+    const result = await aggregateCalls(provider, [
+      { target: view.syAddress, callData: syInterface.encodeFunctionData("assetInfo") }
+    ]);
+    return decodeTupleResult(syInterface, "assetInfo", result[0]);
+  });
+  if (!assetInfo) {
+    return null;
+  }
+  const [, assetTokenAddress, assetTokenDecimals] = assetInfo;
+  if (assetTokenAddress === ethers_exports.ZeroAddress) {
+    return null;
+  }
+  const normalizedAddress = ethers_exports.getAddress(assetTokenAddress);
+  state.tokenMetadataCache[getTokenCacheKey(chain.key, view.syAddress)] = {
+    symbol: metadata?.symbol ?? view.sySymbol,
+    decimals: metadata?.decimals ?? view.syDecimals,
+    outputs: metadata?.outputs ?? [],
+    assetTokenAddress: normalizedAddress,
+    assetTokenDecimals: Number(assetTokenDecimals)
+  };
+  return {
+    address: normalizedAddress,
+    symbol: `Asset ${formatAddress(normalizedAddress)}`,
+    decimals: Number(assetTokenDecimals)
+  };
 }
 function renderSummary() {
   const total = state.renderedMarkets.length;
@@ -24399,7 +24530,7 @@ function renderMarkets() {
     const outputOptions = view.outputTokens.map((token) => {
       const selected = token.address === defaultOutput?.address ? " selected" : "";
       return `<option value="${token.address}"${selected}>${token.symbol} [${formatAddress(token.address)}]</option>`;
-    }).join("");
+    }).join("") || `<option value="">Load asset token on submit</option>`;
     return `
       <article class="panel market-card" data-market-index="${index}">
         <div class="market-card-header">
@@ -24438,6 +24569,7 @@ function renderMarkets() {
         </div>
         <div class="actions compact-actions">
           <button class="swap-pt-button" type="button"${view.ptBalance > 0n ? "" : " disabled"}>Swap PT -> SY</button>
+          <button class="queue-pt-router-button" type="button"${view.ptBalance > 0n && view.isExpired ? "" : " disabled"}>Queue router PT -> SY</button>
         </div>
         <div class="row">
           <label>
@@ -24464,7 +24596,8 @@ function renderMarkets() {
           </label>
         </div>
         <div class="actions compact-actions">
-          <button class="redeem-sy-button" type="button"${view.syBalance > 0n && view.outputTokens.length > 0 ? "" : " disabled"}>Redeem SY -> token</button>
+          <button class="redeem-sy-button" type="button"${view.syBalance > 0n ? "" : " disabled"}>Redeem SY -> token</button>
+          <button class="queue-sy-router-button" type="button"${view.syBalance > 0n ? "" : " disabled"}>Queue router SY -> token</button>
         </div>
       </article>
     `;
@@ -24649,7 +24782,7 @@ async function performSyRedeem(view, card) {
   if (!amountInput || !minTokenInput || !redeemTokenSelect || !resultDisplay) {
     throw new Error("SY redeem inputs are missing");
   }
-  const selectedOutput = view.outputTokens.find((token) => token.address === redeemTokenSelect.value);
+  const selectedOutput = view.outputTokens.find((token) => token.address === redeemTokenSelect.value) ?? await ensureSyAssetToken(view);
   if (!selectedOutput) {
     throw new Error("Choose a redeem token first");
   }
@@ -24671,6 +24804,93 @@ async function performSyRedeem(view, card) {
   await tx.wait();
   resultDisplay.value = "SY redeem confirmed";
 }
+async function buildQueuedPtRouterCall(view, card) {
+  if (!view.isExpired) {
+    throw new Error("Only expired PT positions can be queued for router multicall");
+  }
+  const amountInput = card.querySelector(".pt-amount");
+  const minSyInput = card.querySelector(".pt-min-sy-out");
+  if (!amountInput || !minSyInput) {
+    throw new Error("PT queue inputs are missing");
+  }
+  const amount = parseAmount(amountInput.value, view.ptDecimals);
+  const minSyOut = parseAmount(minSyInput.value || "0", view.syDecimals);
+  const router = new ethers_exports.Contract(PENDLE_ROUTER_V4, PENDLE_ROUTER_ABI);
+  return {
+    id: `pt:${view.marketAddress.toLowerCase()}`,
+    marketAddress: view.marketAddress,
+    label: `${view.underlyingLabel}: expired PT -> SY ${formatBalance(amount, view.ptDecimals)} ${view.ptSymbol}`,
+    target: PENDLE_ROUTER_V4,
+    callData: router.interface.encodeFunctionData("exitPostExpToSy", [
+      state.account,
+      view.marketAddress,
+      amount,
+      0n,
+      minSyOut
+    ]),
+    approvalTokenAddress: view.ptAddress,
+    approvalAmount: amount
+  };
+}
+async function buildQueuedSyRouterCall(view, card) {
+  const amountInput = card.querySelector(".sy-amount");
+  const minTokenInput = card.querySelector(".sy-min-token-out");
+  const redeemTokenSelect = card.querySelector(".redeem-token-select");
+  if (!amountInput || !minTokenInput || !redeemTokenSelect) {
+    throw new Error("SY queue inputs are missing");
+  }
+  const selectedOutput = view.outputTokens.find((token) => token.address === redeemTokenSelect.value) ?? await ensureSyAssetToken(view);
+  if (!selectedOutput) {
+    throw new Error("Choose a redeem token first");
+  }
+  const amount = parseAmount(amountInput.value, view.syDecimals);
+  const minTokenOut = parseAmount(minTokenInput.value || "0", selectedOutput.decimals);
+  const router = new ethers_exports.Contract(PENDLE_ROUTER_V4, PENDLE_ROUTER_ABI);
+  return {
+    id: `sy:${view.marketAddress.toLowerCase()}:${selectedOutput.address.toLowerCase()}`,
+    marketAddress: view.marketAddress,
+    label: `${view.underlyingLabel}: SY -> ${selectedOutput.symbol} ${formatBalance(amount, view.syDecimals)} ${view.sySymbol}`,
+    target: PENDLE_ROUTER_V4,
+    callData: router.interface.encodeFunctionData("redeemSyToToken", [
+      state.account,
+      view.syAddress,
+      amount,
+      {
+        tokenOut: selectedOutput.address,
+        minTokenOut,
+        tokenRedeemSy: selectedOutput.address,
+        pendleSwap: ethers_exports.ZeroAddress,
+        swapData: ZERO_SWAP_DATA
+      }
+    ]),
+    approvalTokenAddress: view.syAddress,
+    approvalAmount: amount
+  };
+}
+async function submitQueuedRouterMulticall() {
+  if (!state.queuedRouterCalls.length) {
+    throw new Error("No queued router calls");
+  }
+  await connectAndSwitchForAction();
+  const router = new ethers_exports.Contract(PENDLE_ROUTER_V4, PENDLE_ROUTER_ABI, state.signer);
+  if (!await routerSupportsMulticall(router)) {
+    throw new Error("Pendle router multicall is not available on this chain");
+  }
+  for (const call of state.queuedRouterCalls) {
+    if (call.approvalTokenAddress && call.approvalAmount) {
+      await ensureApproval(call.approvalTokenAddress, call.approvalAmount);
+    }
+  }
+  const tx = await router.multicall(
+    state.queuedRouterCalls.map((call) => ({
+      target: call.target,
+      allowFailure: false,
+      callData: call.callData
+    }))
+  );
+  await tx.wait();
+  clearQueuedRouterCalls();
+}
 async function performBatchSweep() {
   if (!useBatchWalletRequests()) {
     throw new Error("Enable batched sweep requests in debug mode first");
@@ -24683,9 +24903,19 @@ async function performBatchSweep() {
   const ptSweepable = state.renderedMarkets.filter((view) => view.ptBalance > 0n);
   const activePtSweepable = ptSweepable.filter((view) => !view.isExpired);
   const expiredPtSweepable = ptSweepable.filter((view) => view.isExpired);
-  const sySweepable = state.renderedMarkets.filter((view) => view.syBalance > 0n && chooseDefaultOutputToken(view));
+  const syCandidates = state.renderedMarkets.filter((view) => view.syBalance > 0n);
+  const sySweepable = [];
+  const syOutputByAddress = /* @__PURE__ */ new Map();
+  for (const view of syCandidates) {
+    const outputToken = chooseDefaultOutputToken(view) ?? await ensureSyAssetToken(view);
+    if (!outputToken) {
+      continue;
+    }
+    sySweepable.push(view);
+    syOutputByAddress.set(view.syAddress.toLowerCase(), outputToken);
+  }
   const syCalls = sySweepable.map((view) => {
-    const outputToken = chooseDefaultOutputToken(view);
+    const outputToken = syOutputByAddress.get(view.syAddress.toLowerCase()) ?? chooseDefaultOutputToken(view);
     if (!outputToken) {
       return null;
     }
@@ -24762,7 +24992,7 @@ async function performBatchSweep() {
         });
       }
       for (const view of sySweepable) {
-        const outputToken = chooseDefaultOutputToken(view);
+        const outputToken = syOutputByAddress.get(view.syAddress.toLowerCase()) ?? chooseDefaultOutputToken(view);
         if (!outputToken) {
           continue;
         }
@@ -24825,7 +25055,7 @@ async function performBatchSweep() {
         await exitTx.wait();
       }
       for (const view of sySweepable) {
-        const outputToken = chooseDefaultOutputToken(view);
+        const outputToken = syOutputByAddress.get(view.syAddress.toLowerCase()) ?? chooseDefaultOutputToken(view);
         if (!outputToken) {
           continue;
         }
@@ -24851,16 +25081,20 @@ async function performBatchSweep() {
   }
 }
 async function refreshPageData() {
-  const chain = getSelectedChain();
-  elements.selectedChainStatus.textContent = `${chain.name} (${chain.chainId})`;
-  await refreshWalletSession();
-  state.renderedMarkets = await loadMarketViews();
-  renderMarkets();
-  renderDebugPanel();
-  setNotice(
-    "Review min-out fields before sending. This page uses direct RouterV4 calls, no hosted SDK quote generation, no external aggregator routes, and empty Pendle limit-order data.",
-    "good"
-  );
+  try {
+    const chain = getSelectedChain();
+    elements.selectedChainStatus.textContent = `${chain.name} (${chain.chainId})`;
+    await refreshWalletSession();
+    state.renderedMarkets = await loadMarketViews();
+    renderMarkets();
+    renderDebugPanel();
+    setNotice(
+      "Review min-out fields before sending. This page uses direct RouterV4 calls, no hosted SDK quote generation, no external aggregator routes, and empty Pendle limit-order data.",
+      "good"
+    );
+  } finally {
+    finishLoading();
+  }
 }
 function bindEvents() {
   elements.debugToggle.addEventListener("change", () => {
@@ -24868,6 +25102,13 @@ function bindEvents() {
   });
   elements.batchWalletRequestsToggle.addEventListener("change", () => {
     renderDebugPanel();
+  });
+  elements.activeMarketsOnlyToggle.addEventListener("change", async () => {
+    try {
+      await refreshPageData();
+    } catch (error) {
+      setNotice(error.message, "error");
+    }
   });
   elements.connectButton.addEventListener("click", async () => {
     try {
@@ -24901,6 +25142,19 @@ function bindEvents() {
       setNotice(error.message, "error");
     }
   });
+  elements.queueSubmitButton.addEventListener("click", async () => {
+    try {
+      await submitQueuedRouterMulticall();
+      await refreshPageData();
+      setNotice("Queued Pendle router multicall submitted and confirmed.", "good");
+    } catch (error) {
+      setNotice(error.message, "error");
+    }
+  });
+  elements.queueClearButton.addEventListener("click", () => {
+    clearQueuedRouterCalls();
+    setNotice("Cleared queued router calls.", "good");
+  });
   elements.marketList.addEventListener("click", async (event) => {
     const target = event.target;
     if (!target) {
@@ -24919,9 +25173,17 @@ function bindEvents() {
       if (target.classList.contains("swap-pt-button")) {
         await performPtSwap(view, card);
         await refreshPageData();
+      } else if (target.classList.contains("queue-pt-router-button")) {
+        const queued = await buildQueuedPtRouterCall(view, card);
+        upsertQueuedRouterCall(queued);
+        setNotice("Queued expired PT router call.", "good");
       } else if (target.classList.contains("redeem-sy-button")) {
         await performSyRedeem(view, card);
         await refreshPageData();
+      } else if (target.classList.contains("queue-sy-router-button")) {
+        const queued = await buildQueuedSyRouterCall(view, card);
+        upsertQueuedRouterCall(queued);
+        setNotice("Queued SY router call.", "good");
       }
     } catch (error) {
       const resultDisplay = card.querySelector(".result-display");
@@ -24944,6 +25206,7 @@ function bindEvents() {
 }
 async function main() {
   populateChainSelect();
+  renderLoadingState();
   await loadPendleConfig();
   await loadChainlistRpcs();
   bindEvents();

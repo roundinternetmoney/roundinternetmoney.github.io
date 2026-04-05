@@ -164,6 +164,53 @@ button {
   border-color: var(--good-border);
 }
 
+.load-panel {
+  margin-top: 14px;
+  padding: 12px;
+  border: 2px solid var(--border-soft);
+  background: rgba(255, 253, 247, 0.92);
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.load-copy {
+  min-width: 0;
+}
+
+.load-progress-track {
+  margin-top: 8px;
+  height: 10px;
+  border: 2px solid var(--border-soft);
+  background: #f6edd7;
+}
+
+.load-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c08a21 0%, #f0d694 100%);
+  transition: width 120ms ease-out;
+}
+
+.turnstile {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-soft);
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: turnstile-spin 0.9s linear infinite;
+}
+
+@keyframes turnstile-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .mono {
   font-family: monospace;
 }

@@ -61,7 +61,8 @@ const SUPPORTED_CHAIN_KEYS = [
   "binancechain",
   "sonic",
   "mantle",
-  "berachain"
+  "berachain",
+  "hyperliquid"
 ] as const;
 
 export const PENDLE_CHAIN_CONFIGS: PendleChainConfig[] = APP_CONFIG.chains

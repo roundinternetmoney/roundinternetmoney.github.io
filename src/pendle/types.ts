@@ -23,9 +23,14 @@ export interface PendleMarketRecord {
   underlyingLabel: string;
   decimalsSY: number | null;
   decimalsPT: number | null;
+  ptSymbol?: string | null;
+  sySymbol?: string | null;
   ptAddress?: string;
   syAddress?: string;
   ytAddress?: string;
+  assetTokenAddress?: string | null;
+  assetTokenDecimals?: number | null;
+  redeemOptions?: TokenOption[];
 }
 
 export interface TokenOption {
@@ -65,6 +70,7 @@ export interface CachedTokenMetadata {
   decimals: number;
   outputs: string[];
   assetTokenAddress: string | null;
+  assetTokenDecimals: number | null;
 }
 
 export interface AppState {
@@ -80,16 +86,43 @@ export interface AppState {
   routerMulticallSupport: Record<string, boolean>;
   pendleMarkets: PendleMarketRecord[];
   renderedMarkets: PendleMarketView[];
+  loading: {
+    active: boolean;
+    label: string;
+    current: number;
+    total: number;
+  };
+  queuedRouterCalls: QueuedRouterCall[];
+}
+
+export interface QueuedRouterCall {
+  id: string;
+  marketAddress: string;
+  label: string;
+  target: string;
+  callData: string;
+  approvalTokenAddress?: string;
+  approvalAmount?: bigint;
 }
 
 export interface Elements {
   chainSelect: HTMLSelectElement;
   connectButton: HTMLButtonElement;
   refreshButton: HTMLButtonElement;
+  activeMarketsOnlyToggle: HTMLInputElement;
+  loadingPanel: HTMLElement;
+  loadingSpinner: HTMLElement;
+  loadingLabel: HTMLElement;
+  loadingProgressBar: HTMLElement;
+  loadingProgressText: HTMLElement;
   debugToggle: HTMLInputElement;
   debugPanel: HTMLElement;
   batchWalletRequestsToggle: HTMLInputElement;
   sweepButton: HTMLButtonElement;
+  queuedCallsPanel: HTMLElement;
+  queuedCallsList: HTMLElement;
+  queueSubmitButton: HTMLButtonElement;
+  queueClearButton: HTMLButtonElement;
   accountStatus: HTMLElement;
   walletChainStatus: HTMLElement;
   selectedChainStatus: HTMLElement;
