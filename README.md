@@ -2,14 +2,15 @@ Minimal, static web pages.
 
 ## Features
 
-- **Batch Transfers**: Send many token transfers across hundreds of tokens on EVM chains; fast.
+- **Batch Transfers**: Send 1400+ ERC tokens across 13 chains. Never paste your private key online.
+- **Pendle Interface**: Filter pendle markets; offers unique support for SY tokens.
 
 ## Local Build
 
 - Install dependencies with `npm install`
-- Edit `src/batch-transfer/`
+- Edit `src/...`
 - Build the browser bundle with `npm run build`
-- Deploy the generated `batch-transfer/app.js` with the static site files
+- Deploy the generated `path/to/app.js` with the static site files
 
 ## Deployment
 
@@ -19,9 +20,11 @@ This is a static site that can be deployed to any web server:
 
 - `index.html` - Main page
 - `batch-transfer/` - Batch transfer page assets
+- `pendle/` - Pendle interface page assets
 - `src/batch-transfer/` - Batch transfer source files
-- `tokens.enriched.json` - Token catalog data
-- `banner.webp` - Site banner image
+- `src/pendle/` - Pendle interface source files
+- `src/tokens.enriched.json` - Token data
+- `src/pendle.json` - Pendle data
 
 ## Security Notes
 
