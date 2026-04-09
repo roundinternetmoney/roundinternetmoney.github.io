@@ -21,6 +21,7 @@ This is a static site that can be deployed to any web server:
 - `index.html` - Main page
 - `batch-transfer/` - Batch transfer page assets
 - `pendle/` - Pendle interface page assets
+- `server/**/*.go` - Backend services
 - `src/batch-transfer/` - Batch transfer source files
 - `src/pendle/` - Pendle interface source files
 - `src/tokens.enriched.json` - Token data

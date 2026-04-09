@@ -4,3 +4,5 @@ __pycache__
 scripts/
 .codex
 node_modules/
+server/**/*
+
