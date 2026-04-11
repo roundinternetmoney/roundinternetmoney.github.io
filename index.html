@@ -5,6 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Round Internet Money</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .home-banner {
+      width: min(460px, 100%);
+      margin: 0 auto;
+    }
+
+    .home-intro {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .home-manifesto {
+      margin: 18px 0 10px;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: bold;
+    }
+
+    .home-manifesto li + li {
+      margin-top: 8px;
+    }
+
+    .home-sections {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .github-box {
+      display: inline-block;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 720px) {
+      .home-sections {
+        grid-template-columns: 1fr;
+      }
+
+      .home-manifesto {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="header centered">

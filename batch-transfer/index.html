@@ -5,6 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wallet Batch Transfers</title>
   <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .status-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 8px 12px;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 14px;
+      border: 2px solid var(--border-soft);
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .status-grid div:nth-child(odd) {
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f6edd0;
+    }
+
+    .asset-list {
+      margin-top: 14px;
+      border: 2px solid var(--border-soft);
+      background: var(--panel-strong);
+      padding: 12px;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .asset-list ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .asset-list li + li {
+      margin-top: 6px;
+    }
+
+    .token-transfer-list {
+      margin-top: 14px;
+      border: 2px solid var(--border-soft);
+      background: var(--panel-strong);
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .token-transfer-list label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-weight: normal;
+    }
+
+    .token-transfer-list input[type="checkbox"] {
+      width: auto;
+      margin-top: 2px;
+      margin-right: 0;
+    }
+
+    .debug-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 8px 12px;
+      font-family: monospace;
+      font-size: 13px;
+      margin-top: 14px;
+    }
+
+    .debug-grid div:nth-child(odd) {
+      font-weight: bold;
+    }
+
+    .page-shell {
+      display: grid;
+      gap: 20px;
+    }
+
+    .status-grid,
+    .debug-grid {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    @media (max-width: 720px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="page-shell">

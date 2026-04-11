@@ -44,8 +44,8 @@
       <button id="connectButton" type="button">Connect wallet</button>
       <button id="refreshButton" type="button">Refresh Pendle balances</button>
     </div>
-    <label class="inline-label">
-      <input id="activeMarketsOnlyToggle" type="checkbox" checked class="inline-checkbox" />
+    <label style="display: inline-block; margin-top: 12px; font-weight: normal;">
+      <input id="activeMarketsOnlyToggle" type="checkbox" checked style="width: auto; margin-right: 8px;" />
       Only load active markets
       <span class="field-note">Default on. Expired markets stay hidden and are skipped during balance refresh unless you turn this off.</span>
     </label>
@@ -67,21 +67,21 @@
     <div class="notice" id="notice">
       This page uses direct Pendle RouterV4 actions. It does not use Pendle’s hosted SDK, external swap aggregators, or generated limit-order data. Min-out fields default to zero, so set them yourself if you want slippage protection.
     </div>
-    <label class="inline-label">
-      <input id="debugToggle" type="checkbox" class="inline-checkbox" />
+    <label style="display: inline-block; margin-top: 12px; font-weight: normal;">
+      <input id="debugToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
       show debug
     </label>
-    <div class="panel hidden" id="debugPanel">
+    <div class="panel hidden" id="debugPanel" style="margin-top: 16px; margin-bottom: 0;">
       <h2>Debug Sweep</h2>
-      <label class="inline-label">
-        <input id="batchWalletRequestsToggle" type="checkbox" class="inline-checkbox" />
+      <label style="display: inline-block; margin-bottom: 12px; font-weight: normal;">
+        <input id="batchWalletRequestsToggle" type="checkbox" style="width: auto; margin-right: 8px;" />
         Enable batched PT and SY sweep requests
         <span class="field-note">Debug only. This batches current-chain PT swaps and current-chain SY redeems into grouped router multicalls, while approvals remain separate.</span>
       </label>
       <div class="actions">
         <button id="sweepButton" type="button">Sweep current chain</button>
       </div>
-      <h2 class="queue-heading">Router Queue</h2>
+      <h2 style="margin-top: 18px;">Router Queue</h2>
       <p class="panel-intro">Queue router-native PT and SY actions from market cards, then submit them as one router multicall.</p>
       <div id="queuedCallsPanel" class="codebox">No queued router calls.</div>
       <div class="actions">
@@ -97,7 +97,7 @@
     <div id="summary"></div>
   </div>
 
-  <div id="markets" class="split-grid market-list-grid">
+  <div id="markets" class="split-grid" style="grid-template-columns: 1fr;">
     <div id="marketList"></div>
   </div>
 
